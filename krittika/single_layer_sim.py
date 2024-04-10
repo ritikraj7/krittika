@@ -11,7 +11,7 @@ from krittika.compute.compute_node import ComputeNode
 #++Sahith
 from krittika.chiplet_node import ChipletNode
 from krittika.chiplet_system import ChipletSys
-from krittika.intra_workload_manager import IntraWorkloadManager
+from krittika.scheduler import Scheduler
 
 
 class SingleLayerSim:
@@ -32,7 +32,7 @@ class SingleLayerSim:
 
         #++Sahith
         self.chiplet_sys = ChipletSys()
-        self.intra_workload_manager = IntraWorkloadManager()
+        self.scheduler = Scheduler()
 
         # Variables determining state
         self.layer_id = 0
@@ -124,15 +124,15 @@ class SingleLayerSim:
         #++Sahith
         self.chiplet_node_list = []
 
-        self.run_compute_all_parts()
+        self.run_compute_all_parts() 
         self.run_mem_sim_all_parts()
 
     #
     def run_compute_all_parts(self):
         #ifmap_matrix, filter_matrix, ofmap_matrix = self.op_mat_obj.get_all_operand_matrix()
-        self.intra_workload_manager = IntraWorkloadManager()
-        self.intra_workload_manager.set_params(self.chiplet_sys, self.op_mat_obj)
-        self.intra_workload_manager.uniform_distribution() 
+        self.scheduler = Scheduler()
+        self.scheduler.set_params(self.chiplet_sys, self.op_mat_obj, self.config_obj, self.verbose)
+        self.scheduler.workload_distribution() 
         compute_unit, opt_dataflow = self.partitioner_obj.get_opt_compute_params(layer_id=self.layer_id)
         #input_rows_per_part = math.ceil(ifmap_matrix.shape[0] / self.num_input_part)
         #filter_cols_per_part = math.ceil(filter_matrix.shape[1] / self.num_filter_part)
@@ -223,12 +223,12 @@ class SingleLayerSim:
     def run_mem_sim_all_parts(self):
         assert self.compute_done
 
-        bandwidth_mode = self.config_obj.get_bandwidth_use_mode()
-        per_core_ifmap_buf_size, per_core_fitler_buf_size, per_core_ofmap_buf_size \
-            = ([i * 1024 for i in self.config_obj.get_per_unit_sram_sizes_kb()])
+        #bandwidth_mode = self.config_obj.get_bandwidth_use_mode()
+        #per_core_ifmap_buf_size, per_core_fitler_buf_size, per_core_ofmap_buf_size \
+        #    = ([i * 1024 for i in self.config_obj.get_per_unit_sram_sizes_kb()])
 
-        per_core_ifmap_bw, per_core_filter_bw, per_core_ofmap_bw\
-            = self.config_obj.get_interface_bandwidths()
+        #per_core_ifmap_bw, per_core_filter_bw, per_core_ofmap_bw\
+        #    = self.config_obj.get_interface_bandwidths()
 
         #for compute_node in self.compute_node_list:
 
@@ -258,36 +258,37 @@ class SingleLayerSim:
 
         #    self.all_node_mem_objects += [this_part_mem]
 
+        #-------------------------------------------------------------------
 
-        for chiplet_node in self.chiplet_node_list:
+        #for chiplet_node in self.chiplet_node_list:
 
-            #this_part_mem = double_buffered_scratchpad()
-            chiplet_node.scratch_pad.set_params(verbose=self.verbose,
-                                     estimate_bandwidth_mode=bandwidth_mode,
-                                     ifmap_buf_size_bytes=per_core_ifmap_buf_size,
-                                     filter_buf_size_bytes=per_core_fitler_buf_size,
-                                     ofmap_buf_size_bytes=per_core_ofmap_buf_size,
-                                     ifmap_backing_buf_bw=per_core_ifmap_bw,
-                                     filter_backing_buf_bw=per_core_filter_bw,
-                                     ofmap_backing_buf_bw=per_core_ofmap_bw
-                                     )
+        #    #this_part_mem = double_buffered_scratchpad()
+        #    chiplet_node.scratch_pad.set_params(verbose=self.verbose,
+        #                             estimate_bandwidth_mode=bandwidth_mode,
+        #                             ifmap_buf_size_bytes=per_core_ifmap_buf_size,
+        #                             filter_buf_size_bytes=per_core_fitler_buf_size,
+        #                             ofmap_buf_size_bytes=per_core_ofmap_buf_size,
+        #                             ifmap_backing_buf_bw=per_core_ifmap_bw,
+        #                             filter_backing_buf_bw=per_core_filter_bw,
+        #                             ofmap_backing_buf_bw=per_core_ofmap_bw
+        #                             )
 
-            # Demand mat
-            this_node_ifmap_demand_mat, this_node_filter_demand_mat, this_node_ofmap_demand_mat \
-                = chiplet_node.compute_node.get_demand_matrices()
+        #    # Demand mat
+        #    this_node_ifmap_demand_mat, this_node_filter_demand_mat, this_node_ofmap_demand_mat \
+        #        = chiplet_node.compute_node.get_demand_matrices()
 
-            this_node_ifmap_fetch_mat, this_node_filter_fetch_mat = chiplet_node.compute_node.get_prefetch_matrices()
-            if (self.config_obj.get_bandwidth_use_mode()=="USER"):
-                chiplet_node.scratch_pad.set_read_buf_prefetch_matrices(ifmap_prefetch_mat=this_node_ifmap_fetch_mat,
-                                                         filter_prefetch_mat=this_node_filter_fetch_mat
-                                                         )
-            chiplet_node.scratch_pad.service_memory_requests(this_node_ifmap_demand_mat,
-                                                  this_node_filter_demand_mat,
-                                                  this_node_ofmap_demand_mat)
+        #    this_node_ifmap_fetch_mat, this_node_filter_fetch_mat = chiplet_node.compute_node.get_prefetch_matrices()
+        #    if (self.config_obj.get_bandwidth_use_mode()=="USER"):
+        #        chiplet_node.scratch_pad.set_read_buf_prefetch_matrices(ifmap_prefetch_mat=this_node_ifmap_fetch_mat,
+        #                                                 filter_prefetch_mat=this_node_filter_fetch_mat
+        #                                                 )
+        #    chiplet_node.scratch_pad.service_memory_requests(this_node_ifmap_demand_mat,
+        #                                          this_node_filter_demand_mat,
+        #                                          this_node_ofmap_demand_mat)
 
-            #self.all_node_mem_objects += [chiplet_node.scratch_pad]
+        #    #self.all_node_mem_objects += [chiplet_node.scratch_pad]
 
-
+        self.scheduler.run_sys()
         self.mem_traces_done = True
 
 
