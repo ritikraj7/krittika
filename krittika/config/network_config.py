@@ -12,7 +12,17 @@ class SupportedTopologies(Enum):
 
 class NetworkConfig:
     def __init__(self):
+        """
+        Initialize the NetworkConfig object.
 
+        This method sets up the logging configuration and initializes the parameters for the network configuration.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         self.logging_level = logging.CRITICAL
         self.logger = logging.getLogger(__name__ + "." + self.__class__.__name__)
         self.logger.setLevel(self.logging_level)
@@ -36,7 +46,18 @@ class NetworkConfig:
         self.congestion_aware = None
 
     def read_network_config(self, filename):
+        """
+        Reads the network configuration from a given file.
 
+        Args:
+            filename (str): The path to the configuration file.
+
+        Raises:
+            ValueError: If an invalid topology is parsed.
+
+        Returns:
+            None
+        """
         self.logger.debug(f"Reading from cfg file at {os.path.abspath(filename)}")
         cfg = ConfigParser()
         cfg.read(filename)
@@ -83,3 +104,26 @@ class NetworkConfig:
                 self.logger.error(f"Invalid topology has been parsed: {topo}")
                 self.logger.error(f"Valid options are: {valid_topologies}")
                 raise ValueError(f"Invalid topology {topo}")
+
+    def dump_cpp_config(self, filename):
+        """
+        Dump the network configuration to a C++ style config file.
+
+        Args:
+            filename (str): The name of the file to write the configuration to.
+        """
+        with open(filename, "w") as f:
+            f.write("# 3D basic-topology\n")
+            valid_topos = ", ".join(
+                [topology.value for topology in SupportedTopologies]
+            )
+            f.write(f"topology: {self.topology}  # {valid_topos}\n\n")
+
+            f.write("# Multiply each dim for total num NPUs\n")
+            f.write(f"npus_count: {self.npus_count}  # number of NPUs\n\n")
+
+            f.write("# Bandwidth per each dimension\n")
+            f.write(f"bandwidth: {self.bandwidth}  # GB/s\n\n")
+
+            f.write("# Latency per each dimension\n")
+            f.write(f"latency: {self.latency}  # ns\n")
