@@ -14,7 +14,7 @@ git clone --recursive https://github.com/5ree/krittika_hml_proj.git
 # If you didn't recursively clone the repo, you'd miss all deps. To fix that:
 git submodule update --init --recursive
 ```
-
+   
 # Setting up the conda env
 ```bash
 # Creating a new conda env
