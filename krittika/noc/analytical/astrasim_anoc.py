@@ -1,6 +1,8 @@
 import logging
+import tempfile
 
 from krittika.noc.krittika_noc import KrittikaNoC
+from dependencies.AstraSimANoCModel import sample_wrapper
 
 
 class AstraSimANoC(KrittikaNoC):
@@ -9,7 +11,7 @@ class AstraSimANoC(KrittikaNoC):
         self.cfg_contents = network_config.get_cpp_config()
 
         # TODO5REE: Too much repetition, move it to a logger class
-        self.logging_level = logging.INFO
+        self.logging_level = logging.CRITICAL
         self.logger = logging.getLogger(__name__ + "." + self.__class__.__name__)
         self.logger.setLevel(self.logging_level)
 
@@ -27,41 +29,44 @@ class AstraSimANoC(KrittikaNoC):
             f"Contents of generated cpp cfg file are: \n{self.cfg_contents}"
         )
 
-    def setup():
-        # Write self.cfg_contents to a file
-        # TODO5REE: Setup py binding to do these:
-        #   - const auto network_parser = NetworkParser("../input/Ring.yml");
-        #   - const auto topology = construct_topology(network_parser);
-        pass
+    def setup(self):
+        with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
+            f.write(self.cfg_contents)
+            self.logger.debug(f"Cpp config file written to {f.name}")
 
-    def send(self, src, dest, chunk_size) -> int:
-        # Potential wrapper around the below functions
-        # TODO5REE: Decide if this is the best approach
-        # For now return a magic number latency
-        latency = 42
+            # TODO:
+            #   - Setup a py binding that does the setup part
 
-        # TODO5REE: Is this clks or ns?
-        self.logger.info(
-            f"Sending {chunk_size} bytes from {src} to {dest} took {latency}"
+    def post(self, src, dest, data_size) -> int:
+        MAGIC_TRACKING_ID = 5
+
+        self.logger.debug(
+            f"Posting a txn from {src} to {dest} of size {data_size} with tracking ID {MAGIC_TRACKING_ID}"
         )
-        return latency
 
-    def send_chunk(self, src, dest, chunk_size) -> int:
-        # Send chunk_size data from src to dest
-        # Returns latency of this txn
-        # Simple for unaware, but aware won't be right unless we post txns
-        pass
+        # TODO:
+        #   - Setup a pybinding that sends if unaware and schedules an event if aware
+        #   - Decide who populates and stores the tracking ID
 
-    def post_txn(self, src, dest, chunk_size) -> int:
-        # Posts a chunk_size txn from src to dest
-        # Returns a tracking ID for the txn
-        # Internally registers this tracking ID with the txn Event to be sent
-        pass
+        return MAGIC_TRACKING_ID
 
     def deliver_all_txns(self):
-        # Simulates all the txns that need to be sent so latency can be arrived at
-        pass
+
+        # TODO:
+        #   - Setup the pybinding that does the !finished() {proceed()} loop
+
+        self.logger.debug(f"Delivering all txns")
 
     def get_latency(self, tracking_id) -> int:
-        # After delivery is done, query the latency of a txn using tracking_id
-        pass
+
+        # TODO:
+        #   - Setup the pybinding that queries the tracking handler to get latency
+
+        # TODO: Is this clks or ns?
+        MAGIC_LATENCY = 42
+
+        self.logger.debug(
+            f"Txn with tracking ID {tracking_id} took {MAGIC_LATENCY} clks"
+        )
+
+        return MAGIC_LATENCY
