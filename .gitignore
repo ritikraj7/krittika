@@ -143,3 +143,4 @@ out/
 # FIXME: Need to fix this later
 krittika/traces/
 traces/
+.vscode/
