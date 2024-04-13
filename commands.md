@@ -46,7 +46,7 @@ python setup.py build_ext --inplace
 cd <your repo root>;
 pip install -e .
 ```
-
+#SNDBG TESTING
 # Running a test:
 ```bash
 # Launch Krittika:
