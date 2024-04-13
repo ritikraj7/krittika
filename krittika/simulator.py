@@ -7,12 +7,14 @@ from scalesim.compute.operand_matrix import operand_matrix
 from krittika.config.krittika_config import KrittikaConfig
 from krittika.partition_manager import PartitionManager
 from krittika.single_layer_sim import SingleLayerSim
+from krittika.config.network_config import NetworkConfig
 
 
 class Simulator:
     def __init__(self):
         # Objects
         self.config_obj = KrittikaConfig()
+        self.network_config_obj = NetworkConfig()
         self.partition_obj = PartitionManager()
         self.workload_obj = WorkloadManager()
 
@@ -43,6 +45,7 @@ class Simulator:
 
     def set_params(self,
                    config_filename='',
+                   network_config_filename='',
                    workload_filename='',
                    custom_partition_filename='',
                    reports_dir_path='./',
@@ -51,6 +54,7 @@ class Simulator:
                    ):
         # Read the user input and files and prepare the objects
         self.config_obj.read_config_from_file(filename=config_filename)
+        self.network_config_obj.read_network_config(filename=network_config_filename)
 
         self.workload_obj = WorkloadManager()
         self.workload_obj.read_topologies(workload_filename=workload_filename)
