@@ -105,25 +105,24 @@ class NetworkConfig:
                 self.logger.error(f"Valid options are: {valid_topologies}")
                 raise ValueError(f"Invalid topology {topo}")
 
-    def dump_cpp_config(self, filename):
+    def get_cpp_config(self):
         """
-        Dump the network configuration to a C++ style config file.
+        Get the network configuration to a C++ style config file.
 
-        Args:
-            filename (str): The name of the file to write the configuration to.
+        Returns:
+            str: The string to be written to the file.
         """
-        with open(filename, "w") as f:
-            f.write("# 3D basic-topology\n")
-            valid_topos = ", ".join(
-                [topology.value for topology in SupportedTopologies]
-            )
-            f.write(f"topology: {self.topology}  # {valid_topos}\n\n")
+        config_string = "# 3D basic-topology\n"
+        valid_topos = ", ".join([topology.value for topology in SupportedTopologies])
+        config_string += f"topology: {self.topology}  # {valid_topos}\n\n"
 
-            f.write("# Multiply each dim for total num NPUs\n")
-            f.write(f"npus_count: {self.npus_count}  # number of NPUs\n\n")
+        config_string += "# Multiply each dim for total num NPUs\n"
+        config_string += f"npus_count: {self.npus_count}  # number of NPUs\n\n"
 
-            f.write("# Bandwidth per each dimension\n")
-            f.write(f"bandwidth: {self.bandwidth}  # GB/s\n\n")
+        config_string += "# Bandwidth per each dimension\n"
+        config_string += f"bandwidth: {self.bandwidth}  # GB/s\n\n"
 
-            f.write("# Latency per each dimension\n")
-            f.write(f"latency: {self.latency}  # ns\n")
+        config_string += "# Latency per each dimension\n"
+        config_string += f"latency: {self.latency}  # ns\n"
+
+        return config_string
