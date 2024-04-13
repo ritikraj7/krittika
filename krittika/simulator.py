@@ -82,7 +82,10 @@ class Simulator:
         )
 
         # FIXME: Just a simple example of the API
-        self.noc.send(69, 420, 80085)
+        self.noc.setup()
+        tracking_id = self.noc.post(69, 420, 80085)
+        self.noc.deliver_all_txns()
+        latency = self.noc.get_latency(tracking_id)
 
         self.verbose = verbose
         self.trace_gen_flag = save_traces

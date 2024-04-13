@@ -12,16 +12,9 @@ class KrittikaNoC(ABC):
         pass
 
     @abstractmethod
-    def send_chunk(self, src, dest, chunk_size) -> int:
-        # Send chunk_size data from src to dest
-        # Returns latency of this txn
-        # Simple for unaware, but aware won't be right unless we post txns
-        pass
-
-    @abstractmethod
-    def post_txn(self, src, dest, chunk_size) -> int:
-        # Posts a chunk_size txn from src to dest
-        # Returns a tracking ID for the txn
+    def post(self, src, dest, data_size) -> int:
+        # Posts a data_size txn from src to dest
+        # Returns tracking_id of this txn
         # Internally registers this tracking ID with the txn Event to be sent
         pass
 
