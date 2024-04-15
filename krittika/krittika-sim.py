@@ -3,6 +3,7 @@ import argparse
 from krittika.simulator import Simulator
 
 from dependencies.AstraSimANoCModel import sample_wrapper
+
 import os
 
 if __name__ == '__main__':
@@ -18,7 +19,7 @@ if __name__ == '__main__':
     '''
 
     sample_wrapper.py_common_bridge_sanity()
-
+    
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-t', metavar='Topology file', type=str,

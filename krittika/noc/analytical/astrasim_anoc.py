@@ -35,7 +35,7 @@ class AstraSimANoC(KrittikaNoC):
             self.logger.debug(f"Cpp config file written to {f.name}")
 
             # TODO:
-            #   - Setup a py binding that does the setup part
+            sample_wrapper.py_noc_setup()
 
     def post(self, src, dest, data_size) -> int:
         MAGIC_TRACKING_ID = 5
@@ -45,15 +45,14 @@ class AstraSimANoC(KrittikaNoC):
         )
 
         # TODO:
-        #   - Setup a pybinding that sends if unaware and schedules an event if aware
-        #   - Decide who populates and stores the tracking ID
+        sample_wrapper.py_add_to_EQ(src,dest,data_size)
 
         return MAGIC_TRACKING_ID
 
     def deliver_all_txns(self):
 
         # TODO:
-        #   - Setup the pybinding that does the !finished() {proceed()} loop
+        sample_wrapper.py_simulate_events()
 
         self.logger.debug(f"Delivering all txns")
 
@@ -63,7 +62,7 @@ class AstraSimANoC(KrittikaNoC):
         #   - Setup the pybinding that queries the tracking handler to get latency
 
         # TODO: Is this clks or ns?
-        MAGIC_LATENCY = 42
+        MAGIC_LATENCY = 35
 
         self.logger.debug(
             f"Txn with tracking ID {tracking_id} took {MAGIC_LATENCY} clks"
