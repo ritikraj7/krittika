@@ -15,7 +15,7 @@ from krittika.chiplet_system import ChipletSys
 
 #Outputs
     #Dependency Matrix
-    #Latency
+    #Latency Matrix
 
 
 class Scheduler:
@@ -36,6 +36,13 @@ class Scheduler:
         self.dependency_matrix = []
         self.status_matrix = [] #(x,y,z) x-inp_dependency, y-acc_dependency, z-run-status
         self.ready_to_run = deque()
+        self.latency_matrix = None
+        #set these two in set_params
+        #set this based on DRAM to SRAM latency
+        self.init_latency = 5
+        #hyper parameter
+        self.cycles_per_sec = (1/1.8)
+        self.bandwidth = math.pow(2,33)
 
         #Flags
         self.verbose = True
@@ -51,6 +58,12 @@ class Scheduler:
         self.config_obj = config_obj
         self.verbose = verbosity
 
+    #
+    def count_non_negative(self, list):
+        negative_values = sum(sublist.count(-1) for sublist in list)
+        total_values = sum(len(sublist) for sublist in list)
+        non_negative = total_values - negative_values
+        return non_negative
 
     #
     def workload_distribution(self, uniform = 1):
@@ -60,6 +73,8 @@ class Scheduler:
             input_rows_per_part = math.ceil(ifmap_matrix.shape[0] / self.chiplet_sys.num_input_part)
             filter_cols_per_part = math.ceil(filter_matrix.shape[1] / self.chiplet_sys.num_filter_part)
 
+            self.latency_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
+
             for inp_part in range(self.chiplet_sys.num_input_part):
                 ifmap_row_start = inp_part * input_rows_per_part
                 ifmap_row_end = min(ifmap_row_start + input_rows_per_part, ifmap_matrix.shape[0])
@@ -67,6 +82,7 @@ class Scheduler:
                 ifmap_part = ifmap_matrix[ifmap_row_start:ifmap_row_end,:]
                 this_row_dependency = []
                 this_row_status = []
+                this_row_latency = []
 
                 for filt_part in range(self.chiplet_sys.num_filter_part):
                     filt_col_start = filt_part * filter_cols_per_part
@@ -79,32 +95,54 @@ class Scheduler:
                     self.chiplet_sys.chiplet_matrix[inp_part][filt_part].compute_node.set_operands(ifmap_opmat=ifmap_part,
                                                                                                     filter_opmat=filter_part,
                                                                                                     ofmap_opmat=ofmap_part)
+                    
+                    #the sizes of the ifmap and filt for this part of the communication
+                    ifmap_part_size = np.sum(ifmap_part != -1)
+                    # filt_part_size = np.sum(filt_part != -1)
+                    # print("ifmap:")
+                    # print(ifmap_part_size)
+                    # print("filt:")
+                    # print(filt_part_size)
 
 
-                    if((inp_part == 0)):
-                        acc_dep_coord = (-1, -1)
-                        if(filt_part == 0):
-                            inp_dep_coord = (-1, -1)
-                            this_row_status.append([1,1,0])
-                        else:
-                            inp_dep_coord = (inp_part, filt_part - 1)
-                            this_row_status.append([0,1,0])
-                    elif((filt_part == 0)):
-                        acc_dep_coord = (inp_part - 1, filt_part)
+                    # if((inp_part == 0)):
+                    #     # acc_dep_coord = (-1, -1)
+                    #     if(filt_part == 0):
+                    #         inp_dep_coord = (-1, -1)
+                    #         this_row_status.append([1,0])
+                    #     else:
+                    #         inp_dep_coord = (inp_part, filt_part - 1)
+                    #         this_row_status.append([0,0])
+                    # elif((filt_part == 0)):
+                    #     inp_dep_coord = (-1, -1)
+                    #     this_row_status.append([1,0])
+                    # else:
+                    #     inp_dep_coord = (inp_part, filt_part - 1)
+                    #     this_row_status.append([0,0])
+
+                    if(filt_part == 0):
                         inp_dep_coord = (-1, -1)
-                        this_row_status.append([1,0,0])
+                        this_row_status.append([1,0])
+                        self.latency_matrix[inp_part][filt_part] = self.init_latency
                     else:
-                        acc_dep_coord = (inp_part - 1, filt_part)
                         inp_dep_coord = (inp_part, filt_part - 1)
-                        this_row_status.append([0,0,0])
+                        this_row_status.append([0,0])
+                        self.latency_matrix[inp_part][filt_part] = self.latency_matrix[inp_part][filt_part-1] + np.ceil((ifmap_part_size*8/self.bandwidth)*self.cycles_per_sec)
 
-                    if(acc_dep_coord == (-1,-1) and inp_dep_coord == (-1,-1)):
+
+                    if(inp_dep_coord == (-1,-1)):
                         self.ready_to_run.append((inp_part, filt_part))
-                    this_row_dependency.append((inp_dep_coord, acc_dep_coord))
+
+                    this_row_dependency.append((inp_dep_coord))
                 self.dependency_matrix.append(this_row_dependency)
                 self.status_matrix.append(this_row_status)
+
+        print("Dependency matrix:")
         print(self.dependency_matrix)
+        print("Status Matrix")
         print(self.status_matrix)
+        print("Latency Matrix")
+        print(self.latency_matrix)
 
 
     def run_chiplet(self):
@@ -144,23 +182,19 @@ class Scheduler:
 
     def run_sys(self):
         while len(self.ready_to_run):
+            #pass the latency of the chiplet to run _chiplet (to account for traces start time)
             self.run_chiplet()
             present_chiplet = self.ready_to_run.popleft()
-            self.status_matrix[present_chiplet[0]][present_chiplet[1]][2] = 1
+            self.status_matrix[present_chiplet[0]][present_chiplet[1]][1] = 1
     
             #update the ready_to_run with new chiplets that are ready to run
             for i in range(len(self.dependency_matrix)):
                 row = self.dependency_matrix[i]
                 for j in range(len(row)):
                     ele = self.dependency_matrix[i][j]
-                    if(ele[0] == present_chiplet):
+                    if(ele == present_chiplet):
                         self.status_matrix[i][j][0] = 1
-                    if(ele[1] == present_chiplet):
-                        self.status_matrix[i][j][1] = 1
-                    if(self.status_matrix[i][j] == [1,1,0]):
+                    if(self.status_matrix[i][j] == [1,0]):
                         self.ready_to_run.append((i,j))
                         self.ready_to_run = deque(set(self.ready_to_run))
-            print(self.ready_to_run)
-         
-
-
+            # print(self.ready_to_run)
