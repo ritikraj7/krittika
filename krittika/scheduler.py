@@ -166,6 +166,7 @@ class Scheduler:
        
         chiplet_node = self.chiplet_sys.chiplet_matrix[self.ready_to_run[0][0]][self.ready_to_run[0][1]]
         print("Chiplet being Run: ", self.ready_to_run[0][0], self.ready_to_run[0][1])
+        nop_latency = self.latency_matrix[self.ready_to_run[0][0]][self.ready_to_run[0][1]]
 
         chiplet_node.scratch_pad.set_params(verbose=self.verbose,
                                  estimate_bandwidth_mode=bandwidth_mode,
@@ -189,7 +190,7 @@ class Scheduler:
         temp = chiplet_node.scratch_pad.service_memory_requests(this_node_ifmap_demand_mat,
                                              this_node_filter_demand_mat,
                                              this_node_ofmap_demand_mat,
-                                             100)
+                                             nop_latency)
 
         print("Latency is: ", temp)
 
