@@ -40,7 +40,7 @@ class Scheduler:
         self.end_latency_matrix = None
         #set these two in set_params
         #set this based on DRAM to SRAM latency
-        self.init_latency = 5
+        self.init_latency = 0
         #hyper parameter
         self.cycles_per_sec = 1.8*math.pow(2,30)
         self.bandwidth = 100*math.pow(2,33)
