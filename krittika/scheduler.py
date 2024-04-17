@@ -36,13 +36,14 @@ class Scheduler:
         self.dependency_matrix = []
         self.status_matrix = [] #(x,y,z) x-inp_dependency, y-acc_dependency, z-run-status
         self.ready_to_run = deque()
-        self.latency_matrix = None
+        self.comm_latency_matrix = None
+        self.end_latency_matrix = None
         #set these two in set_params
         #set this based on DRAM to SRAM latency
         self.init_latency = 5
         #hyper parameter
-        self.cycles_per_sec = (1/1.8)
-        self.bandwidth = math.pow(2,33)
+        self.cycles_per_sec = 1.8*math.pow(2,30)
+        self.bandwidth = 100*math.pow(2,33)
 
         #Flags
         self.verbose = True
@@ -73,7 +74,8 @@ class Scheduler:
             input_rows_per_part = math.ceil(ifmap_matrix.shape[0] / self.chiplet_sys.num_input_part)
             filter_cols_per_part = math.ceil(filter_matrix.shape[1] / self.chiplet_sys.num_filter_part)
 
-            self.latency_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
+            self.comm_latency_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
+            self.end_latency_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
 
             for inp_part in range(self.chiplet_sys.num_input_part):
                 ifmap_row_start = inp_part * input_rows_per_part
@@ -123,11 +125,11 @@ class Scheduler:
                     if(filt_part == 0):
                         inp_dep_coord = (-1, -1)
                         this_row_status.append([1,0])
-                        self.latency_matrix[inp_part][filt_part] = self.init_latency
+                        self.comm_latency_matrix[inp_part][filt_part] = self.init_latency
                     else:
                         inp_dep_coord = (inp_part, filt_part - 1)
                         this_row_status.append([0,0])
-                        self.latency_matrix[inp_part][filt_part] = self.latency_matrix[inp_part][filt_part-1] + np.ceil((ifmap_part_size*8/self.bandwidth)*self.cycles_per_sec)
+                        self.comm_latency_matrix[inp_part][filt_part] = self.comm_latency_matrix[inp_part][filt_part-1] + np.ceil((ifmap_part_size*8/self.bandwidth)*self.cycles_per_sec)
 
 
                     if(inp_dep_coord == (-1,-1)):
@@ -141,8 +143,8 @@ class Scheduler:
         print(self.dependency_matrix)
         print("Status Matrix")
         print(self.status_matrix)
-        print("Latency Matrix")
-        print(self.latency_matrix)
+        print("Communication Latency Matrix")
+        print(self.comm_latency_matrix)
 
     #
     def set_memory_dependency(self):
@@ -166,7 +168,7 @@ class Scheduler:
        
         chiplet_node = self.chiplet_sys.chiplet_matrix[self.ready_to_run[0][0]][self.ready_to_run[0][1]]
         print("Chiplet being Run: ", self.ready_to_run[0][0], self.ready_to_run[0][1])
-        nop_latency = self.latency_matrix[self.ready_to_run[0][0]][self.ready_to_run[0][1]]
+        nop_latency = self.comm_latency_matrix[self.ready_to_run[0][0]][self.ready_to_run[0][1]]
 
         chiplet_node.scratch_pad.set_params(verbose=self.verbose,
                                  estimate_bandwidth_mode=bandwidth_mode,
@@ -191,8 +193,10 @@ class Scheduler:
                                              this_node_filter_demand_mat,
                                              this_node_ofmap_demand_mat,
                                              nop_latency)
-
-        print("Latency is: ", temp)
+        
+        # print("ofmap_lines:", this_node_ofmap_demand_mat.shape[0])
+        self.end_latency_matrix[self.ready_to_run[0][0]][self.ready_to_run[0][1]] \
+            = self.comm_latency_matrix[self.ready_to_run[0][0]][self.ready_to_run[0][1]] + this_node_ofmap_demand_mat.shape[0]
 
 
     def run_sys(self):
@@ -213,3 +217,9 @@ class Scheduler:
                         self.ready_to_run.append((i,j))
                         self.ready_to_run = deque(set(self.ready_to_run))
             # print(self.ready_to_run)
+        print("End Latency Matrix")
+        print(self.end_latency_matrix)
+
+    def get_latency(self):
+        completion_time = np.max(self.end_latency_matrix)
+        return completion_time

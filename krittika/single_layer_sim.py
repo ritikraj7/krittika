@@ -291,8 +291,7 @@ class SingleLayerSim:
         #    #self.all_node_mem_objects += [chiplet_node.scratch_pad]
 
         self.scheduler.run_sys()
-        temp = self.chiplet_sys.chiplet_matrix[0][0].compute_node.get_demand_matrices()
-        np.savetxt("temp.csv", temp[0], fmt='%s', delimiter=",")        
+        print("Total Latency:", self.scheduler.get_latency())
  
         self.mem_traces_done = True
 
