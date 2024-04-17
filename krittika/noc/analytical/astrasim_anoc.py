@@ -34,38 +34,32 @@ class AstraSimANoC(KrittikaNoC):
             f.write(self.cfg_contents)
             self.logger.debug(f"Cpp config file written to {f.name}")
 
-            # TODO:
-            sample_wrapper.py_noc_setup()
+            # FIXME:
+            #   - Getting parsing errors when using generated topology
+            file_path_str = f.name.encode("utf-8")
+            file_path_str = "/home/hice1/sprathipati6/hml_proj/setup_clean_tree/krittika_hml_proj/dependencies/AstraSimANoCModel/input/Ring.yml".encode(
+                "utf-8"
+            )
+
+            sample_wrapper.py_noc_setup(file_path_str)
 
     def post(self, src, dest, data_size) -> int:
-        MAGIC_TRACKING_ID = 5
+        t_id = sample_wrapper.py_add_to_EQ(src, dest, data_size)
 
         self.logger.debug(
-            f"Posting a txn from {src} to {dest} of size {data_size} with tracking ID {MAGIC_TRACKING_ID}"
+            f"Posting a txn from {src} to {dest} of size {data_size} with tracking ID {t_id}"
         )
 
-        # TODO:
-        sample_wrapper.py_add_to_EQ(src,dest,data_size)
-
-        return MAGIC_TRACKING_ID
+        return t_id
 
     def deliver_all_txns(self):
-
-        # TODO:
         sample_wrapper.py_simulate_events()
-
         self.logger.debug(f"Delivering all txns")
 
     def get_latency(self, tracking_id) -> int:
-
-        # TODO:
-        #   - Setup the pybinding that queries the tracking handler to get latency
-
         # TODO: Is this clks or ns?
-        MAGIC_LATENCY = 35
+        latency = sample_wrapper.py_get_latency(tracking_id)
 
-        self.logger.debug(
-            f"Txn with tracking ID {tracking_id} took {MAGIC_LATENCY} clks"
-        )
+        self.logger.debug(f"Txn with tracking ID {tracking_id} took {latency} clks")
 
-        return MAGIC_LATENCY
+        return latency
