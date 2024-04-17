@@ -144,6 +144,17 @@ class Scheduler:
         print("Latency Matrix")
         print(self.latency_matrix)
 
+    #
+    def set_memory_dependency(self):
+        for row in range(self.chiplet_sys.num_input_part):
+            for col in range(self.chiplet_sys.num_filter_part):
+                dep_coordinate = self.dependency_matrix[row][col]
+                if(dep_coordinate[0] == -1 and dep_coordinate[1] == -1):
+                    pass
+                else:
+                    self.chiplet_sys.chiplet_matrix[row][col].scratch_pad.set_ifmap_backing_buffer( self.chiplet_sys.chiplet_matrix[dep_coordinate[0]][dep_coordinate[1]].scratch_pad.ifmap_buf)
+            
+        
 
     def run_chiplet(self):
         bandwidth_mode = self.config_obj.get_bandwidth_use_mode()
@@ -175,9 +186,12 @@ class Scheduler:
             chiplet_node.scratch_pad.set_read_buf_prefetch_matrices(ifmap_prefetch_mat=this_node_ifmap_fetch_mat,
                                                      filter_prefetch_mat=this_node_filter_fetch_mat
                                                      )
-        chiplet_node.scratch_pad.service_memory_requests(this_node_ifmap_demand_mat,
+        temp = chiplet_node.scratch_pad.service_memory_requests(this_node_ifmap_demand_mat,
                                              this_node_filter_demand_mat,
-                                             this_node_ofmap_demand_mat)
+                                             this_node_ofmap_demand_mat,
+                                             100)
+
+        print("Latency is: ", temp)
 
 
     def run_sys(self):

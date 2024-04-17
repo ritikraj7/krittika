@@ -1,5 +1,6 @@
 import math
 import os.path
+import numpy as np
 
 from scalesim.compute.operand_matrix import operand_matrix
 from scalesim.memory.double_buffered_scratchpad_mem import double_buffered_scratchpad
@@ -133,6 +134,7 @@ class SingleLayerSim:
         self.scheduler = Scheduler()
         self.scheduler.set_params(self.chiplet_sys, self.op_mat_obj, self.config_obj, self.verbose)
         self.scheduler.workload_distribution() 
+        self.scheduler.set_memory_dependency()
         compute_unit, opt_dataflow = self.partitioner_obj.get_opt_compute_params(layer_id=self.layer_id)
         #input_rows_per_part = math.ceil(ifmap_matrix.shape[0] / self.num_input_part)
         #filter_cols_per_part = math.ceil(filter_matrix.shape[1] / self.num_filter_part)
@@ -289,6 +291,9 @@ class SingleLayerSim:
         #    #self.all_node_mem_objects += [chiplet_node.scratch_pad]
 
         self.scheduler.run_sys()
+        temp = self.chiplet_sys.chiplet_matrix[0][0].compute_node.get_demand_matrices()
+        np.savetxt("temp.csv", temp[0], fmt='%s', delimiter=",")        
+ 
         self.mem_traces_done = True
 
 
