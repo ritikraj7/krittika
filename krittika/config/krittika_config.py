@@ -51,7 +51,7 @@ class KrittikaConfig:
 
         cfg = ConfigParser()
         cfg.read(filename)
-
+        print(filename)
         section = 'GENERAL'
         self.run_name = cfg.get(section, 'Run Name')
 

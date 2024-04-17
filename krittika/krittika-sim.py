@@ -22,7 +22,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-t', metavar='Topology file', type=str,
-                        default='../topologies/conv_nets/test.csv',
+                        default='../topologies/test.csv',
                         help='Path to the topology CSV file'
                         )
 
@@ -32,7 +32,7 @@ if __name__ == '__main__':
                         )
 
     parser.add_argument('-p', metavar='Partition file', type=str,
-                        default='../part_files/demo_partition_file.csv',
+                        default='../partitions/temp_part.csv',
                         help='Path to the partition file'
                         )
 
@@ -47,7 +47,7 @@ if __name__ == '__main__':
                         )
 
     parser.add_argument('--savetrace', metavar='Save traces', type=bool,
-                        default=False,
+                        default=True,
                         help='Flag to indicate if the traces should be saved'
                         )
 

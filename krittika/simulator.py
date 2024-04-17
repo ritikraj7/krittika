@@ -93,6 +93,8 @@ class Simulator:
         self.reports_dir_path = reports_dir_path
 
         self.params_valid = True
+        self.enable_ls_partition = True
+        self.enable_lp_partition = False
 
     #
     def run(self):
@@ -101,6 +103,10 @@ class Simulator:
 
         # Run compute simulations for all layers first
         num_layers = self.workload_obj.get_num_layers()
+        ######################## 
+######## Need to define a function for this. for now just putting these same so its okay
+        num_cores = self.workload_obj.get_num_layers() # self.workload_obj.get_num_cores()
+
 
         # Update the offsets to generate operand matrices
         single_arr_config = scale_config()
@@ -112,56 +118,89 @@ class Simulator:
         conf_list[10] = self.config_obj.get_bandwidth_use_mode()
         conf_list.append(self.config_obj.get_interface_bandwidths()[0])
         single_arr_config.update_from_list(conf_list=conf_list)
-
-        for layer_id in range(num_layers):
-            if self.verbose:
-                print("Running Layer " + str(layer_id))
-            this_layer_op_mat_obj = operand_matrix()
-            layer_params = self.workload_obj.get_layer_params(layer_id)
-            if layer_params[0] in ["conv", "gemm"]:
-                this_layer_op_mat_obj.set_params(
-                    config_obj=single_arr_config,
-                    topoutil_obj=self.workload_obj,
-                    layer_id=layer_id,
-                )
-                this_layer_op_mat_obj.create_operand_matrices()
-
-                this_layer_sim = SingleLayerSim()
-                this_layer_sim.set_params(
-                    config_obj=self.config_obj,
-                    op_mat_obj=this_layer_op_mat_obj,
-                    partitioner_obj=self.partition_obj,
-                    layer_id=layer_id,
-                    log_top_path=self.top_path,
-                    verbosity=self.verbose,
-                )
-                this_layer_sim.run()
-                self.single_layer_objects_list += [this_layer_sim]
-
+        if self.enable_ls_partition:
+            for layer_id in range(num_layers):
                 if self.verbose:
-                    print("SAVING TRACES")
-                this_layer_sim.save_traces()
-                this_layer_sim.gather_report_items_across_cores()
-            elif layer_params[0] in ["activation"]:
-                op_matrix = self.single_layer_objects_list[
-                    layer_id - 1
-                ].get_ofmap_operand_matrix()
-
-                this_layer_sim = SingleLayerSim()
-                this_layer_sim.set_params(
-                    config_obj=self.config_obj,
-                    op_mat_obj=this_layer_op_mat_obj,
-                    partitioner_obj=self.partition_obj,
-                    layer_id=layer_id,
-                    log_top_path=self.top_path,
-                    verbosity=self.verbose,
-                )
-                this_layer_sim.run_simd_all_parts(
-                    operand_matrix=op_matrix, optype=layer_params[1]
-                )
-                self.single_layer_objects_list += [this_layer_sim]
-
-                this_layer_sim.gather_simd_report_items_across_cores()
+                    print('Running Layer ' + str(layer_id))
+                this_layer_op_mat_obj = operand_matrix()
+                layer_params = self.workload_obj.get_layer_params(layer_id)
+                if (layer_params[0] in ['conv', 'gemm']):
+                    this_layer_op_mat_obj.set_params(config_obj=single_arr_config,
+                                                 topoutil_obj=self.workload_obj,
+                                                 layer_id=layer_id)
+                    this_layer_op_mat_obj.create_operand_matrices()
+    
+                    this_layer_sim = SingleLayerSim()
+                    this_layer_sim.set_params(config_obj=self.config_obj,
+                                          op_mat_obj=this_layer_op_mat_obj,
+                                          partitioner_obj=self.partition_obj,
+                                          layer_id=layer_id,core_id= core_id,
+                                          log_top_path=self.top_path,
+                                          verbosity=self.verbose)
+                    this_layer_sim.run()
+                    self.single_layer_objects_list += [this_layer_sim]
+    
+                    if self.verbose:
+                        print('SAVING TRACES')
+                    this_layer_sim.save_traces()
+                    this_layer_sim.gather_report_items_across_cores()
+                elif (layer_params[0] in ['activation']):
+                    op_matrix = self.single_layer_objects_list[layer_id-1].get_ofmap_operand_matrix()
+    
+                    this_layer_sim = SingleLayerSim()
+                    this_layer_sim.set_params(config_obj=self.config_obj,
+                                          op_mat_obj=this_layer_op_mat_obj,
+                                          partitioner_obj=self.partition_obj,
+                                          layer_id=layer_id,
+                                          log_top_path=self.top_path,
+                                          verbosity=self.verbose)
+                    this_layer_sim.run_simd_all_parts(operand_matrix=op_matrix, optype = layer_params[1])
+                    self.single_layer_objects_list += [this_layer_sim]
+                    
+                    this_layer_sim.gather_simd_report_items_across_cores()
+        elif self.enable_lp_partition:
+            ### for now scheduling it one layer per core
+            ### for now assuming 1:1 core -> layer mapping
+            ### layer_id  --> core_id
+            for core_id in range(num_cores):
+                if self.verbose:
+                    print('Running Layer ' + str(core_id) + 'On core' + str(core_id))
+                this_layer_op_mat_obj = operand_matrix()
+                layer_params = self.workload_obj.get_layer_params(core_id)   
+                if (layer_params[0] in ['conv', 'gemm']):
+                    this_layer_op_mat_obj.set_params(config_obj=single_arr_config,
+                                                 topoutil_obj=self.workload_obj,
+                                                 layer_id=core_id)
+                    this_layer_op_mat_obj.create_operand_matrices()
+    
+                    this_layer_sim = SingleLayerSim() ### again for now till milestone we can assume one core, hmm maybe have an additional self knob for hyrbvid
+                    this_layer_sim.set_params(config_obj=self.config_obj,
+                                          op_mat_obj=this_layer_op_mat_obj,
+                                          partitioner_obj=self.partition_obj,
+                                          layer_id=core_id,,core_id= core_id,
+                                          log_top_path=self.top_path,
+                                          verbosity=self.verbose,skip_dram_reads=self.enable_lp_partition,skip_dram_writes = self.enable_lp_partition,num_cores = num_cores)
+                    this_layer_sim.run()
+                    self.single_layer_objects_list += [this_layer_sim]
+    
+                    if self.verbose:
+                        print('SAVING TRACES')
+                    this_layer_sim.save_traces()
+                    this_layer_sim.gather_report_items_across_cores()
+                elif (layer_params[0] in ['activation']):
+                    op_matrix = self.single_layer_objects_list[core_id-1].get_ofmap_operand_matrix()
+    
+                    this_layer_sim = SingleLayerSim()
+                    this_layer_sim.set_params(config_obj=self.config_obj,
+                                          op_mat_obj=this_layer_op_mat_obj,
+                                          partitioner_obj=self.partition_obj,
+                                          layer_id=core_id,
+                                          log_top_path=self.top_path,
+                                          verbosity=self.verbose)
+                    this_layer_sim.run_simd_all_parts(operand_matrix=op_matrix, optype = layer_params[1])
+                    self.single_layer_objects_list += [this_layer_sim]
+                    
+                    this_layer_sim.gather_simd_report_items_across_cores()
 
         self.runs_done = True
         self.generate_all_reports()

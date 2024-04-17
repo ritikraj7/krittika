@@ -4,5 +4,4 @@ configparser
 numpy
 pandas
 Cython
--e dependencies/AstraSimANoCModel
 -e dependencies/ScaleSimKrittikaBackend
