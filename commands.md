@@ -37,6 +37,7 @@ conda env create -f my_env.yml
 # THIS IS NEEDED FOR USING THE ANOC!
 # FIXME: Find a way to do this via requirements.txt
 cd dependencies/AstraSimANoCModel/;
+conda install -c conda-forge yaml-cpp
 python setup.py build_ext --inplace
 ```
 
@@ -46,7 +47,7 @@ python setup.py build_ext --inplace
 cd <your repo root>;
 pip install -e .
 ```
-#SNDBG TESTING
+
 # Running a test:
 ```bash
 # Launch Krittika:
