@@ -1,4 +1,5 @@
 import argparse
+import csv
 
 from krittika.simulator import Simulator
 
@@ -8,7 +9,7 @@ if __name__ == '__main__':
         -t : Path to topology file
         -c : Path to config file
         -p : Path to partition file (Not needed if partition mode is auto)
-        -o : Path to log dump directory 
+        -o : Path to log dump directory    
         --verbose: Verbosity of the run (Default: True)
         --savetrace: If True then saves the traces (Default: True) 
     '''
@@ -54,6 +55,13 @@ if __name__ == '__main__':
 
     verbosity = args.verbose
     save_traces_flag = args.savetrace
+
+    with open('results.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+            
+        writer.writerow(['Layer id', 'Total Latency'])
+
+        file.close()
 
     krittika = Simulator()
     krittika.set_params(

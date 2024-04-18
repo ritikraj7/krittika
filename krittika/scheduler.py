@@ -139,12 +139,12 @@ class Scheduler:
                 self.dependency_matrix.append(this_row_dependency)
                 self.status_matrix.append(this_row_status)
 
-        print("Dependency matrix:")
-        print(self.dependency_matrix)
-        print("Status Matrix")
-        print(self.status_matrix)
-        print("Communication Latency Matrix")
-        print(self.comm_latency_matrix)
+        # print("Dependency matrix:")
+        # print(self.dependency_matrix)
+        # print("Status Matrix")
+        # print(self.status_matrix)
+        # print("Communication Latency Matrix")
+        # print(self.comm_latency_matrix)
 
     #
     def set_memory_dependency(self):
@@ -217,6 +217,8 @@ class Scheduler:
                         self.ready_to_run.append((i,j))
                         self.ready_to_run = deque(set(self.ready_to_run))
             # print(self.ready_to_run)
+        print("Communication Latency Matrix")
+        print(self.comm_latency_matrix)
         print("End Latency Matrix")
         print(self.end_latency_matrix)
 

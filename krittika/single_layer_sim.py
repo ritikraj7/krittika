@@ -1,6 +1,7 @@
 import math
 import os.path
 import numpy as np
+import csv
 
 from scalesim.compute.operand_matrix import operand_matrix
 from scalesim.memory.double_buffered_scratchpad_mem import double_buffered_scratchpad
@@ -109,9 +110,9 @@ class SingleLayerSim:
         self.chiplet_sys.set_params(self.num_input_part,self.num_filter_part)
 
         #++Debug
-        for row in self.chiplet_sys.chiplet_matrix:
-            for i in row:
-                print(i.y,i.x)        
+        # for row in self.chiplet_sys.chiplet_matrix:
+        #     for i in row:
+        #         print(i.y,i.x)        
 
         self.layer_id = layer_id
 
@@ -291,7 +292,14 @@ class SingleLayerSim:
         #    #self.all_node_mem_objects += [chiplet_node.scratch_pad]
 
         self.scheduler.run_sys()
-        print("Total Latency:", self.scheduler.get_latency())
+        print("Total Latency: ",self.scheduler.get_latency())
+
+        with open('results.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            
+            writer.writerow([f'Layer {self.layer_id}', self.scheduler.get_latency()])
+
+            file.close()
  
         self.mem_traces_done = True
 
