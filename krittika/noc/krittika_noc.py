@@ -12,8 +12,8 @@ class KrittikaNoC(ABC):
         pass
 
     @abstractmethod
-    def post(self, src, dest, data_size) -> int:
-        # Posts a data_size txn from src to dest
+    def post(self, clk, src, dest, data_size) -> int:
+        # Posts a data_size txn from src to dest at time clk
         # Returns tracking_id of this txn
         # Internally registers this tracking ID with the txn Event to be sent
         pass
