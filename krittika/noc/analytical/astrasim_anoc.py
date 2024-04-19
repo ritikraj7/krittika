@@ -43,8 +43,8 @@ class AstraSimANoC(KrittikaNoC):
 
             sample_wrapper.py_noc_setup(file_path_str)
 
-    def post(self, src, dest, data_size) -> int:
-        t_id = sample_wrapper.py_add_to_EQ(src, dest, data_size)
+    def post(self, clk, src, dest, data_size) -> int:
+        t_id = sample_wrapper.py_add_to_EQ(clk, src, dest, data_size)
 
         self.logger.debug(
             f"Posting a txn from {src} to {dest} of size {data_size} with tracking ID {t_id}"

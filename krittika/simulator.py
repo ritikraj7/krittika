@@ -88,7 +88,7 @@ class Simulator:
 
         t_ids = []
         for i in range(10):
-            t = self.noc.post(1, 3, 512)
+            t = self.noc.post((500 * (i+2)), 1, 3, 512)
             t_ids.append(t)
 
         self.noc.deliver_all_txns()
