@@ -53,6 +53,7 @@ class Simulator:
         custom_partition_filename="",
         reports_dir_path="./",
         verbose=True,
+        noc_obj= None,
         save_traces=True,
     ):
         # Read the user input and files and prepare the objects
@@ -61,6 +62,7 @@ class Simulator:
 
         self.workload_obj = WorkloadManager()
         self.workload_obj.read_topologies(workload_filename=workload_filename)
+        self.noc_obj = noc_obj
 
         # print(self.workload_obj.get_simd_operation(0))
 
@@ -102,8 +104,8 @@ class Simulator:
         self.reports_dir_path = reports_dir_path
 
         self.params_valid = True
-        self.enable_ls_partition = True
-        self.enable_lp_partition = False
+        self.enable_ls_partition = False
+        self.enable_lp_partition = True
 
     #
     def run(self):
@@ -115,7 +117,6 @@ class Simulator:
         ######################## 
 ######## Need to define a function for this. for now just putting these same so its okay
         num_cores = self.workload_obj.get_num_layers() # self.workload_obj.get_num_cores()
-
 
         # Update the offsets to generate operand matrices
         single_arr_config = scale_config()
@@ -143,7 +144,7 @@ class Simulator:
                     this_layer_sim.set_params(config_obj=self.config_obj,
                                           op_mat_obj=this_layer_op_mat_obj,
                                           partitioner_obj=self.partition_obj,
-                                          layer_id=layer_id,core_id= core_id,
+                                          layer_id=layer_id,core_id= layer_id,
                                           log_top_path=self.top_path,
                                           verbosity=self.verbose)
                     this_layer_sim.run()
@@ -186,16 +187,19 @@ class Simulator:
                     this_layer_sim.set_params(config_obj=self.config_obj,
                                           op_mat_obj=this_layer_op_mat_obj,
                                           partitioner_obj=self.partition_obj,
-                                          layer_id=core_id,,core_id= core_id,
+                                          noc_obj = self.noc,
+                                          layer_id=core_id,core_id= core_id,
                                           log_top_path=self.top_path,
-                                          verbosity=self.verbose,skip_dram_reads=self.enable_lp_partition,skip_dram_writes = self.enable_lp_partition,num_cores = num_cores)
+                                          verbosity=self.verbose,skip_dram_reads=self.enable_lp_partition,skip_dram_writes = self.enable_lp_partition,num_cores = num_cores, enable_lp_partition = self.enable_lp_partition )
                     this_layer_sim.run()
+                    # Based on the partitioning scheme, post if any NoC transfer required (core-to-core only)
+                    this_layer_sim.tracking_id = self.noc.post(core_id, core_id+1, 10000) #TODO LARTHAM this needs to be valid ofmap SRAM size 
                     self.single_layer_objects_list += [this_layer_sim]
-    
-                    if self.verbose:
-                        print('SAVING TRACES')
-                    this_layer_sim.save_traces()
-                    this_layer_sim.gather_report_items_across_cores()
+                    
+ #                   if self.verbose:
+ #                       print('SAVING TRACES')
+ #                   this_layer_sim.save_traces()
+ #                   this_layer_sim.gather_report_items_across_cores()
                 elif (layer_params[0] in ['activation']):
                     op_matrix = self.single_layer_objects_list[core_id-1].get_ofmap_operand_matrix()
     
@@ -210,7 +214,20 @@ class Simulator:
                     self.single_layer_objects_list += [this_layer_sim]
                     
                     this_layer_sim.gather_simd_report_items_across_cores()
-
+        # NoC simulation
+        if(self.enable_lp_partition == 1):
+            self.noc.deliver_all_txns()
+            # Memory simulation + Trace generation
+            for lid in range(self.workload_obj.get_num_layers()):
+                layer_params = self.workload_obj.get_layer_params(lid)
+                if layer_params[0] in ["conv", "gemm", "activation"]:
+                    this_layer_sim_obj = self.single_layer_objects_list[lid]
+                    this_layer_sim_obj.run_mem_sim_all_parts()       
+                    if self.verbose:
+                        print("SAVING TRACES")
+                    this_layer_sim_obj.save_traces()
+                    this_layer_sim_obj.gather_report_items_across_cores()
+    
         self.runs_done = True
         self.generate_all_reports()
 

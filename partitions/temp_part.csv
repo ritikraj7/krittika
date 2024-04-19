@@ -1,2 +1,3 @@
 layer id, input parts, filter parts, unit, dataflow
 0, 1, 1, matmul, ws
+1, 1, 1, matmul, ws

@@ -24,7 +24,8 @@ class SingleLayerSim:
         self.op_mat_obj = operand_matrix()
         self.partitioner_obj = PartitionManager()
         self.config_obj = KrittikaConfig()
-
+        self.noc_obj    = None
+        
         # Variables determining state
         self.layer_id = 0
         self.num_input_part = 0
@@ -86,9 +87,10 @@ class SingleLayerSim:
                    config_obj=KrittikaConfig(),
                    op_mat_obj=operand_matrix(),
                    partitioner_obj=PartitionManager(),
+                   noc_obj = None,
                    layer_id=0,core_id=0,
                    verbosity=True,
-                   log_top_path='./',skip_dram_reads=False,skip_dram_writes=False,num_cores):
+                   log_top_path='./',skip_dram_reads=False,skip_dram_writes=False, num_cores= 1 , enable_lp_partition = 0 ):
 
         self.verbose = verbosity
         self.log_top_path = log_top_path
@@ -96,6 +98,7 @@ class SingleLayerSim:
         self.config_obj = config_obj
         self.op_mat_obj = op_mat_obj
         self.partitioner_obj = partitioner_obj
+        self.noc_obj    = noc_obj
 
         self.layer_id = layer_id
         self.core_id = core_id
@@ -103,9 +106,14 @@ class SingleLayerSim:
         self.skip_dram_reads = skip_dram_reads
         self.skip_dram_writes = skip_dram_writes
         self.num_cores = num_cores
+        self.enable_lp_partition = enable_lp_partition
     #
     def run(self):
-        self.num_input_part, self.num_filter_part = self.partitioner_obj.get_layer_partitions(layer_id=self.layer_id)
+        if(self.enable_lp_partition == 0):
+            self.num_input_part, self.num_filter_part = self.partitioner_obj.get_layer_partitions(layer_id=self.layer_id)
+        else:
+            self.num_input_part = 1
+            self.num_filter_part = 1
 
         self.compute_node_list = []
 
@@ -124,10 +132,12 @@ class SingleLayerSim:
         ### chunksize = rd_active_buf*ifmap_sram_size
         ### self.noc.post(chunksize,src,dst)
         ###
-        self.run_mem_sim_all_parts()
+        if(self.skip_dram_reads == 0):
+            self.run_mem_sim_all_parts()
 
     def run_compute_all_parts(self):
         ifmap_matrix, filter_matrix, ofmap_matrix = self.op_mat_obj.get_all_operand_matrix()
+        #print(ifmap_matrix,filter_matrix)
         compute_unit, opt_dataflow = self.partitioner_obj.get_opt_compute_params(layer_id=self.layer_id)
         input_rows_per_part = math.ceil(ifmap_matrix.shape[0] / self.num_input_part)
         filter_cols_per_part = math.ceil(filter_matrix.shape[1] / self.num_filter_part)
@@ -202,7 +212,12 @@ class SingleLayerSim:
 
         per_core_ifmap_bw, per_core_filter_bw, per_core_ofmap_bw\
             = self.config_obj.get_interface_bandwidths()
-      
+        skip_dram_reads = self.skip_dram_reads
+        skip_dram_writes = self.skip_dram_writes
+        if(self.skip_dram_reads and self.layer_id == 0 ): ## In LP, the first core is needs to read from mem and last core neesd to write from mem
+            skip_dram_reads = 0
+        if(self.skip_dram_reads and self.layer_id == self.num_cores - 1 ): ## In LP, the first core is needs to read from mem and last core neesd to write from mem
+            skip_dram_writes = 0
         for compute_node in self.compute_node_list:
 
             this_part_mem = double_buffered_scratchpad()
@@ -213,28 +228,27 @@ class SingleLayerSim:
                                      ofmap_buf_size_bytes=per_core_ofmap_buf_size,
                                      ifmap_backing_buf_bw=per_core_ifmap_bw,
                                      filter_backing_buf_bw=per_core_filter_bw,
-                                     ofmap_backing_buf_bw=per_core_ofmap_bw
+                                     ofmap_backing_buf_bw=per_core_ofmap_bw,
+                                     skip_dram_reads = skip_dram_reads,
+                                     skip_dram_writes = skip_dram_writes
                                      )
 
             # Demand mat
             this_node_ifmap_demand_mat, this_node_filter_demand_mat, this_node_ofmap_demand_mat \
                 = compute_node.get_demand_matrices()
-
+            
             this_node_ifmap_fetch_mat, this_node_filter_fetch_mat = compute_node.get_prefetch_matrices()
+           #print(this_node_ifmap_demand_mat)
+           #print(this_node_ifmap_fetch_mat)
+           #print(this_node_filter_fetch_mat)
             if (self.config_obj.get_bandwidth_use_mode()=="USER"):
                 this_part_mem.set_read_buf_prefetch_matrices(ifmap_prefetch_mat=this_node_ifmap_fetch_mat,
                                                          filter_prefetch_mat=this_node_filter_fetch_mat
                                                          )
 
-            skip_dram_reads = self.skip_dram_reads
-            skip_dram_writes = self.skip_dram_writes
-            if(self.skip_dram_reads and self.core_id == 0 ) ## In LP, the first core is needs to read from mem and last core neesd to write from mem
-                    skip_dram_reads= 0
-            if(self.skip_dram_writes and self.core_id == self.num_cores - 1)
-                    skip_dram_writes= 0
             this_part_mem.service_memory_requests(this_node_ifmap_demand_mat,
                                                   this_node_filter_demand_mat,
-                                                  this_node_ofmap_demand_mat,skip_dram_reads,skip_dram_writes)
+                                                  this_node_ofmap_demand_mat)
 
             self.all_node_mem_objects += [this_part_mem]
 
@@ -267,7 +281,7 @@ class SingleLayerSim:
     #
     def gather_report_items_across_cores(self):
         assert self.compute_done and self.mem_traces_done
-
+        #(len(self.compute_node_list))
         for core_id in range(len(self.compute_node_list)):
             compute_system = self.compute_node_list[core_id]
             memory_system = self.all_node_mem_objects[core_id]
@@ -275,7 +289,8 @@ class SingleLayerSim:
             # Compute report
             num_compute = compute_system.get_num_compute()
             num_unit = compute_system.get_num_units()
-            total_cycles = memory_system.get_total_compute_cycles()
+            total_cycles = memory_system.get_total_compute_cycles() + self.noc_obj.get_latency(compute_system.tracking_id) # + DEPENDENCY BUBBLES LOLDBG
+            # Manish SRAM to SRAM may help with adding the dependency cycles
             
             stall_cycles = memory_system.get_stall_cycles()
             overall_util = (num_compute * 100) / (total_cycles * num_unit)
@@ -349,7 +364,8 @@ class SingleLayerSim:
         for part_idx in range(len(self.all_node_mem_objects)):
             trace_dir_name = self.log_top_path + \
                              '/traces/layer' + str(self.layer_id) + \
-                             '/core' + str(part_idx)
+                             '/core' + str(self.layer_id)  # str(part_idx) ## TODO Mmanchali fix it have core id.
+                             # currently this is run for each layer and since only 1 layer has 1 core executing it assumes it to be core 0, Need to fix this
 
             ifmap_sram_filename = trace_dir_name + '/IFMAP_SRAM_TRACE.csv'
             filter_sram_filename = trace_dir_name + '/FILTER_SRAM_TRACE.csv'
@@ -378,7 +394,7 @@ class SingleLayerSim:
         self.check_and_build(l2_dir)
 
         for core_id in range(len(self.compute_node_list)):
-            this_core_dir = l2_dir + '/core' + str(core_id)
+            this_core_dir = l2_dir + '/core' + str(self.layer_id) ## Change this back to core_id
             self.check_and_build(this_core_dir)
 
     def get_ofmap_operand_matrix(self):
