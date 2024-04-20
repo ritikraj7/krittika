@@ -32,6 +32,8 @@ class ComputeNode:
         self.params_set = False
         self.operands_valid = False
         self.matrices_valid = False
+        # NoC
+        self.tracking_id = 0
 
     #
     def set_params(self,

@@ -118,21 +118,7 @@ class SingleLayerSim:
         self.compute_node_list = []
 
         self.run_compute_all_parts()
-        ### Call Noc here for cycles only for noc
-        ## Push event queue
-        ## run
-        ## get event times, maybe in mem
-        ### for now cycles is 0.
-        ### Noc part is this
-        ###         self.noc.setup()
-        #self.noc.post(1, 3, 512)
-        ##self.noc.deliver_all_txns()
-        ##latency = self.noc.get_latency(0)
-
-        ### chunksize = rd_active_buf*ifmap_sram_size
-        ### self.noc.post(chunksize,src,dst)
-        ###
-        if(self.skip_dram_reads == 0):
+        if(self.enable_lp_partition == 0):
             self.run_mem_sim_all_parts()
 
     def run_compute_all_parts(self):
@@ -214,9 +200,10 @@ class SingleLayerSim:
             = self.config_obj.get_interface_bandwidths()
         skip_dram_reads = self.skip_dram_reads
         skip_dram_writes = self.skip_dram_writes
+        print(skip_dram_reads,skip_dram_writes)
         if(self.skip_dram_reads and self.layer_id == 0 ): ## In LP, the first core is needs to read from mem and last core neesd to write from mem
             skip_dram_reads = 0
-        if(self.skip_dram_reads and self.layer_id == self.num_cores - 1 ): ## In LP, the first core is needs to read from mem and last core neesd to write from mem
+        if(self.skip_dram_reads and self.layer_id == (self.num_cores - 1) ): ## In LP, the first core is needs to read from mem and last core neesd to write from mem
             skip_dram_writes = 0
         for compute_node in self.compute_node_list:
 
@@ -245,10 +232,9 @@ class SingleLayerSim:
                 this_part_mem.set_read_buf_prefetch_matrices(ifmap_prefetch_mat=this_node_ifmap_fetch_mat,
                                                          filter_prefetch_mat=this_node_filter_fetch_mat
                                                          )
-
             this_part_mem.service_memory_requests(this_node_ifmap_demand_mat,
                                                   this_node_filter_demand_mat,
-                                                  this_node_ofmap_demand_mat)
+                                                  this_node_ofmap_demand_mat,self.layer_id)
 
             self.all_node_mem_objects += [this_part_mem]
 
@@ -289,7 +275,11 @@ class SingleLayerSim:
             # Compute report
             num_compute = compute_system.get_num_compute()
             num_unit = compute_system.get_num_units()
-            total_cycles = memory_system.get_total_compute_cycles() + self.noc_obj.get_latency(compute_system.tracking_id) # + DEPENDENCY BUBBLES LOLDBG
+            if(self.enable_lp_partition == 1):
+                print("Layer ",core_id,"Noc",self.noc_obj.get_latency(compute_system.tracking_id))
+                total_cycles = memory_system.get_total_compute_cycles() ##+ self.noc_obj.get_latency(compute_system.tracking_id) # + DEPENDENCY BUBBLES LOLDBG
+            else:
+                total_cycles = memory_system.get_total_compute_cycles() 
             # Manish SRAM to SRAM may help with adding the dependency cycles
             
             stall_cycles = memory_system.get_stall_cycles()

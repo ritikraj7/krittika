@@ -89,15 +89,16 @@ class Simulator:
         t_ids = []
         for i in range(10):
             t = self.noc.post((500 * (i+2)), 1, 3, 512)
+            print("t",i," ",(500 * (i+2)))
             t_ids.append(t)
-
+        
         self.noc.deliver_all_txns()
 
         latencies = []
         for t in t_ids:
             l = self.noc.get_latency(t)
             latencies.append(l)
-
+        print(latencies)
         self.verbose = verbose
         self.trace_gen_flag = save_traces
 
@@ -193,7 +194,11 @@ class Simulator:
                                           verbosity=self.verbose,skip_dram_reads=self.enable_lp_partition,skip_dram_writes = self.enable_lp_partition,num_cores = num_cores, enable_lp_partition = self.enable_lp_partition )
                     this_layer_sim.run()
                     # Based on the partitioning scheme, post if any NoC transfer required (core-to-core only)
-                    this_layer_sim.tracking_id = self.noc.post(core_id, core_id+1, 10000) #TODO LARTHAM this needs to be valid ofmap SRAM size 
+                    # Currently transferring 
+                    ## Currently hard coding a huger time difference to enable non overlapping of transactions.
+                    print(this_layer_op_mat_obj.ofmap_addr_matrix.shape[0] *this_layer_op_mat_obj.ofmap_addr_matrix.shape[1])
+                    if(core_id != (num_cores - 1)):
+                        this_layer_sim.tracking_id =  self.noc.post(0 + core_id*1000000 ,core_id, core_id+1, this_layer_op_mat_obj.ofmap_addr_matrix.shape[0] *this_layer_op_mat_obj.ofmap_addr_matrix.shape[1]*1) #TODO Fix the 0.5 as a active buf knob so that they are same in Mem sys and here LARTHAM this needs to be valid ofmap SRAM size 
                     self.single_layer_objects_list += [this_layer_sim]
                     
  #                   if self.verbose:
@@ -220,7 +225,7 @@ class Simulator:
             # Memory simulation + Trace generation
             for lid in range(self.workload_obj.get_num_layers()):
                 layer_params = self.workload_obj.get_layer_params(lid)
-                if layer_params[0] in ["conv", "gemm", "activation"]:
+                if layer_params[0] in ["conv", "gemm", "activation"]: ## TODO mmanish remove activation
                     this_layer_sim_obj = self.single_layer_objects_list[lid]
                     this_layer_sim_obj.run_mem_sim_all_parts()       
                     if self.verbose:
