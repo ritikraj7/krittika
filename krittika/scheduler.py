@@ -38,6 +38,7 @@ class Scheduler:
         self.ready_to_run = deque()
         self.comm_latency_matrix = None
         self.end_latency_matrix = None
+        self.ifmap_size_matrix = None
         #set these two in set_params
         #set this based on DRAM to SRAM latency
         self.init_latency = 0
@@ -77,6 +78,9 @@ class Scheduler:
             self.comm_latency_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
             self.end_latency_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
 
+            #Debug
+            self.ifmap_size_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
+
             for inp_part in range(self.chiplet_sys.num_input_part):
                 ifmap_row_start = inp_part * input_rows_per_part
                 ifmap_row_end = min(ifmap_row_start + input_rows_per_part, ifmap_matrix.shape[0])
@@ -100,6 +104,7 @@ class Scheduler:
                     
                     #the sizes of the ifmap and filt for this part of the communication
                     ifmap_part_size = np.sum(ifmap_part != -1)
+                    self.ifmap_size_matrix[inp_part][filt_part] = ifmap_part_size
                     # filt_part_size = np.sum(filt_part != -1)
                     # print("ifmap:")
                     # print(ifmap_part_size)
@@ -133,7 +138,8 @@ class Scheduler:
 
 
                     if(inp_dep_coord == (-1,-1)):
-                        self.ready_to_run.append((inp_part, filt_part))
+                        if(self.ifmap_size_matrix[inp_part][filt_part] != 0):
+                            self.ready_to_run.append((inp_part, filt_part))
 
                     this_row_dependency.append((inp_dep_coord))
                 self.dependency_matrix.append(this_row_dependency)
@@ -145,6 +151,8 @@ class Scheduler:
         # print(self.status_matrix)
         # print("Communication Latency Matrix")
         # print(self.comm_latency_matrix)
+        # print("ifmap_size_matrix:")
+        # print(self.ifmap_size_matrix)
 
     #
     def set_memory_dependency(self):
@@ -167,7 +175,7 @@ class Scheduler:
             = self.config_obj.get_interface_bandwidths()
        
         chiplet_node = self.chiplet_sys.chiplet_matrix[self.ready_to_run[0][0]][self.ready_to_run[0][1]]
-        print("Chiplet being Run: ", self.ready_to_run[0][0], self.ready_to_run[0][1])
+        # print("Chiplet being Run: ", self.ready_to_run[0][0], self.ready_to_run[0][1])
         nop_latency = self.comm_latency_matrix[self.ready_to_run[0][0]][self.ready_to_run[0][1]]
 
         chiplet_node.scratch_pad.set_params(verbose=self.verbose,
@@ -214,7 +222,8 @@ class Scheduler:
                     if(ele == present_chiplet):
                         self.status_matrix[i][j][0] = 1
                     if(self.status_matrix[i][j] == [1,0]):
-                        self.ready_to_run.append((i,j))
+                        if(self.ifmap_size_matrix[i][j] != 0):
+                            self.ready_to_run.append((i,j))
                         self.ready_to_run = deque(set(self.ready_to_run))
             # print(self.ready_to_run)
         print("Communication Latency Matrix")
@@ -225,3 +234,6 @@ class Scheduler:
     def get_latency(self):
         completion_time = np.max(self.end_latency_matrix)
         return completion_time
+    
+    def get_ifmap_size_matrix(self):
+        return self.ifmap_size_matrix

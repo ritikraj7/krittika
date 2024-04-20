@@ -168,19 +168,21 @@ class SingleLayerSim:
 
                 #self.compute_node_list += [this_part_compute_node]
 
-                #++Sahith
-                this_part_chiplet_node = self.chiplet_sys.chiplet_matrix[inp_part][filt_part]
-                #this_part_chiplet_node = ChipletNode()
-                this_part_chiplet_node.compute_node.set_params(config=self.config_obj,
-                                                  compute_unit=compute_unit,
-                                                  dataflow=opt_dataflow)
+                ifmap_size_matrix = self.scheduler.get_ifmap_size_matrix()
+                if(ifmap_size_matrix[inp_part][filt_part] != 0):
+                    #++Sahith
+                    this_part_chiplet_node = self.chiplet_sys.chiplet_matrix[inp_part][filt_part]
+                    #this_part_chiplet_node = ChipletNode()
+                    this_part_chiplet_node.compute_node.set_params(config=self.config_obj,
+                                                    compute_unit=compute_unit,
+                                                    dataflow=opt_dataflow)
 
-                #this_part_chiplet_node.compute_node.set_operands(ifmap_opmat=ifmap_part,
-                #                                    filter_opmat=filter_part,
-                #                                    ofmap_opmat=ofmap_part)
-                this_part_chiplet_node.compute_node.calc_demand_matrices()
+                    #this_part_chiplet_node.compute_node.set_operands(ifmap_opmat=ifmap_part,
+                    #                                    filter_opmat=filter_part,
+                    #                                    ofmap_opmat=ofmap_part)
+                    this_part_chiplet_node.compute_node.calc_demand_matrices()
 
-                self.chiplet_node_list += [this_part_chiplet_node]
+                    self.chiplet_node_list += [this_part_chiplet_node]
 
         self.compute_done = True
         
