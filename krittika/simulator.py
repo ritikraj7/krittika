@@ -88,7 +88,7 @@ class Simulator:
 
         t_ids = []
         for i in range(10):
-            t = self.noc.post((500 * (i+2)), 1, 3, 512)
+            t = self.noc.post((500 * (i + 2)), 1, 3, 512)
             #print("t",i," ",(500 * (i+2)))
             t_ids.append(t)
         
@@ -98,7 +98,9 @@ class Simulator:
         for t in t_ids:
             l = self.noc.get_latency(t)
             latencies.append(l)
-        #print(latencies)
+
+        stat_lat = self.noc.get_static_latency(0, 1, 512)
+
         self.verbose = verbose
         self.trace_gen_flag = save_traces
 
