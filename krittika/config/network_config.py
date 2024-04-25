@@ -8,6 +8,7 @@ class SupportedTopologies(Enum):
     RING = "Ring"
     FULLYCONNECTED = "FullyConnected"
     SWITCH = "Switch"
+    HYPERCUBE = "HyperCube"
 
 
 class NetworkConfig:
