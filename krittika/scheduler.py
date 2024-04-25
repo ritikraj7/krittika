@@ -39,6 +39,7 @@ class Scheduler:
         self.comm_latency_matrix = None
         self.end_latency_matrix = None
         self.ifmap_size_matrix = None
+        self.data_dist_matrix = None
         #set these two in set_params
         #set this based on DRAM to SRAM latency
         self.init_latency = 0
@@ -66,6 +67,60 @@ class Scheduler:
         total_values = sum(len(sublist) for sublist in list)
         non_negative = total_values - negative_values
         return non_negative
+
+    #def
+    def non_uniform_work_dist(self, occupancy_m, N_src):
+        data_dist_m = np.zeros((occupancy_m.shape[0],occupancy_m.shape[1]))
+
+        srcs = {}
+        coordinates = {}
+        for i in range(occupancy_m.shape[0]):
+            for j in range(occupancy_m.shape[1]):
+                if (occupancy_m[i][j] < 0):
+                    srcs[occupancy_m[i][j]] = (i,j)
+                if (occupancy_m[i][j] > 0):
+                    if (occupancy_m[i][j] in coordinates):
+                        coordinates[occupancy_m[i][j]].append((i,j))
+                    else:
+                        coordinates[occupancy_m[i][j]] = [(i,j)]
+
+        total_distance = []
+        for i in range (N_src):
+            total_dist = 0
+            src = i+1
+            for coord in coordinates[src]:
+                #print (coord)
+                total_dist = total_dist + 1 + abs(coord[0] - srcs[-1*src][0]) + abs(coord[1] - srcs[-1*src][1])
+
+            #adding 1 for source 
+            total_dist = total_dist + 1 
+            total_distance.append(total_dist)
+            print ("i = ", i, "tot dist = ", total_dist)
+
+        for i in range (N_src):
+            max_hopcount = 0
+            tot_assigned = 0
+            src = i+1
+            #Find max hop count
+            for coord in coordinates[src]:
+                hop_count = abs(coord[0] - srcs[-1*src][0]) + abs(coord[1] - srcs[-1*src][1]) + 1
+                if (max_hopcount < hop_count):
+                    max_hopcount = hop_count
+            #assign data
+            for coord in coordinates[src]:
+                hop_count = abs(coord[0] - srcs[-1*src][0]) + abs(coord[1] - srcs[-1*src][1]) + 1
+                data_dist_m[coord[0]][coord[1]] = (max_hopcount - hop_count + 1)/total_distance[i]
+                tot_assigned = tot_assigned + max_hopcount - hop_count + 1
+
+            hop_count = 1
+            
+            data_dist_m[srcs[-1*src][0]][srcs[-1*src][1]] = max_hopcount - hop_count + 1 
+            tot_assigned = tot_assigned + max_hopcount - hop_count + 1
+            assign_leftover_to_src = total_distance[i] - tot_assigned
+            data_dist_m[srcs[-1*src][0]][srcs[-1*src][1]] += assign_leftover_to_src
+            data_dist_m[srcs[-1*src][0]][srcs[-1*src][1]] /= total_distance[i]
+        
+        return data_dist_m
 
     #
     def workload_distribution(self, uniform = 1):
@@ -105,27 +160,6 @@ class Scheduler:
                     #the sizes of the ifmap and filt for this part of the communication
                     ifmap_part_size = np.sum(ifmap_part != -1)
                     self.ifmap_size_matrix[inp_part][filt_part] = ifmap_part_size
-                    # filt_part_size = np.sum(filt_part != -1)
-                    # print("ifmap:")
-                    # print(ifmap_part_size)
-                    # print("filt:")
-                    # print(filt_part_size)
-
-
-                    # if((inp_part == 0)):
-                    #     # acc_dep_coord = (-1, -1)
-                    #     if(filt_part == 0):
-                    #         inp_dep_coord = (-1, -1)
-                    #         this_row_status.append([1,0])
-                    #     else:
-                    #         inp_dep_coord = (inp_part, filt_part - 1)
-                    #         this_row_status.append([0,0])
-                    # elif((filt_part == 0)):
-                    #     inp_dep_coord = (-1, -1)
-                    #     this_row_status.append([1,0])
-                    # else:
-                    #     inp_dep_coord = (inp_part, filt_part - 1)
-                    #     this_row_status.append([0,0])
 
                     if(filt_part == 0):
                         inp_dep_coord = (-1, -1)
@@ -145,15 +179,35 @@ class Scheduler:
                 self.dependency_matrix.append(this_row_dependency)
                 self.status_matrix.append(this_row_status)
 
-        # print("Dependency matrix:")
-        # print(self.dependency_matrix)
-        # print("Status Matrix")
-        # print(self.status_matrix)
-        # print("Communication Latency Matrix")
-        # print(self.comm_latency_matrix)
-        # print("ifmap_size_matrix:")
-        # print(self.ifmap_size_matrix)
+        #else:
 
+            print("Dependency matrix:")
+            print(self.dependency_matrix)
+            print("Status Matrix")
+            print(self.status_matrix)
+            print("Communication Latency Matrix")
+            print(self.comm_latency_matrix)
+            print("ifmap_size_matrix:")
+            print(self.ifmap_size_matrix)
+
+        else:
+            ##TODO - Need to update this with greedy algorithm
+            occupancy_m = np.zeros((6,6))
+            occupancy_m = np.array([[1.0, -1.0, 1.0, 2.0, -2.0, 2.0],
+                            [1.0, 1.0, 1.0, 2.0, 2.0, 2.0],
+                            [-3.0, 3.0, 3.0, 4.0, 4.0, -4.0],
+                            [3.0, 5.0, 5.0, 6.0, 6.0, 4.0],
+                            [3.0, 5.0, -5.0, 6.0, -6.0, 4.0],
+                            [3.0, 5.0, 5.0, 6.0, 6.0, 4.0] ])
+            #TODO - Need to update this with greedy algorithm
+            N_src = 6
+            print("Occupancy Matrix:")
+            print (occupancy_m)
+            
+            self.data_dist_m = self.non_uniform_work_dist (occupancy_m, N_src)
+            
+            print ("Data Dist Matrix matrix:")
+            print (self.data_dist_m )
     #
     def set_memory_dependency(self):
         for row in range(self.chiplet_sys.num_input_part):
