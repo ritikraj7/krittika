@@ -208,6 +208,7 @@ class WorkloadManager:
         if not (self.topo_valid or self.num_layers - 1 < layer_id):
             print("ERROR: topologies.get_layer_params: Invalid layer id")
             return
+        #print(layer_id)
         layer_params = self.topo_list[layer_id]
         return layer_params
 

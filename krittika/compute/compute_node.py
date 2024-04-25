@@ -33,7 +33,7 @@ class ComputeNode:
         self.operands_valid = False
         self.matrices_valid = False
         # NoC
-        self.tracking_id = 0
+        self.tracking_id = {}
 
     #
     def set_params(self,
@@ -50,9 +50,11 @@ class ComputeNode:
 
         if compute_unit == 'matmul':
             if dataflow == 'os':
+                print("OSSS")
                 self.selected_compute_node = SystolicMatMulOS()
 
             elif dataflow == 'ws':
+                print("WSSS")
                 self.selected_compute_node = SystolicMatMulWS()
 
             elif dataflow == 'is':

@@ -65,6 +65,7 @@ class KrittikaConfig:
             self.matmul_arr_col = int(cfg.get(section, 'MatMul ArrCol'))
 
             matmul_default_dataflow = cfg.get(section, 'MatMul Default Dataflow')
+            print(matmul_default_dataflow)
             assert matmul_default_dataflow in ['os', 'ws', 'is'], 'Invalid dataflow: ' + str(matmul_default_dataflow)
             self.matmul_default_dataflow = matmul_default_dataflow
 
