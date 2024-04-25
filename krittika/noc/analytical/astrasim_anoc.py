@@ -63,3 +63,6 @@ class AstraSimANoC(KrittikaNoC):
         self.logger.debug(f"Txn with tracking ID {tracking_id} took {latency} clks")
 
         return latency
+
+    def get_static_latency(self, src, dest, size) -> int:
+        return sample_wrapper.py_get_static_latency(src, dest, size)

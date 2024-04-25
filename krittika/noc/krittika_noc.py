@@ -27,3 +27,9 @@ class KrittikaNoC(ABC):
     def get_latency(self, tracking_id) -> int:
         # After delivery is done, query the latency of a txn using tracking_id
         pass
+
+    @abstractmethod
+    def get_static_latency(self, src, dest, size) -> int:
+        # Returns the fixed part of sending from src to dest
+        #   This includes serialization delay and fixed route latency
+        pass
