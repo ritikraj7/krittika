@@ -10,6 +10,7 @@ class SupportedTopologies(Enum):
     SWITCH = "Switch"
     HYPERCUBE = "HyperCube"
     MESH = "Mesh"
+    BUS = "Bus"
 
 
 class NetworkConfig:
@@ -112,16 +113,12 @@ class NetworkConfig:
             for item in cfg.get("Network Configuration", "cols").split(",")
         ]
         self.logger.debug(f"cols read from cfg file is: {self.cols}")
-        
-        self.mapping_en = cfg.getboolean(
-            "Network Configuration", "mapping_en"
-        )
-        self.logger.debug(
-            f"Mapping enable read from cfg file is: {self.mapping_en}"
-        )
 
-        if 'logical_to_physical_mapping' in cfg:
-            for key, value in cfg['logical_to_physical_mapping'].items():
+        self.mapping_en = cfg.getboolean("Network Configuration", "mapping_en")
+        self.logger.debug(f"Mapping enable read from cfg file is: {self.mapping_en}")
+
+        if "logical_to_physical_mapping" in cfg:
+            for key, value in cfg["logical_to_physical_mapping"].items():
                 self.mapping_dict[int(key)] = int(value)
 
         # Validate entries
@@ -163,6 +160,6 @@ class NetworkConfig:
 
     def get_logical_to_physical_mapping(self):
         return self.mapping_dict
-    
+
     def get_mapping_en(self):
         return self.mapping_en
