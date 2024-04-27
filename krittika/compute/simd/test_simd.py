@@ -1,5 +1,5 @@
 import unittest
-from fsimd import simd  # Ensure this path is correct based on your project structure
+from simd import simd  # Ensure this path is correct based on your project structure
 import numpy as np
 
 class TestSIMDOperations(unittest.TestCase):

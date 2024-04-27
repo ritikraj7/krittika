@@ -1,6 +1,6 @@
 import numpy as np
 import math
-from krittika_config import KrittikaConfig
+from krittika.config.krittika_config import KrittikaConfig
 
 dummy_matrix = np.ones((1, 1)) * -1
 
