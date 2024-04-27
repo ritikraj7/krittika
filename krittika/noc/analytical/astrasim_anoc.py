@@ -1,5 +1,5 @@
 import logging
-import tempfile
+import os
 
 from krittika.noc.krittika_noc import KrittikaNoC
 from dependencies.AstraSimANoCModel import sample_wrapper
@@ -9,6 +9,8 @@ class AstraSimANoC(KrittikaNoC):
 
     def __init__(self, network_config):
         self.cfg_contents = network_config.get_cpp_config()
+        self.mapping_en = network_config.get_mapping_en()
+        self.mapping_dict = network_config.get_logical_to_physical_mapping()
 
         # TODO5REE: Too much repetition, move it to a logger class
         self.logging_level = logging.CRITICAL
@@ -25,29 +27,38 @@ class AstraSimANoC(KrittikaNoC):
             ch.setFormatter(formatter)
             self.logger.addHandler(ch)
 
+        self.logger.debug(f"Logical to Physical mapping enabled : {self.mapping_en} \n")
+        if self.mapping_en:
+            self.logger.debug(f"Logical to Physical mapping is : \n")
+            for key, value in self.mapping_dict.items():
+                self.logger.debug(f"Logical Core: {key} -> Physical Core : {value}\n")
+
         self.logger.debug(
             f"Contents of generated cpp cfg file are: \n{self.cfg_contents}"
         )
 
     def setup(self):
-        with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
+        file_name = os.path.abspath("krittika_anoc_cfg.yml")
+        with open(file_name, "w") as f:
             f.write(self.cfg_contents)
-            self.logger.debug(f"Cpp config file written to {f.name}")
+            self.logger.debug(f"Cpp cconfig file contents are {self.cfg_contents}")
+            self.logger.debug(f"Cpp config file written to {file_name}")
 
-            # FIXME:
-            #   - Getting parsing errors when using generated topology
-            file_path_str = f.name.encode("utf-8")
-            file_path_str = "/home/hice1/mmanchali3/hml_proj_kritiika_final/commit_tree/krittika_hml_proj/dependencies/AstraSimANoCModel/input/Mesh.yml".encode(
-                "utf-8"
-            )
-
-            sample_wrapper.py_noc_setup(file_path_str)
+        file_path_str = file_name.encode("utf-8")
+        sample_wrapper.py_noc_setup(file_path_str)
 
     def post(self, clk, src, dest, data_size) -> int:
-        t_id = sample_wrapper.py_add_to_EQ(clk, src, dest, data_size)
 
+        if self.mapping_en:
+            physical_src = self.mapping_dict[src]
+            physical_dest = self.mapping_dict[dest]
+        else:
+            physical_src = src
+            physical_dest = dest
+
+        t_id = sample_wrapper.py_add_to_EQ(clk, physical_src, physical_dest, data_size)
         self.logger.debug(
-            f"Posting a txn from {src} to {dest} of size {data_size} with tracking ID {t_id}"
+            f"Posting a txn from physical core {physical_src} to physical core {physical_dest} of size {data_size} with tracking ID {t_id}"
         )
 
         return t_id

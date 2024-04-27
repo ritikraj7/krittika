@@ -9,6 +9,7 @@ class SupportedTopologies(Enum):
     FULLYCONNECTED = "FullyConnected"
     SWITCH = "Switch"
     HYPERCUBE = "HyperCube"
+    MESH = "Mesh"
 
 
 class NetworkConfig:
@@ -43,6 +44,9 @@ class NetworkConfig:
         self.npus_count = []
         self.bandwidth = []
         self.latency = []
+        self.rows = []
+        self.cols = []
+        self.mapping_dict = {}
 
         self.congestion_aware = None
 
@@ -97,6 +101,29 @@ class NetworkConfig:
             f"Congestion Aware read from cfg file is: {self.congestion_aware}"
         )
 
+        self.rows = [
+            int(item.strip())
+            for item in cfg.get("Network Configuration", "rows").split(",")
+        ]
+        self.logger.debug(f"rows read from cfg file is: {self.rows}")
+
+        self.cols = [
+            int(item.strip())
+            for item in cfg.get("Network Configuration", "cols").split(",")
+        ]
+        self.logger.debug(f"cols read from cfg file is: {self.cols}")
+        
+        self.mapping_en = cfg.getboolean(
+            "Network Configuration", "mapping_en"
+        )
+        self.logger.debug(
+            f"Mapping enable read from cfg file is: {self.mapping_en}"
+        )
+
+        if 'logical_to_physical_mapping' in cfg:
+            for key, value in cfg['logical_to_physical_mapping'].items():
+                self.mapping_dict[int(key)] = int(value)
+
         # Validate entries
         # TODO5REE: Add more validation checks
         for topo in self.topology:
@@ -124,6 +151,18 @@ class NetworkConfig:
         config_string += f"bandwidth: {self.bandwidth}  # GB/s\n\n"
 
         config_string += "# Latency per each dimension\n"
-        config_string += f"latency: {self.latency}  # ns\n"
+        config_string += f"latency: {self.latency}  # ns\n\n"
+
+        config_string += "# rows per each dimension\n"
+        config_string += f"rows: {self.rows}  \n\n"
+
+        config_string += "# cols per each dimension\n"
+        config_string += f"cols: {self.cols}  \n"
 
         return config_string
+
+    def get_logical_to_physical_mapping(self):
+        return self.mapping_dict
+    
+    def get_mapping_en(self):
+        return self.mapping_en
