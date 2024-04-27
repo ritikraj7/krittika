@@ -1,5 +1,5 @@
 import logging
-import tempfile
+import os
 
 from krittika.noc.krittika_noc import KrittikaNoC
 from dependencies.AstraSimANoCModel import sample_wrapper
@@ -30,18 +30,14 @@ class AstraSimANoC(KrittikaNoC):
         )
 
     def setup(self):
-        with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
+        file_name = os.path.abspath("krittika_anoc_cfg.yml")
+        with open(file_name, "w") as f:
             f.write(self.cfg_contents)
-            self.logger.debug(f"Cpp config file written to {f.name}")
+            self.logger.debug(f"Cpp cconfig file contents are {self.cfg_contents}")
+            self.logger.debug(f"Cpp config file written to {file_name}")
 
-            # FIXME:
-            #   - Getting parsing errors when using generated topology
-            file_path_str = f.name.encode("utf-8")
-            file_path_str = "/home/hice1/sprathipati6/hml_proj/setup_clean_tree/krittika_hml_proj/dependencies/AstraSimANoCModel/input/Ring.yml".encode(
-                "utf-8"
-            )
-
-            sample_wrapper.py_noc_setup(file_path_str)
+        file_path_str = file_name.encode("utf-8")
+        sample_wrapper.py_noc_setup(file_path_str)
 
     def post(self, clk, src, dest, data_size) -> int:
         t_id = sample_wrapper.py_add_to_EQ(clk, src, dest, data_size)
