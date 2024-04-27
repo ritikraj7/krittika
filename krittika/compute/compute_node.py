@@ -34,6 +34,10 @@ class ComputeNode:
         self.matrices_valid = False
         # NoC
         self.tracking_id = {}
+        self.compute_node_total_tiles_ifmap_layer = 0
+        self.compute_node_total_tiles_filter_map_layer = 0
+        self.per_tile_size = 0
+        self.tile_number = 0
 
     #
     def set_params(self,

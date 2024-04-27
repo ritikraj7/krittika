@@ -109,6 +109,7 @@ class Simulator:
         self.params_valid = True
         self.enable_ls_partition = False
         self.enable_lp_partition = True
+        self.enable_ls_partition_tile_based = False
 
         self.tile_num = {} # Global variable as of now
 
@@ -311,7 +312,6 @@ class Simulator:
         #end
             ## Reset traces adn the object
         if (1):
-            print("PJJJJJ:Wq")
             for core_id in range(num_cores):
                 time_scheduled[core_id] = 0
                 time_current[core_id] = 0
@@ -372,7 +372,7 @@ class Simulator:
                         #print("Congested latency",self.noc.get_latency(this_layer_sim[core_id].tracking_id[core_id+1][this_layer_sim[core_id].tile_number]))
                         #assert(extra_noc_cycles > 0)
                     this_layer_sim[core_id].tile_number +=1
-###########################################################################################################################################################
+
            
            #### Run the while loop again.
            ### Question, do we need to reset the layer obkets? i dont think so.
@@ -391,10 +391,76 @@ class Simulator:
         self.runs_done = True
         self.generate_all_reports()  
 
+#############################################
+##### Tiles based experiment
+    def run_ls_tile_execution(self):
+        assert self.params_valid, "Cannot run simulation without inputs"
+
+        # Run compute simulations for all layers first
+        num_layers = self.workload_obj.get_num_layers()
+
+        # Update the offsets to generate operand matrices
+        single_arr_config = scale_config()
+        conf_list = scale_config.get_default_conf_as_list()
+        user_offsets = self.config_obj.get_operand_offsets()
+        conf_list[6] = user_offsets[0]
+        conf_list[7] = user_offsets[1]
+        conf_list[8] = user_offsets[2]
+        conf_list[10] = self.config_obj.get_bandwidth_use_mode()
+        conf_list.append(self.config_obj.get_interface_bandwidths()[0])
+        single_arr_config.update_from_list(conf_list=conf_list)
+        for layer_id in range(num_layers):
+            if self.verbose:
+                print('Running Layer ' + str(layer_id))
+            this_layer_op_mat_obj = operand_matrix()
+            layer_params = self.workload_obj.get_layer_params(layer_id)
+            if (layer_params[0] in ['conv', 'gemm']):
+                this_layer_op_mat_obj.set_params(config_obj=single_arr_config,
+                                             topoutil_obj=self.workload_obj,
+                                             layer_id=layer_id)
+                this_layer_op_mat_obj.create_operand_matrices()
+
+                this_layer_sim = SingleLayerSim()
+                this_layer_sim.set_params(config_obj=self.config_obj,
+                                      op_mat_obj=this_layer_op_mat_obj,
+                                      partitioner_obj=self.partition_obj,
+                                      layer_id=layer_id,core_id= layer_id,
+                                      log_top_path=self.top_path,
+                                      verbosity=self.verbose)
+                this_layer_sim.run_single_layer_ls_tiled(self.noc) ## For now running only one layer support . 
+                #Multi layers required time to be passed out of a layer sim and provided for the next one.
+                self.single_layer_objects_list += [this_layer_sim]
+
+                if self.verbose:
+                    print('SAVING TRACES')
+                this_layer_sim.save_traces()
+                this_layer_sim.gather_report_items_across_cores()
+            elif (layer_params[0] in ['activation']):
+                op_matrix = self.single_layer_objects_list[layer_id-1].get_ofmap_operand_matrix()
+
+                this_layer_sim = SingleLayerSim()
+                this_layer_sim.set_params(config_obj=self.config_obj,
+                                      op_mat_obj=this_layer_op_mat_obj,
+                                      partitioner_obj=self.partition_obj,
+                                      layer_id=layer_id,
+                                      log_top_path=self.top_path,
+                                      verbosity=self.verbose)
+                this_layer_sim.run_simd_all_parts(operand_matrix=op_matrix, optype = layer_params[1])
+                self.single_layer_objects_list += [this_layer_sim]
+                
+                this_layer_sim.gather_simd_report_items_across_cores()
+        
+        self.runs_done = True
+        self.generate_all_reports()  
+        assert (0) # WTF you cnat come here yet
+
     def run(self):
         if self.enable_ls_partition:
             self.run_ls()
+        elif (self.enable_ls_partition_tile_based):
+            self.run_ls_tile_execution()
         else:
+            print("Execuitiong")
             self.run_lp()
 
     def generate_all_reports(self):
