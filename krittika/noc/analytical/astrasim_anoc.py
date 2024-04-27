@@ -76,4 +76,11 @@ class AstraSimANoC(KrittikaNoC):
         return latency
 
     def get_static_latency(self, src, dest, size) -> int:
-        return sample_wrapper.py_get_static_latency(src, dest, size)
+        if self.mapping_en:
+            physical_src = self.mapping_dict[src]
+            physical_dest = self.mapping_dict[dest]
+        else:
+            physical_src = src
+            physical_dest = dest
+        
+        return sample_wrapper.py_get_static_latency(physical_src, physical_dest, size)
