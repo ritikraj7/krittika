@@ -9,6 +9,8 @@ class AstraSimANoC(KrittikaNoC):
 
     def __init__(self, network_config):
         self.cfg_contents = network_config.get_cpp_config()
+        self.mapping_en = network_config.get_mapping_en()
+        self.mapping_dict = network_config.get_logical_to_physical_mapping()
 
         # TODO5REE: Too much repetition, move it to a logger class
         self.logging_level = logging.CRITICAL
@@ -26,6 +28,18 @@ class AstraSimANoC(KrittikaNoC):
             self.logger.addHandler(ch)
 
         self.logger.debug(
+            f"Logical to Physical mapping enabled : {self.mapping_en} \n"
+        )
+        if(self.mapping_en):
+            self.logger.debug(
+                f"Logical to Physical mapping is : \n"
+            )
+            for key, value in self.mapping_dict.items():
+                self.logger.debug( 
+                    f"Logical Core: {key} -> Physical Core : {value}\n"
+                )
+
+        self.logger.debug(
             f"Contents of generated cpp cfg file are: \n{self.cfg_contents}"
         )
 
@@ -37,17 +51,24 @@ class AstraSimANoC(KrittikaNoC):
             # FIXME:
             #   - Getting parsing errors when using generated topology
             file_path_str = f.name.encode("utf-8")
-            file_path_str = "/home/hice1/sprathipati6/hml_proj/setup_clean_tree/krittika_hml_proj/dependencies/AstraSimANoCModel/input/Ring.yml".encode(
+            file_path_str = "/home/hice1/snawandar3/clean_tot_tree/krittika_hml_proj/dependencies/AstraSimANoCModel/input/Ring.yml".encode(
                 "utf-8"
             )
 
             sample_wrapper.py_noc_setup(file_path_str)
 
     def post(self, clk, src, dest, data_size) -> int:
-        t_id = sample_wrapper.py_add_to_EQ(clk, src, dest, data_size)
+        
+        if(self.mapping_en) :
+            physical_src  = self.mapping_dict[src]
+            physical_dest = self.mapping_dict[dest]
+        else :
+            physical_src  = src
+            physical_dest = dest
 
+        t_id = sample_wrapper.py_add_to_EQ(clk, physical_src, physical_dest, data_size)
         self.logger.debug(
-            f"Posting a txn from {src} to {dest} of size {data_size} with tracking ID {t_id}"
+            f"Posting a txn from physical core {physical_src} to physical core {physical_dest} of size {data_size} with tracking ID {t_id}"
         )
 
         return t_id
