@@ -37,7 +37,7 @@ class AstraSimANoC(KrittikaNoC):
             # FIXME:
             #   - Getting parsing errors when using generated topology
             file_path_str = f.name.encode("utf-8")
-            file_path_str = "/home/hice1/mmanchali3/hml_proj_kritiika_final/commit_tree/krittika_hml_proj/dependencies/AstraSimANoCModel/input/Ring.yml".encode(
+            file_path_str = "/home/hice1/mmanchali3/hml_proj_kritiika_final/commit_tree/krittika_hml_proj/dependencies/AstraSimANoCModel/input/Mesh.yml".encode(
                 "utf-8"
             )
 

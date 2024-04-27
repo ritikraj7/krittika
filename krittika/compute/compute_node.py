@@ -50,11 +50,11 @@ class ComputeNode:
 
         if compute_unit == 'matmul':
             if dataflow == 'os':
-                print("OSSS")
+                #print("OSSS")
                 self.selected_compute_node = SystolicMatMulOS()
 
             elif dataflow == 'ws':
-                print("WSSS")
+                #print("WSSS")
                 self.selected_compute_node = SystolicMatMulWS()
 
             elif dataflow == 'is':
