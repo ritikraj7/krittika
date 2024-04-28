@@ -212,10 +212,11 @@ class Scheduler:
         elif(uniform==2): ###non-unfiorm + communication
             
     # Define the parameters for the greedy function
-            N_src = 6
-            destination_list = [(i, j) for i in range(6) for j in range(6)]
+            #change
+            N_src = self.chiplet_sys.num_input_part
+            destination_list = [(i, j) for i in range(self.chiplet_sys.num_input_part) for j in range(self.chiplet_sys.num_filter_part)]
             src_list = []
-            occupancy_m = np.zeros((6, 6))
+            occupancy_m = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
             occupancy_m = self._greedy(occupancy_m, N_src, destination_list, -1, None, src_list)
 
             print("Updated Occupancy Matrix with Greedy Algorithm:")
@@ -230,7 +231,7 @@ class Scheduler:
             # print(src_list)
 
             print("PLACING ROWS")
-            N_left = 5
+            N_left = self.chiplet_sys.num_filter_part - 1
             destination_list = []
             for src in src_list:
                 destination_list.append([src])
@@ -348,10 +349,10 @@ class Scheduler:
 
 
         elif(uniform==3):    #### uniform + communication
-            N_src = 6
-            destination_list = [(i, j) for i in range(6) for j in range(6)]
+            N_src = self.chiplet_sys.num_input_part
+            destination_list = [(i, j) for i in range(self.chiplet_sys.num_input_part) for j in range(self.chiplet_sys.num_filter_part)]
             src_list = []
-            occupancy_m = np.zeros((6, 6))
+            occupancy_m = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
             occupancy_m = self._greedy(occupancy_m, N_src, destination_list, -1, None, src_list)
 
             print("Updated Occupancy Matrix with Greedy Algorithm:")
@@ -366,7 +367,7 @@ class Scheduler:
             # print(src_list)
 
             print("PLACING ROWS")
-            N_left = 5
+            N_left = self.chiplet_sys.num_filter_part - 1
             destination_list = []
             for src in src_list:
                 destination_list.append([src])
@@ -476,15 +477,18 @@ class Scheduler:
 
         elif(uniform==4):  ####only non-uniform 
                         ##TODO - Need to update this with greedy algorithm
-            occupancy_m = np.zeros((6,6))
-            occupancy_m = np.array([[-1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-                            [-2.0, 2.0, 2.0, 2.0, 2.0, 2.0],
-                            [-3.0, 3.0, 3.0, 3.0, 3.0, 3.0],
-                            [-4.0, 4.0, 4.0, 4.0, 4.0, 4.0],
-                            [-5.0, 5.0, 5.0, 5.0, 5.0, 5.0],
-                            [-6.0, 6.0, 6.0, 6.0, 6.0, 6.0] ])
+            occupancy_m = np.zeros((self.chiplet_sys.num_input_part,self.chiplet_sys.num_filter_part))
+            for i in range(occupancy_m.shape[0]):
+                occupancy_m[i] = (i+1)*np.ones(occupancy_m.shape[1])
+            occupancy_m[:,0] = -1*occupancy_m[:,0]
+            # occupancy_m = np.array([[-1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+            #                 [-2.0, 2.0, 2.0, 2.0, 2.0, 2.0],
+            #                 [-3.0, 3.0, 3.0, 3.0, 3.0, 3.0],
+            #                 [-4.0, 4.0, 4.0, 4.0, 4.0, 4.0],
+            #                 [-5.0, 5.0, 5.0, 5.0, 5.0, 5.0],
+            #                 [-6.0, 6.0, 6.0, 6.0, 6.0, 6.0] ])
             #TODO - Need to update this with greedy algorithm
-            N_src = 6
+            N_src = self.chiplet_sys.num_input_part
             print(occupancy_m)   
             self.data_dist_m = self.non_uniform_work_dist (occupancy_m, N_src)
             
