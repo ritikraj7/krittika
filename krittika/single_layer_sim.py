@@ -218,10 +218,14 @@ class SingleLayerSim:
                 
                 self.total_tiles_ifmap_layer = this_part_compute_node.selected_compute_node.compute_unit.total_tiles_ifmap
                 self.total_tiles_filter_map_layer  = this_part_compute_node.selected_compute_node.compute_unit.total_tiles_filter_map
+                print("YESSS",self.total_tiles_ifmap_layer,this_part_compute_node.selected_compute_node.compute_unit.ifmap_demand_matrix.shape[0])
                 #self.total_tiles_ofmap_layer  =  this_part_compute_node.selected_compute_node.compute_unit.total_tiles_ofmap
                 assert self.total_tiles_ifmap_layer == self.total_tiles_filter_map_layer
-                self.per_tile_size =  this_part_compute_node.selected_compute_node.compute_unit.ifmap_demand_matrix.shape[0]/ self.total_tiles_ifmap_layer
-                print("YESSS",this_part_compute_node.selected_compute_node.compute_unit.total_tiles_ifmap)
+                if(self.total_tiles_ifmap_layer):
+                    self.per_tile_size =  this_part_compute_node.selected_compute_node.compute_unit.ifmap_demand_matrix.shape[0]/ self.total_tiles_ifmap_layer
+                else:
+                    self.per_tile_size = this_part_compute_node.selected_compute_node.compute_unit.ifmap_demand_matrix.shape[0]
+                
                 self.compute_node_list += [this_part_compute_node]
 
         self.compute_done = True
@@ -482,7 +486,7 @@ class SingleLayerSim:
             #print(this_tile_ofmap_demand_mat.shape,this_tile_ofmap_demand_mat)
             
             self.this_part_mem.service_memory_requests_multiple_times( this_tile_ifmap_demand_mat,
-            this_tile_filter_demand_mat,this_tile_ofmap_demand_mat,self.layer_id, self.tile_number,init_time, 
+            this_tile_filter_demand_mat,this_tile_ofmap_demand_mat,core_id, self.tile_number,init_time, 
             (self.tile_number == self.total_tiles_ifmap_layer - 1)) ## hopefullt this object wont be destroye when gone out of scope.
 
         self.mem_traces_done = True ## Wll this be valid? as we need each layer to be done to set this TODO
@@ -597,8 +601,10 @@ class SingleLayerSim:
             total_cycles = compute_system.get_total_cycles()
             
             stall_cycles = 0
-
-            overall_util = (num_compute * 100) / (total_cycles * num_unit)
+            if(total_cycles):
+                overall_util = (num_compute * 100) / (total_cycles * num_unit)
+            else:
+                overall_util = 0
             mapping_eff = compute_system.get_avg_mapping_efficiency() * 100
             compute_util = compute_system.get_avg_compute_utilization() * 100
 
@@ -625,7 +631,10 @@ class SingleLayerSim:
                 total_cycles = memory_system.get_total_compute_cycles() 
             # Manish SRAM to SRAM may help with adding the dependency cycles
             stall_cycles = memory_system.get_stall_cycles()
-            overall_util = (num_compute * 100) / (total_cycles * num_unit)
+            if(total_cycles):
+                overall_util = (num_compute * 100) / (total_cycles * num_unit)
+            else:
+                overall_util = 0
             mapping_eff = compute_system.get_avg_mapping_efficiency() * 100
             compute_util = compute_system.get_avg_compute_utilization() * 100
 
@@ -639,10 +648,14 @@ class SingleLayerSim:
             ifmap_sram_reads = compute_system.get_ifmap_requests()
             filter_sram_reads = compute_system.get_filter_requests()
             ofmap_sram_writes = compute_system.get_ofmap_requests()
-            avg_ifmap_sram_bw = ifmap_sram_reads / total_cycles
-            avg_filter_sram_bw = filter_sram_reads / total_cycles
-            avg_ofmap_sram_bw = ofmap_sram_writes / total_cycles
-
+            if(total_cycles):
+                avg_ifmap_sram_bw = ifmap_sram_reads / total_cycles
+                avg_filter_sram_bw = filter_sram_reads / total_cycles
+                avg_ofmap_sram_bw = ofmap_sram_writes / total_cycles
+            else:
+                avg_ifmap_sram_bw = 0 
+                avg_filter_sram_bw = 0
+                avg_ofmap_sram_bw = 0
             self.ifmap_sram_reads_list += [ifmap_sram_reads]
             self.filter_sram_reads_list += [filter_sram_reads]
             self.ofmap_sram_writes_list += [ofmap_sram_writes]
