@@ -149,7 +149,6 @@ class SingleLayerSim:
 
     def run_compute_all_parts_tiled_noc(self):
         ifmap_matrix, filter_matrix, ofmap_matrix = self.op_mat_obj.get_all_operand_matrix()
-        #print(ifmap_matrix,filter_matrix)
         compute_unit, opt_dataflow = self.partitioner_obj.get_opt_compute_params(layer_id=self.layer_id)
         input_rows_per_part = math.ceil(ifmap_matrix.shape[0] / self.num_input_part)
         filter_cols_per_part = math.ceil(filter_matrix.shape[1] / self.num_filter_part)
@@ -178,10 +177,8 @@ class SingleLayerSim:
                 
                 this_part_compute_node.compute_node_total_tiles_ifmap_layer = this_part_compute_node.selected_compute_node.compute_unit.total_tiles_ifmap
                 this_part_compute_node.compute_node_total_tiles_filter_map_layer  = this_part_compute_node.selected_compute_node.compute_unit.total_tiles_filter_map
-                #self.total_tiles_ofmap_layer  =  this_part_compute_node.selected_compute_node.compute_unit.total_tiles_ofmap
                 assert this_part_compute_node.compute_node_total_tiles_ifmap_layer == this_part_compute_node.compute_node_total_tiles_filter_map_layer
                 this_part_compute_node.per_tile_size =  this_part_compute_node.selected_compute_node.compute_unit.ifmap_demand_matrix.shape[0]/ this_part_compute_node.compute_node_total_tiles_ifmap_layer
-                print("YESSS",this_part_compute_node.selected_compute_node.compute_unit.total_tiles_ifmap)
                 self.compute_node_list += [this_part_compute_node]
 
         self.compute_done = True
@@ -189,7 +186,6 @@ class SingleLayerSim:
 
     def run_compute_all_parts(self):
         ifmap_matrix, filter_matrix, ofmap_matrix = self.op_mat_obj.get_all_operand_matrix()
-        #print(ifmap_matrix,filter_matrix)
         compute_unit, opt_dataflow = self.partitioner_obj.get_opt_compute_params(layer_id=self.layer_id)
         input_rows_per_part = math.ceil(ifmap_matrix.shape[0] / self.num_input_part)
         filter_cols_per_part = math.ceil(filter_matrix.shape[1] / self.num_filter_part)
@@ -218,8 +214,8 @@ class SingleLayerSim:
                 
                 self.total_tiles_ifmap_layer = this_part_compute_node.selected_compute_node.compute_unit.total_tiles_ifmap
                 self.total_tiles_filter_map_layer  = this_part_compute_node.selected_compute_node.compute_unit.total_tiles_filter_map
-                print("YESSS",self.total_tiles_ifmap_layer,this_part_compute_node.selected_compute_node.compute_unit.ifmap_demand_matrix.shape[0])
-                #self.total_tiles_ofmap_layer  =  this_part_compute_node.selected_compute_node.compute_unit.total_tiles_ofmap
+            
+            
                 assert self.total_tiles_ifmap_layer == self.total_tiles_filter_map_layer
                 if(self.total_tiles_ifmap_layer):
                     self.per_tile_size =  this_part_compute_node.selected_compute_node.compute_unit.ifmap_demand_matrix.shape[0]/ self.total_tiles_ifmap_layer
@@ -263,7 +259,7 @@ class SingleLayerSim:
     def run_mem_sim_all_parts(self):
         assert self.compute_done
 
-        #bandwidth_mode = self.config_obj.get_bandwidth_use_mode()
+        
         bandwidth_mode = True
         if (self.config_obj.get_bandwidth_use_mode()=="USER"):
             bandwidth_mode = False
@@ -326,8 +322,6 @@ class SingleLayerSim:
             skip_dram_writes = 0
             wr_frac = 0.999
         # TODO hard coded fix thr avoe
-        #print("Read write",rd_buf_active_frac,wr_buf_active_frac)
-        #print("Skip read and Skip write",skip_dram_reads,skip_dram_writes)
         for compute_node in self.compute_node_list:
 
             self.this_part_mem.set_params(verbose=self.verbose,
@@ -372,13 +366,12 @@ class SingleLayerSim:
         
         if(self.skip_dram_reads and self.layer_id == 0 ): ## In LP, the first core is needs to read from mem and last core neesd to write from mem
             skip_dram_reads = 0
-            rd_frac = 0.99
+            rd_frac = 0.999
         if(self.skip_dram_writes and self.layer_id == (self.num_cores - 1) ): ## In LP, the first core is needs to read from mem and last core neesd to write from mem
             skip_dram_writes = 0
-            wr_frac = 0.99
+            wr_frac = 0.999
         # TODO hard coded fix thr avoe
-        #print("Read write",rd_buf_active_frac,wr_buf_active_frac)
-        #print("Skip read and Skip write",skip_dram_reads,skip_dram_writes)
+        
         for compute_node in self.compute_node_list:
 
             self.this_part_mem = double_buffered_scratchpad()
@@ -407,83 +400,33 @@ class SingleLayerSim:
             
                 
             self.all_node_mem_objects += [self.this_part_mem] ## This is usualyl done for mem requests.
-            #print("LEmght",len(self.all_node_mem_objects))
-
-    def setup_memory_ls_tiled(self):
-        assert self.compute_done
-
-        bandwidth_mode = True
-        if (self.config_obj.get_bandwidth_use_mode()=="USER"):
-            bandwidth_mode = False
-
-        per_core_ifmap_buf_size, per_core_fitler_buf_size, per_core_ofmap_buf_size \
-            = ([i * 1024 for i in self.config_obj.get_per_unit_sram_sizes_kb()])
-
-        per_core_ifmap_bw, per_core_filter_bw, per_core_ofmap_bw\
-            = self.config_obj.get_interface_bandwidths()
-
-        rd_buf_active_frac = 0.99
-        wr_buf_active_frac = 0.99 ## Pass this as a knob TODO
-        
-        # TODO hard coded fix thr avoe
-        #print("Read write",rd_buf_active_frac,wr_buf_active_frac)
-        #print("Skip read and Skip write",skip_dram_reads,skip_dram_writes)
-        for compute_node in self.compute_node_list:
-
-            self.this_part_mem = double_buffered_scratchpad()
-            self.this_part_mem.set_params(verbose=self.verbose,
-                                     estimate_bandwidth_mode=bandwidth_mode,
-                                     ifmap_buf_size_bytes=per_core_ifmap_buf_size,
-                                     filter_buf_size_bytes=per_core_fitler_buf_size,
-                                     ofmap_buf_size_bytes=per_core_ofmap_buf_size,
-                                     ifmap_backing_buf_bw=per_core_ifmap_bw,
-                                     filter_backing_buf_bw=per_core_filter_bw,
-                                     ofmap_backing_buf_bw=per_core_ofmap_bw,
-                                     rd_buf_active_frac = rd_buf_active_frac ,
-                                     wr_buf_active_frac = wr_buf_active_frac
-                                     )
-
-            # Demand mat
-            self.ifmap_demand_mat, self.filter_demand_mat, self.ofmap_demand_mat \
-                = compute_node.get_demand_matrices()   
-            this_node_ifmap_fetch_mat, this_node_filter_fetch_mat = compute_node.get_prefetch_matrices()
-            if (self.config_obj.get_bandwidth_use_mode()=="USER"):
-                self.this_part_mem.set_read_buf_prefetch_matrices(ifmap_prefetch_mat=this_node_ifmap_fetch_mat,
-                                                         filter_prefetch_mat=this_node_filter_fetch_mat
-                                                         )  
             
-            ### maybe not needed  ### TODO TODO TODO   
-            self.all_node_mem_objects += [self.this_part_mem] ## This is usualyl done for mem requests.
-            #print("LEmght",len(self.all_node_mem_objects))
-       
+    
+
 
     def run_mem_sim_all_parts_lp(self, core_id, init_time): ## Why does this need time again?
         assert self.compute_done
-        #print("Inside mem sim all parts lp for core id",core_id,",  total tiles",self.total_tiles_ifmap_layer,"Init time",init_time)
-       # print("TIle",self.tile_number,self.total_tiles_ifmap_layer % 1,self.total_tiles_ifmap_layer / 1 + 1)
+       
         completed = 0
         if(self.tile_number + 1 <= 0):
-            #self.tile_number+=1
             return 0 
-           
+        
         if(self.tile_number >= (self.total_tiles_ifmap_layer)): # / 3 + self.total_tiles_ifmap_layer % 3 )): ## asset checks if they iofmap and filter tiles are same always
             return  1 ## This should say you are done for this core id.
+        print("Inside mem sim all parts lp for core id",core_id,",  total tiles",self.total_tiles_ifmap_layer,"Init time",init_time)
         for compute_node in self.compute_node_list: ## Can remove this. TODO DO we need it tto loop 
             # Demand mat
-            #print("Here",self.per_tile_size)
+            
             row_start = int(self.tile_number * 1* self.per_tile_size)
             row_end = row_start + 1*int(self.per_tile_size)
             row_end = min(row_end,self.ofmap_demand_mat.shape[0])
-            #print(self.ofmap_demand_mat.shape[0])
+            
 
-            #print("Row start",row_start,"Row wend",row_end)
+            
             this_tile_ifmap_demand_mat = self.ifmap_demand_mat[ row_start : row_end ]
             this_tile_filter_demand_mat =  self.filter_demand_mat[ row_start : row_end ]
             this_tile_ofmap_demand_mat = self.ofmap_demand_mat[ row_start : row_end ]         
 
-            #print(this_tile_ifmap_demand_mat.shape,this_tile_ifmap_demand_mat)
-            #print(this_tile_filter_demand_mat.shape,this_tile_filter_demand_mat)
-            #print(this_tile_ofmap_demand_mat.shape,this_tile_ofmap_demand_mat)
             
             self.this_part_mem.service_memory_requests_multiple_times( this_tile_ifmap_demand_mat,
             this_tile_filter_demand_mat,this_tile_ofmap_demand_mat,core_id, self.tile_number,init_time, 
@@ -491,15 +434,14 @@ class SingleLayerSim:
 
         self.mem_traces_done = True ## Wll this be valid? as we need each layer to be done to set this TODO
 
-       # self.tile_number += 1 ## used for tracking
-        #print("YO",completed)
         return completed
+
 
 
     def run_mem_sim_all_parts_tiled_noc(self, noc_obj = None): ## Why does this need time again?
         assert self.compute_done
         assert noc_obj
-        #bandwidth_mode = self.config_obj.get_bandwidth_use_mode()
+        
         bandwidth_mode = True
         if (self.config_obj.get_bandwidth_use_mode()=="USER"):
             bandwidth_mode = False
@@ -528,21 +470,19 @@ class SingleLayerSim:
                                      )
 
             # Demand mat
-            a,b,c                = compute_node.get_demand_matrices()
-            print(a.shape)
             this_node_ifmap_demand_mat[iterator], this_node_filter_demand_mat[iterator], this_node_ofmap_demand_mat[iterator] \
                 = compute_node.get_demand_matrices()
-            print(this_node_ifmap_demand_mat[iterator].shape)
-
+            
+            
             this_node_ifmap_fetch_mat, this_node_filter_fetch_mat = compute_node.get_prefetch_matrices()
+            
+            
             if (self.config_obj.get_bandwidth_use_mode()=="USER"):
                 this_part_mem[iterator].set_read_buf_prefetch_matrices(ifmap_prefetch_mat=this_node_ifmap_fetch_mat,
                                                          filter_prefetch_mat=this_node_filter_fetch_mat
                                                          )
             self.all_node_mem_objects += [this_part_mem[iterator]]
             iterator+=1
-
-        lookup_table = [0,1,2,3,4,5]
         completed = 0
         time_current = {} # should be moved later
         for core_id in range(len(self.compute_node_list)):
@@ -551,10 +491,11 @@ class SingleLayerSim:
         noc_total_time = 0
 
         while(completed != len(self.compute_node_list)):
-            print("In this loop")
+            
             completed = 0
             for core_id in range(len(self.compute_node_list)):
-                #completed_per_core = this_part_mem[core_id].run_mem_sim_ls_tiled(core_id,time_scheduled[core_id ])
+                
+                
                 completed_per_core = 0
                 if(self.compute_node_list[core_id].tile_number >= (self.compute_node_list[core_id].compute_node_total_tiles_ifmap_layer)): # / 3 + self.total_tiles_ifmap_layer % 3 )): ## asset checks if they iofmap and filter tiles are same always
                     completed_per_core =  1 ## This should say you are done for this core id.
@@ -562,32 +503,82 @@ class SingleLayerSim:
                 if(completed_per_core == 1):
                     continue
                 # Demand mat
-                print("Here",self.compute_node_list[core_id].per_tile_size)
+                
                 row_start = int(self.compute_node_list[core_id].tile_number * 1* self.compute_node_list[core_id].per_tile_size)
                 row_end = row_start + 1*int(self.compute_node_list[core_id].per_tile_size)
-                #row_end = min(row_end,this_node_ofmap_demand_mat[core_id].shape[0])
-                #print(this_node_ofmap_demand_mat[core_id])
-                #print(this_node_ofmap_demand_mat[core_id].shape)
-                print("Row start",row_start,"Row wend",row_end)
-                this_tile_ifmap_demand_mat = this_node_ofmap_demand_mat[core_id][ row_start : row_end ]
+                
+                this_tile_ifmap_demand_mat = this_node_ifmap_demand_mat[core_id][ row_start : row_end ]
                 this_tile_filter_demand_mat =  this_node_filter_demand_mat[core_id][ row_start : row_end ]
                 this_tile_ofmap_demand_mat = this_node_ofmap_demand_mat[core_id][ row_start : row_end ]        
-    
-                #print(this_tile_ifmap_demand_mat.shape,this_tile_ifmap_demand_mat)
-                #print(this_tile_filter_demand_mat.shape,this_tile_filter_demand_mat)
-                #print(this_tile_ofmap_demand_mat.shape,this_tile_ofmap_demand_mat)
+                
                 
                 this_part_mem[core_id].service_memory_requests_multiple_times_ls_tiled( this_tile_ifmap_demand_mat,
                 this_tile_filter_demand_mat,this_tile_ofmap_demand_mat,core_id, self.compute_node_list[core_id].tile_number,time_current[core_id], 
-                (self.compute_node_list[core_id].tile_number == self.compute_node_list[core_id].compute_node_total_tiles_ifmap_layer - 1),noc_obj , 1) ## hopefullt this object wont be destroye when gone out of scope.
+                (self.compute_node_list[core_id].tile_number == self.compute_node_list[core_id].compute_node_total_tiles_ifmap_layer - 1),noc_obj , 1, self.tracking_id, self.pushed_in_time ) ## hopefullt this object wont be destroye when gone out of scope.
                 self.mem_traces_done = True ## IDK if this should be here. IN LP code it was here so/
-                print("out")
-
+                
                 time_current[core_id] = time_current[core_id] + this_part_mem[core_id].cycles_per_tile
                 self.compute_node_list[core_id].tile_number+=1
+        completed = 0
+        noc_total_time = 0
+        
+        for core_id in range(len(self.compute_node_list)):
+            self.compute_node_list[core_id].tile_number = 0
+            time_current[core_id] = 0
+            self.all_node_mem_objects[core_id].reset_buffer_states()
+            
+            self.all_node_mem_objects[core_id].set_params(verbose=self.verbose,
+                                    estimate_bandwidth_mode=bandwidth_mode,
+                                    ifmap_buf_size_bytes=per_core_ifmap_buf_size,
+                                    filter_buf_size_bytes=per_core_fitler_buf_size,
+                                    ofmap_buf_size_bytes=per_core_ofmap_buf_size,
+                                    ifmap_backing_buf_bw=per_core_ifmap_bw,
+                                    filter_backing_buf_bw=per_core_filter_bw,
+                                    ofmap_backing_buf_bw=per_core_ofmap_bw,
+                                     )
+            this_node_ifmap_fetch_mat, this_node_filter_fetch_mat = self.compute_node_list[core_id].get_prefetch_matrices()
+            if (self.config_obj.get_bandwidth_use_mode()=="USER"):
+                self.all_node_mem_objects[core_id].set_read_buf_prefetch_matrices(ifmap_prefetch_mat=this_node_ifmap_fetch_mat,
+                                                         filter_prefetch_mat=this_node_filter_fetch_mat
+                                                         )
+        
+        noc_obj.deliver_all_txns()
 
+        while(completed != len(self.compute_node_list)):
+            
+            completed = 0
+            for core_id in range(len(self.compute_node_list)):
+                
+                completed_per_core = 0
+                if(self.compute_node_list[core_id].tile_number >= (self.compute_node_list[core_id].compute_node_total_tiles_ifmap_layer)): # / 3 + self.total_tiles_ifmap_layer % 3 )): ## asset checks if they iofmap and filter tiles are same always
+                    completed_per_core =  1 ## This should say you are done for this core id.
+                completed += completed_per_core
+                if(completed_per_core == 1):
+                    continue
+                # Demand mat
+                
+                row_start = int(self.compute_node_list[core_id].tile_number * 1* self.compute_node_list[core_id].per_tile_size)
+                row_end = row_start + 1*int(self.compute_node_list[core_id].per_tile_size)
+                this_tile_ifmap_demand_mat = this_node_ifmap_demand_mat[core_id][ row_start : row_end ]
+                this_tile_filter_demand_mat =  this_node_filter_demand_mat[core_id][ row_start : row_end ]
+                this_tile_ofmap_demand_mat = this_node_ofmap_demand_mat[core_id][ row_start : row_end ]        
+               
+                
+                self.all_node_mem_objects[core_id].service_memory_requests_multiple_times_ls_tiled( this_tile_ifmap_demand_mat,
+                this_tile_filter_demand_mat,this_tile_ofmap_demand_mat,core_id, self.compute_node_list[core_id].tile_number,time_current[core_id], 
+                (self.compute_node_list[core_id].tile_number == self.compute_node_list[core_id].compute_node_total_tiles_ifmap_layer - 1),noc_obj , 0, self.tracking_id, self.pushed_in_time ) ## hopefullt this object wont be destroye when gone out of scope.
+                self.mem_traces_done = True ## IDK if this should be here. IN LP code it was here so/
+                
+
+                time_current[core_id] = time_current[core_id] + self.all_node_mem_objects[core_id].cycles_per_tile
+                self.compute_node_list[core_id].tile_number+=1
         
-        
+   
+        max_time = time_current[0]
+        for core_id in range(len(self.compute_node_list)):
+            if(max_time < time_current[core_id] ):
+                max_time = time_current[core_id]
+        print("Run time",max_time)
 ###################################################################################################
     # 
     def gather_simd_report_items_across_cores(self):
@@ -620,12 +611,13 @@ class SingleLayerSim:
         for core_id in range(len(self.compute_node_list)):
             compute_system = self.compute_node_list[core_id]
             memory_system = self.all_node_mem_objects[core_id]
-
+            
             # Compute report
             num_compute = compute_system.get_num_compute()
+            print(num_compute)
             num_unit = compute_system.get_num_units()
             if(self.enable_lp_partition == 1):
-                #print("Layer ",core_id,"Noc",self.noc_obj.get_latency(compute_system.tracking_id))
+                
                 total_cycles = memory_system.get_total_compute_cycles() ##+ self.noc_obj.get_latency(compute_system.tracking_id) # + DEPENDENCY BUBBLES LOLDBG
             else:
                 total_cycles = memory_system.get_total_compute_cycles() 
@@ -702,16 +694,22 @@ class SingleLayerSim:
         self.report_metrics_ready = True
 
     #
-    def save_traces(self):
+    def save_traces(self,enable_ls_file_saving = 0):
         assert self.mem_traces_done
-        self.build_trace_log_dirs()
-        #print(len(self.all_node_mem_objects))
+        self.build_trace_log_dirs(enable_ls_file_saving)
+        #len(self.all_node_mem_objects))
         for part_idx in range(len(self.all_node_mem_objects)):
-            trace_dir_name = self.log_top_path + \
+            #print("Which core id bro",part_idx)
+            if(enable_ls_file_saving == 1):
+                trace_dir_name = self.log_top_path + \
+                             '/traces/layer' + str(self.layer_id) + \
+                             '/core' + str(part_idx)
+            else:
+                trace_dir_name = self.log_top_path + \
                              '/traces/layer' + str(self.layer_id) + \
                              '/core' + str(self.layer_id)  # str(part_idx) ## TODO Mmanchali fix it have core id.
                              # currently this is run for each layer and since only 1 layer has 1 core executing it assumes it to be core 0, Need to fix this
-
+            
             ifmap_sram_filename = trace_dir_name + '/IFMAP_SRAM_TRACE.csv'
             filter_sram_filename = trace_dir_name + '/FILTER_SRAM_TRACE.csv'
             ofmap_sram_filename = trace_dir_name + '/OFMAP_SRAM_TRACE.csv'
@@ -729,9 +727,9 @@ class SingleLayerSim:
             memory_system.print_ofmap_dram_trace(ofmap_dram_filename)
 
 #
-    def build_trace_log_dirs(self):
+    def build_trace_log_dirs(self,enable_ls_file_saving = 0):
         self.check_and_build(self.log_top_path)
-
+        
         l1_dir = self.log_top_path + '/traces'
         self.check_and_build(l1_dir)
 
@@ -739,7 +737,10 @@ class SingleLayerSim:
         self.check_and_build(l2_dir)
 
         for core_id in range(len(self.compute_node_list)):
-            this_core_dir = l2_dir + '/core' + str(self.layer_id) ## Change this back to core_id
+            if(enable_ls_file_saving):
+                this_core_dir = l2_dir + '/core' + str(core_id) ## Change this back to core_id
+            else:    
+                this_core_dir = l2_dir + '/core' + str(self.layer_id) ## Change this back to core_id
             self.check_and_build(this_core_dir)
 
     def get_ofmap_operand_matrix(self):

@@ -1,5 +1,4 @@
 layer id, input parts, filter parts, unit, dataflow
-0, 1, 4, matmul, os
-1, 1, 4, matmul, os
-2, 1, 4, matmul, os
-3, 1, 4, matmul, os
+0, 1, 1, matmul, os
+0, 1, 1, matmul, os
+0, 1, 1, matmul, os

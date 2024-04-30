@@ -11,7 +11,8 @@ class AstraSimANoC(KrittikaNoC):
         self.cfg_contents = network_config.get_cpp_config()
         self.mapping_en = network_config.get_mapping_en()
         self.mapping_dict = network_config.get_logical_to_physical_mapping()
-
+        self.tracking_id =[]
+        self.pushed_in_time =[]
         # TODO5REE: Too much repetition, move it to a logger class
         self.logging_level = logging.CRITICAL
         self.logger = logging.getLogger(__name__ + "." + self.__class__.__name__)

@@ -108,8 +108,8 @@ class Simulator:
         self.reports_dir_path = reports_dir_path
         self.top_path = reports_dir_path
         self.params_valid = True
-        self.enable_ls_partition = True
-        self.enable_lp_partition = False
+        self.enable_ls_partition = False
+        self.enable_lp_partition = True
         self.enable_ls_partition_tile_based = False
 
         self.tile_num = {} # Global variable as of now
@@ -155,7 +155,7 @@ class Simulator:
 
                 if self.verbose:
                     print('SAVING TRACES')
-                this_layer_sim.save_traces()
+                this_layer_sim.save_traces(self.enable_ls_partition)
                 this_layer_sim.gather_report_items_across_cores()
             elif (layer_params[0] in ['activation']):
                 op_matrix = self.single_layer_objects_list[layer_id-1].get_ofmap_operand_matrix()
@@ -237,8 +237,7 @@ class Simulator:
         time_start ={}
         noc_total_time = {}
         iterator = 0 # debug ppurposes
-        #lookup_table = [0,3,1,4,2,5]
-        #lookup_table = [0,2,7,5,4,]
+        
         for core_id in range(num_cores): ## dependancy grpahs
             this_layer_sim[core_id].tile_number = core_id*-1
             time_start[core_id] = 0
@@ -251,10 +250,10 @@ class Simulator:
             completed = 0
             extra_noc_cycles = 0
             for core_id in range(num_cores):
+                print("Time scheduled",time_scheduled[core_id ])
                 completed_per_core = this_layer_sim[core_id].run_mem_sim_all_parts_lp(core_id,time_scheduled[core_id ])
                 #Add SIMD here to accoutn for the time it might take so that we can add the time taken to current
-                #print("Returned number core",core_id,"tile",this_layer_sim[core_id].tile_number,"comepleted >?",completed_per_core)
-                #print(completed_per_core)
+                
                 completed += completed_per_core 
                 if(this_layer_sim[core_id].tile_number < 0 ):
                     this_layer_sim[core_id].tile_number +=1
@@ -262,39 +261,24 @@ class Simulator:
                     if(this_layer_sim[core_id].tile_number == 0):
                         time_start[core_id] = time_scheduled[core_id ]
                     noc_total_time[core_id] +=extra_noc_cycles
-                    #assert(extra_noc_cycles > 0)
+                    
                     continue ## We dont wanna do any updates for the core if nothing was executed.
                 if(completed_per_core == 1):
-                    #if(core_id != num_cores - 1):
-                    #    extra_noc_cycles =  static_noc_latency[core_id] #10 # self.noc.get_static_latency(core_id, core_id + 1, this_layer_sim[core_id].per_tile_size) #sreemanth api call
+                    
                     continue # Since we need a prev iteration values for Time across core, they need to be updated correctly once you are done with a core's execution
-                #print(this_layer_sim[core_id].this_part_mem.cycles_per_tile,step_increment_cycles,extra_noc_cycles)
-                #if(step_increment_cycles < this_layer_sim[core_id].this_part_mem.cycles_per_tile + extra_noc_cycles): 
-                #    step_increment_cycles = this_layer_sim[core_id].this_part_mem.cycles_per_tile + extra_noc_cycles ## Post updating to make sure add the noc cycles to thenext core.
-                #    #print("Step:",core_id,this_layer_sim[core_id].this_part_mem.cycles_per_tile,step_increment_cycles,extra_noc_cycles)
-                if(core_id != 0 ): ### Need to double check this. Getting the per core absolute time using the rpevious core as reference
+                
                     time_current[core_id] = time_scheduled[core_id] + this_layer_sim[core_id].this_part_mem.cycles_per_tile
                     time_scheduled[core_id] = time_current[core_id - 1] + extra_noc_cycles
                     noc_total_time[core_id] +=extra_noc_cycles
-                    #print("Core id ", core_id)
-                    #assert(extra_noc_cycles > 0 or (this_layer_sim[core_id - 1].tile_number == this_layer_sim[core_id - 1].total_tiles_ifmap_layer ))
-                    ## impplying that previous tile was done hence it can be 0
-                    #time_across_cores[core_id ] = time_across_cores_prev[core_id - 1 ] + extra_noc_cycles + this_layer_sim[core_id].this_part_mem.cycles_per_tile #DEBG 
-                    #print("WTFFFFFFCore",core_id,"Current time ",time_current[core_id],"Scheduled next tile time ",time_scheduled[core_id] ,"Noc time added",extra_noc_cycles,"Time this tile",this_layer_sim[core_id].this_part_mem.cycles_per_tile,"tile num",this_layer_sim[core_id].tile_number)
                     #######
                 else:
-                    #time_across_cores_prev[core_id] = time_across_cores[core_id]
+                    
                     time_current[core_id] = time_scheduled[core_id] + this_layer_sim[core_id].this_part_mem.cycles_per_tile
                     time_scheduled[core_id] = time_current[core_id] + extra_noc_cycles
-                    #print("Core 0", "time curr after ex", time_current[core_id] , "Next scheduled",time_scheduled[core_id], "Time taken this tile", this_layer_sim[core_id].this_part_mem.cycles_per_tile )
                     noc_total_time[core_id] +=extra_noc_cycles
-                    #time_across_cores[core_id] = time_across_cores[core_id] +  extra_noc_cycles + this_layer_sim[core_id].this_part_mem.cycles_per_tile  # May require -1
-                    #print("Core0:",core_id,"Current time ",time_current[core_id],"Scheduled next tile time ",time_scheduled[core_id] ,"Noc time added",extra_noc_cycles,"Time this tile",this_layer_sim[core_id].this_part_mem.cycles_per_tile)
                 if(core_id != num_cores - 1 ):
                     extra_noc_cycles = static_noc_latency[core_id] # 10 #self.noc.get_static_latency(core_id, core_id + 1, this_layer_sim[core_id].per_tile_size)
-                    #print(extra_noc_cycles)
-                    #assert(extra_noc_cycles > 0)
-                    # sreemanth api
+                
                 if(core_id != (num_cores - 1)):
                     if not (core_id + 1) in this_layer_sim[core_id].tracking_id :
                          this_layer_sim[core_id].tracking_id[core_id+1] = {}
@@ -348,9 +332,6 @@ class Simulator:
                 extra_noc_cycles = 0
                 for core_id in range(num_cores):
                     completed_per_core = this_layer_sim[core_id].run_mem_sim_all_parts_lp(core_id,time_scheduled[core_id ])
-                    #Add SIMD here to accoutn for the time it might take so that we can add the time taken to current
-                    #print("Returned number core",core_id,"tile",this_layer_sim[core_id].tile_number,"comepleted >?",completed_per_core)
-                    #print(completed_per_core)
                     completed += completed_per_core 
                     if(this_layer_sim[core_id].tile_number < 0 ):
                         this_layer_sim[core_id].tile_number +=1
@@ -359,17 +340,17 @@ class Simulator:
                             time_start[core_id] = time_scheduled[core_id ]
                         if(core_id == 1):
                             noc_total_time[core_id] +=extra_noc_cycles
-                        #noc_total_time[core_id] +=extra_noc_cycles
-                        #assert(extra_noc_cycles > 0)
+                        
+                        
                         continue ## We dont wanna do any updates for the core if nothing was executed.
                     if(completed_per_core == 1):
-                        #if(core_id != num_cores - 1):
-                        #    print("Getting SRC",core_id,"DST",core_id +1,"TILE",this_layer_sim[core_id].tile_number,"NOC ID  ")
-                        #    print(this_layer_sim[core_id].tracking_id[core_id+1][this_layer_sim[core_id].tile_number])
-                        #    extra_noc_cycles = self.noc.get_latency(this_layer_sim[core_id].tracking_id[core_id+1][this_layer_sim[core_id].tile_number])  - static_noc_latency[core_id]
-                        #    assert(extra_noc_cycles >=0)
+                        
+                        
+                        
+                        
+                        
                         continue # Since we need a prev iteration values for Time across core, they need to be updated correctly once you are done with a core's execution
-                    #print(this_layer_sim[core_id].this_part_mem.cycles_per_tile,step_increment_cycles,extra_noc_cycles)
+                    
     
                     if(core_id != 0 ): ### Need to double check this. Getting the per core absolute time using the rpevious core as reference
                         time_current[core_id] = time_scheduled[core_id] + this_layer_sim[core_id].this_part_mem.cycles_per_tile
@@ -385,13 +366,11 @@ class Simulator:
 
                     if(core_id != num_cores - 1 ):
                         extra_noc_cycles = self.noc.get_latency(this_layer_sim[core_id].tracking_id[core_id+1][this_layer_sim[core_id].tile_number])  - this_layer_sim[core_id].pushed_in_time[core_id+1][this_layer_sim[core_id].tile_number]#static_noc_latency[core_id] # 10 #self.noc.get_static_latency(core_id, core_id + 1, this_layer_sim[core_id].per_tile_size)
-                        #print("Noc time ",extra_noc_cycles)
-                        #assert(extra_noc_cycles > 0)
+                        
                     this_layer_sim[core_id].tile_number +=1
 
            
-           #### Run the while loop again.
-           ### Question, do we need to reset the layer obkets? i dont think so.
+          
         
         for lid in range(num_cores):
             #print("Core",lid,time_across_cores[core_id])
@@ -446,11 +425,12 @@ class Simulator:
                                       verbosity=self.verbose)
                 this_layer_sim.run_single_layer_ls_tiled(self.noc) ## For now running only one layer support . 
                 #Multi layers required time to be passed out of a layer sim and provided for the next one.
+                
                 self.single_layer_objects_list += [this_layer_sim]
 
                 if self.verbose:
-                    print('SAVING TRACES')
-                this_layer_sim.save_traces()
+                    print('SAVING TRACES',this_layer_sim.all_node_mem_objects[0].traces_valid)
+                this_layer_sim.save_traces(self.enable_ls_partition_tile_based)
                 this_layer_sim.gather_report_items_across_cores()
             elif (layer_params[0] in ['activation']):
                 op_matrix = self.single_layer_objects_list[layer_id-1].get_ofmap_operand_matrix()
@@ -469,7 +449,7 @@ class Simulator:
         
         self.runs_done = True
         self.generate_all_reports()  
-        assert (0) # WTF you cnat come here yet
+        #assert (0) # WTF you cnat come here yet
 
     def run(self):
         if self.enable_ls_partition:
@@ -477,7 +457,6 @@ class Simulator:
         elif (self.enable_ls_partition_tile_based):
             self.run_ls_tile_execution()
         else:
-            print("Execuitiong")
             self.run_lp()
 
     def generate_all_reports(self):
