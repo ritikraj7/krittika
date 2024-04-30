@@ -53,6 +53,7 @@ class Simulator:
         custom_partition_filename="",
         reports_dir_path="./",
         verbose=True,
+        noc_obj= None,
         save_traces=True,
     ):
         # Read the user input and files and prepare the objects
@@ -61,6 +62,7 @@ class Simulator:
 
         self.workload_obj = WorkloadManager()
         self.workload_obj.read_topologies(workload_filename=workload_filename)
+        self.noc_obj = noc_obj
 
         # print(self.workload_obj.get_simd_operation(0))
 
@@ -86,14 +88,16 @@ class Simulator:
 
         t_ids = []
         for i in range(10):
-            t = self.noc.post((500 * (i + 2)), 1, 3, 512)
+            t = self.noc.post((500 ), 1, 3, 512)
+            #print("t",i," ",(500 * (i+2)))
             t_ids.append(t)
-
+        
         self.noc.deliver_all_txns()
 
         latencies = []
         for t in t_ids:
             l = self.noc.get_latency(t)
+            print(l )
             latencies.append(l)
 
         stat_lat = self.noc.get_static_latency(0, 1, 512)
@@ -102,12 +106,17 @@ class Simulator:
         self.trace_gen_flag = save_traces
 
         self.reports_dir_path = reports_dir_path
-
+        self.top_path = reports_dir_path
         self.params_valid = True
+        self.enable_ls_partition = False
+        self.enable_lp_partition = True
+        self.enable_ls_partition_tile_based = False
+
+        self.tile_num = {} # Global variable as of now
 
     #
-    def run(self):
-        # Orchestrate among the function calls to run simulations
+
+    def run_ls(self):
         assert self.params_valid, "Cannot run simulation without inputs"
 
         # Run compute simulations for all layers first
@@ -123,59 +132,332 @@ class Simulator:
         conf_list[10] = self.config_obj.get_bandwidth_use_mode()
         conf_list.append(self.config_obj.get_interface_bandwidths()[0])
         single_arr_config.update_from_list(conf_list=conf_list)
-
         for layer_id in range(num_layers):
             if self.verbose:
-                print("Running Layer " + str(layer_id))
+                print('Running Layer ' + str(layer_id))
             this_layer_op_mat_obj = operand_matrix()
             layer_params = self.workload_obj.get_layer_params(layer_id)
-            if layer_params[0] in ["conv", "gemm"]:
-                this_layer_op_mat_obj.set_params(
-                    config_obj=single_arr_config,
-                    topoutil_obj=self.workload_obj,
-                    layer_id=layer_id,
-                )
+            if (layer_params[0] in ['conv', 'gemm']):
+                this_layer_op_mat_obj.set_params(config_obj=single_arr_config,
+                                             topoutil_obj=self.workload_obj,
+                                             layer_id=layer_id)
                 this_layer_op_mat_obj.create_operand_matrices()
 
                 this_layer_sim = SingleLayerSim()
-                this_layer_sim.set_params(
-                    config_obj=self.config_obj,
-                    op_mat_obj=this_layer_op_mat_obj,
-                    partitioner_obj=self.partition_obj,
-                    layer_id=layer_id,
-                    log_top_path=self.top_path,
-                    verbosity=self.verbose,
-                )
-                this_layer_sim.run()
+                this_layer_sim.set_params(config_obj=self.config_obj,
+                                      op_mat_obj=this_layer_op_mat_obj,
+                                      partitioner_obj=self.partition_obj,
+                                      layer_id=layer_id,core_id= layer_id,
+                                      log_top_path=self.top_path,
+                                      verbosity=self.verbose)
+                this_layer_sim.run_single_layer_ls()
                 self.single_layer_objects_list += [this_layer_sim]
 
                 if self.verbose:
-                    print("SAVING TRACES")
-                this_layer_sim.save_traces()
+                    print('SAVING TRACES')
+                this_layer_sim.save_traces(self.enable_ls_partition)
                 this_layer_sim.gather_report_items_across_cores()
-            elif layer_params[0] in ["activation"]:
-                op_matrix = self.single_layer_objects_list[
-                    layer_id - 1
-                ].get_ofmap_operand_matrix()
+            elif (layer_params[0] in ['activation']):
+                op_matrix = self.single_layer_objects_list[layer_id-1].get_ofmap_operand_matrix()
 
                 this_layer_sim = SingleLayerSim()
-                this_layer_sim.set_params(
-                    config_obj=self.config_obj,
-                    op_mat_obj=this_layer_op_mat_obj,
-                    partitioner_obj=self.partition_obj,
-                    layer_id=layer_id,
-                    log_top_path=self.top_path,
-                    verbosity=self.verbose,
-                )
-                this_layer_sim.run_simd_all_parts(
-                    operand_matrix=op_matrix, optype=layer_params[1]
-                )
+                this_layer_sim.set_params(config_obj=self.config_obj,
+                                      op_mat_obj=this_layer_op_mat_obj,
+                                      partitioner_obj=self.partition_obj,
+                                      layer_id=layer_id,
+                                      log_top_path=self.top_path,
+                                      verbosity=self.verbose)
+                this_layer_sim.run_simd_all_parts(operand_matrix=op_matrix, optype = layer_params[1])
+                self.single_layer_objects_list += [this_layer_sim]
+                
+                this_layer_sim.gather_simd_report_items_across_cores()
+        
+        self.runs_done = True
+        self.generate_all_reports()        
+
+    def run_lp(self):
+
+        num_cores = self.workload_obj.get_num_layers() # self.workload_obj.get_num_cores()
+
+        # Update the offsets to generate operand matrices
+        single_arr_config = scale_config()
+        conf_list = scale_config.get_default_conf_as_list()
+        user_offsets = self.config_obj.get_operand_offsets()
+        conf_list[6] = user_offsets[0]
+        conf_list[7] = user_offsets[1]
+        conf_list[8] = user_offsets[2]
+        conf_list[10] = self.config_obj.get_bandwidth_use_mode()
+        conf_list.append(self.config_obj.get_interface_bandwidths()[0])
+        single_arr_config.update_from_list(conf_list=conf_list)   
+        time_scheduled = {}
+        time_current = {}
+        executed_tile = {}
+        this_layer_op_mat_obj={}
+        this_layer_sim ={}
+        for core_id in range(num_cores):
+            time_scheduled[core_id] = 0
+            time_current[core_id] = 0
+            executed_tile[core_id] = -1
+            this_layer_op_mat_obj[core_id] = operand_matrix()
+            layer_params = self.workload_obj.get_layer_params(core_id)   
+            if (layer_params[0] in ['conv', 'gemm']):
+                this_layer_op_mat_obj[core_id].set_params(config_obj=single_arr_config,
+                topoutil_obj=self.workload_obj,
+                layer_id=core_id)
+                this_layer_op_mat_obj[core_id].create_operand_matrices()
+    
+                this_layer_sim[core_id] = SingleLayerSim() ### again for now till milestone we can assume one core, hmm maybe have an additional self knob for hyrbvid
+                this_layer_sim[core_id].set_params(config_obj=self.config_obj,
+                                      op_mat_obj=this_layer_op_mat_obj[core_id],
+                                      partitioner_obj=self.partition_obj,
+                                      noc_obj = self.noc,
+                                      layer_id=core_id,core_id= core_id,
+                                      log_top_path=self.top_path,
+                                      verbosity=self.verbose,skip_dram_reads=self.enable_lp_partition,skip_dram_writes = self.enable_lp_partition,num_cores = num_cores, enable_lp_partition = self.enable_lp_partition )
+                this_layer_sim[core_id].run_single_layer_lp() ## This is run_compute
+                this_layer_sim[core_id].setup_memory()
+                self.single_layer_objects_list += [this_layer_sim[core_id]]
+            #elif (layer_params[0] in ['activation']): ## TODO Need to fix this
+            #    op_matrix = self.single_layer_objects_list[core_id-1].get_ofmap_operand_matrix()
+    
+            #    this_layer_sim = SingleLayerSim()
+            #    this_layer_sim.set_params(config_obj=self.config_obj,
+            #                          op_mat_obj=this_layer_op_mat_obj,
+            #                          partitioner_obj=self.partition_obj,
+            #                          layer_id=core_id,
+            #                          log_top_path=self.top_path,
+            #                          verbosity=self.verbose)
+            #    this_layer_sim.run_simd_all_parts(operand_matrix=op_matrix, optype = layer_params[1])
+            #    self.single_layer_objects_list += [this_layer_sim]
+            
+        self.time_overall=0 ## starts the cycles.
+        # Need to create dependancy graph.
+        completed = 0
+        static_noc_latency= {}
+        time_start ={}
+        noc_total_time = {}
+        iterator = 0 # debug ppurposes
+        
+        for core_id in range(num_cores): ## dependancy grpahs
+            this_layer_sim[core_id].tile_number = core_id*-1
+            time_start[core_id] = 0
+            noc_total_time[core_id] = 0
+            if(core_id != num_cores - 1):
+                static_noc_latency[core_id] =  self.noc.get_static_latency(core_id , core_id + 1, 1*this_layer_sim[core_id].per_tile_size)
+                #print("Static latency",static_noc_latency[core_id] )
+        while(completed != num_cores): ## naive way of looping untill allof these are started.
+            step_increment_cycles = 0
+            completed = 0
+            extra_noc_cycles = 0
+            for core_id in range(num_cores):
+                print("Time scheduled",time_scheduled[core_id ])
+                completed_per_core = this_layer_sim[core_id].run_mem_sim_all_parts_lp(core_id,time_scheduled[core_id ])
+                #Add SIMD here to accoutn for the time it might take so that we can add the time taken to current
+                
+                completed += completed_per_core 
+                if(this_layer_sim[core_id].tile_number < 0 ):
+                    this_layer_sim[core_id].tile_number +=1
+                    time_scheduled[core_id ] = time_current[core_id - 1 ] + extra_noc_cycles #+ this_layer_sim[core_id].this_part_mem.cycles_per_tile
+                    if(this_layer_sim[core_id].tile_number == 0):
+                        time_start[core_id] = time_scheduled[core_id ]
+                    noc_total_time[core_id] +=extra_noc_cycles
+                    
+                    continue ## We dont wanna do any updates for the core if nothing was executed.
+                if(completed_per_core == 1):
+                    
+                    continue # Since we need a prev iteration values for Time across core, they need to be updated correctly once you are done with a core's execution
+                
+                    time_current[core_id] = time_scheduled[core_id] + this_layer_sim[core_id].this_part_mem.cycles_per_tile
+                    time_scheduled[core_id] = time_current[core_id - 1] + extra_noc_cycles
+                    noc_total_time[core_id] +=extra_noc_cycles
+                    #######
+                else:
+                    
+                    time_current[core_id] = time_scheduled[core_id] + this_layer_sim[core_id].this_part_mem.cycles_per_tile
+                    time_scheduled[core_id] = time_current[core_id] + extra_noc_cycles
+                    noc_total_time[core_id] +=extra_noc_cycles
+                if(core_id != num_cores - 1 ):
+                    extra_noc_cycles = static_noc_latency[core_id] # 10 #self.noc.get_static_latency(core_id, core_id + 1, this_layer_sim[core_id].per_tile_size)
+                
+                if(core_id != (num_cores - 1)):
+                    if not (core_id + 1) in this_layer_sim[core_id].tracking_id :
+                         this_layer_sim[core_id].tracking_id[core_id+1] = {}
+                    if not this_layer_sim[core_id].tile_number in this_layer_sim[core_id].tracking_id[core_id + 1] :
+                        this_layer_sim[core_id].tracking_id[core_id + 1][this_layer_sim[core_id].tile_number] = {}
+                    
+                    if not (core_id + 1) in this_layer_sim[core_id].pushed_in_time :
+                         this_layer_sim[core_id].pushed_in_time[core_id+1] = {}
+                    if not this_layer_sim[core_id].tile_number in this_layer_sim[core_id].tracking_id[core_id + 1] :
+                        this_layer_sim[core_id].pushed_in_time[core_id + 1][this_layer_sim[core_id].tile_number] = {}
+                    
+                    ### Call congestion unaware NoC to remove the 6 cyclesdelay here.
+                    #print("NOc insertion Core:",core_id,"Tile ",this_layer_sim[core_id].tile_number," at time ",time_current[core_id] ,extra_noc_cycles)
+                    this_layer_sim[core_id].tracking_id[core_id+1][this_layer_sim[core_id].tile_number] =self.noc.post(time_current[core_id] ,core_id , core_id + 1, this_layer_sim[core_id].per_tile_size) # TODO replace this with SreemanthsAPI call.
+                    
+                    this_layer_sim[core_id].pushed_in_time[core_id+1][this_layer_sim[core_id].tile_number] = time_current[core_id]
+                    
+                    #print("POSTING SRC",core_id,"DST",core_id +1,"TILE",this_layer_sim[core_id].tile_number,"NOC ID  ",this_layer_sim[core_id].tracking_id[core_id+1][this_layer_sim[core_id].tile_number],"At time",time_current[core_id])
+                
+                this_layer_sim[core_id].tile_number +=1
+                
+            iterator+=1
+        #end
+            ## Reset traces adn the object
+        if (1):
+            for core_id in range(num_cores):
+                time_scheduled[core_id] = 0
+                time_current[core_id] = 0
+                executed_tile[core_id] = -1
+                this_layer_sim[core_id].tile_number = -1
+                this_layer_sim[core_id].this_part_mem.reset_buffer_states()
+                this_layer_sim[core_id].setup_again_parameter() ## Setup 
+                
+            ##### Deliver######  
+            #######################################################################
+            self.noc.deliver_all_txns()
+            completed = 0
+            print("Generating the loop agains")
+
+            #### Running the loop again for congestions.########
+            iterator = 0 # debug ppurposes
+            for core_id in range(num_cores): ## dependancy grpahs
+                this_layer_sim[core_id].tile_number = core_id*-1
+                time_start[core_id] = 0
+                noc_total_time[core_id] = 0
+            
+            while(completed != num_cores): ## naive way of looping untill allof these are started.
+                #print("Generating the loop agains")
+                step_increment_cycles = 0
+                completed = 0
+                extra_noc_cycles = 0
+                for core_id in range(num_cores):
+                    completed_per_core = this_layer_sim[core_id].run_mem_sim_all_parts_lp(core_id,time_scheduled[core_id ])
+                    completed += completed_per_core 
+                    if(this_layer_sim[core_id].tile_number < 0 ):
+                        this_layer_sim[core_id].tile_number +=1
+                        time_scheduled[core_id ] = time_current[core_id - 1 ] + extra_noc_cycles #+ this_layer_sim[core_id].this_part_mem.cycles_per_tile
+                        if(this_layer_sim[core_id].tile_number == 0):
+                            time_start[core_id] = time_scheduled[core_id ]
+                        if(core_id == 1):
+                            noc_total_time[core_id] +=extra_noc_cycles
+                        
+                        
+                        continue ## We dont wanna do any updates for the core if nothing was executed.
+                    if(completed_per_core == 1):
+                        
+                        
+                        
+                        
+                        
+                        continue # Since we need a prev iteration values for Time across core, they need to be updated correctly once you are done with a core's execution
+                    
+    
+                    if(core_id != 0 ): ### Need to double check this. Getting the per core absolute time using the rpevious core as reference
+                        time_current[core_id] = time_scheduled[core_id] + this_layer_sim[core_id].this_part_mem.cycles_per_tile
+                        time_scheduled[core_id] = time_current[core_id - 1] + extra_noc_cycles
+                        if(core_id == 1):
+                            noc_total_time[core_id] +=extra_noc_cycles
+                       # assert(extra_noc_cycles > 0 or (this_layer_sim[core_id - 1].tile_number == this_layer_sim[core_id - 1].total_tiles_ifmap_layer ))
+                    else:
+                        #time_across_cores_prev[core_id] = time_across_cores[core_id]
+                        time_current[core_id] = time_scheduled[core_id] + this_layer_sim[core_id].this_part_mem.cycles_per_tile
+                        time_scheduled[core_id] = time_current[core_id] + extra_noc_cycles
+                        noc_total_time[core_id] +=extra_noc_cycles
+
+                    if(core_id != num_cores - 1 ):
+                        extra_noc_cycles = self.noc.get_latency(this_layer_sim[core_id].tracking_id[core_id+1][this_layer_sim[core_id].tile_number])  - this_layer_sim[core_id].pushed_in_time[core_id+1][this_layer_sim[core_id].tile_number]#static_noc_latency[core_id] # 10 #self.noc.get_static_latency(core_id, core_id + 1, this_layer_sim[core_id].per_tile_size)
+                        
+                    this_layer_sim[core_id].tile_number +=1
+
+           
+          
+        
+        for lid in range(num_cores):
+            #print("Core",lid,time_across_cores[core_id])
+            layer_params = self.workload_obj.get_layer_params(lid)
+            if layer_params[0] in ["conv", "gemm"]: ## TODO mmanish remove activation    
+                if self.verbose:
+                    print("SAVING TRACES")
+                this_layer_sim[lid].save_traces()
+                #print("Stat gather for core",lid)
+                this_layer_sim[lid].gather_report_items_across_cores()   
+       
+        print("Total Cycles taken for the sim is ", time_current[max(time_current)]) 
+        print("Noc Cycles for core ",num_cores-1,"is ",noc_total_time[num_cores - 1],"Total cycles for this core is ",time_current[num_cores - 1] - time_start[num_cores -1] , time_start[num_cores - 1])
+        self.runs_done = True
+        self.generate_all_reports()  
+
+#############################################
+##### Tiles based experiment
+    def run_ls_tile_execution(self):
+        assert self.params_valid, "Cannot run simulation without inputs"
+
+        # Run compute simulations for all layers first
+        num_layers = self.workload_obj.get_num_layers()
+
+        # Update the offsets to generate operand matrices
+        single_arr_config = scale_config()
+        conf_list = scale_config.get_default_conf_as_list()
+        user_offsets = self.config_obj.get_operand_offsets()
+        conf_list[6] = user_offsets[0]
+        conf_list[7] = user_offsets[1]
+        conf_list[8] = user_offsets[2]
+        conf_list[10] = self.config_obj.get_bandwidth_use_mode()
+        conf_list.append(self.config_obj.get_interface_bandwidths()[0])
+        single_arr_config.update_from_list(conf_list=conf_list)
+        for layer_id in range(num_layers):
+            if self.verbose:
+                print('Running Layer ' + str(layer_id))
+            this_layer_op_mat_obj = operand_matrix()
+            layer_params = self.workload_obj.get_layer_params(layer_id)
+            if (layer_params[0] in ['conv', 'gemm']):
+                this_layer_op_mat_obj.set_params(config_obj=single_arr_config,
+                                             topoutil_obj=self.workload_obj,
+                                             layer_id=layer_id)
+                this_layer_op_mat_obj.create_operand_matrices()
+
+                this_layer_sim = SingleLayerSim()
+                this_layer_sim.set_params(config_obj=self.config_obj,
+                                      op_mat_obj=this_layer_op_mat_obj,
+                                      partitioner_obj=self.partition_obj,
+                                      layer_id=layer_id,core_id= layer_id,
+                                      log_top_path=self.top_path,
+                                      verbosity=self.verbose)
+                this_layer_sim.run_single_layer_ls_tiled(self.noc) ## For now running only one layer support . 
+                #Multi layers required time to be passed out of a layer sim and provided for the next one.
+                
                 self.single_layer_objects_list += [this_layer_sim]
 
-                this_layer_sim.gather_simd_report_items_across_cores()
+                if self.verbose:
+                    print('SAVING TRACES',this_layer_sim.all_node_mem_objects[0].traces_valid)
+                this_layer_sim.save_traces(self.enable_ls_partition_tile_based)
+                this_layer_sim.gather_report_items_across_cores()
+            elif (layer_params[0] in ['activation']):
+                op_matrix = self.single_layer_objects_list[layer_id-1].get_ofmap_operand_matrix()
 
+                this_layer_sim = SingleLayerSim()
+                this_layer_sim.set_params(config_obj=self.config_obj,
+                                      op_mat_obj=this_layer_op_mat_obj,
+                                      partitioner_obj=self.partition_obj,
+                                      layer_id=layer_id,
+                                      log_top_path=self.top_path,
+                                      verbosity=self.verbose)
+                this_layer_sim.run_simd_all_parts(operand_matrix=op_matrix, optype = layer_params[1])
+                self.single_layer_objects_list += [this_layer_sim]
+                
+                this_layer_sim.gather_simd_report_items_across_cores()
+        
         self.runs_done = True
-        self.generate_all_reports()
+        self.generate_all_reports()  
+        #assert (0) # WTF you cnat come here yet
+
+    def run(self):
+        if self.enable_ls_partition:
+            self.run_ls()
+        elif (self.enable_ls_partition_tile_based):
+            self.run_ls_tile_execution()
+        else:
+            self.run_lp()
 
     def generate_all_reports(self):
         self.create_cycles_report_structures()
@@ -352,7 +634,7 @@ class Simulator:
 
     def save_all_cycle_reports(self):
         assert self.cycles_report_ready
-        compute_report_name = self.top_path + "traces/" + "/COMPUTE_REPORT.csv"
+        compute_report_name = self.top_path + "/traces/" + "/COMPUTE_REPORT.csv"
         compute_report = open(compute_report_name, "w")
         header = "LayerID, Total Cycles, Stall Cycles, Overall Util %, Mapping Efficiency %, Compute Util %,\n"
         columns = header.count(",") - 1
@@ -378,7 +660,7 @@ class Simulator:
     def save_all_bw_reports(self):
         assert self.bandwidth_report_ready
 
-        bandwidth_report_name = self.top_path + "traces" + "/BANDWIDTH_REPORT.csv"
+        bandwidth_report_name = self.top_path + "/traces" + "/BANDWIDTH_REPORT.csv"
         bandwidth_report = open(bandwidth_report_name, "w")
         header = "LayerID, Avg IFMAP SRAM BW, Avg FILTER SRAM BW, Avg OFMAP SRAM BW, "
         header += "Avg IFMAP DRAM BW, Avg FILTER DRAM BW, Avg OFMAP DRAM BW,\n"
@@ -406,7 +688,7 @@ class Simulator:
     def save_all_detailed_reports(self):
         assert self.detailed_report_ready
 
-        detailed_report_name = self.top_path + "traces" + "/DETAILED_ACCESS_REPORT.csv"
+        detailed_report_name = self.top_path + "/traces" + "/DETAILED_ACCESS_REPORT.csv"
         detailed_report = open(detailed_report_name, "w")
         header = "LayerID, "
         header += "SRAM IFMAP Start Cycle, SRAM IFMAP Stop Cycle, SRAM IFMAP Reads, "

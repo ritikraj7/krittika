@@ -32,6 +32,12 @@ class ComputeNode:
         self.params_set = False
         self.operands_valid = False
         self.matrices_valid = False
+        # NoC
+        self.tracking_id = {}
+        self.compute_node_total_tiles_ifmap_layer = 0
+        self.compute_node_total_tiles_filter_map_layer = 0
+        self.per_tile_size = 0
+        self.tile_number = 0
 
     #
     def set_params(self,
@@ -48,9 +54,11 @@ class ComputeNode:
 
         if compute_unit == 'matmul':
             if dataflow == 'os':
+                #print("OSSS")
                 self.selected_compute_node = SystolicMatMulOS()
 
             elif dataflow == 'ws':
+                #print("WSSS")
                 self.selected_compute_node = SystolicMatMulWS()
 
             elif dataflow == 'is':

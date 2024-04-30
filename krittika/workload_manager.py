@@ -20,9 +20,11 @@ class WorkloadManager:
         format = 'conv'
 
         for index, row in enumerate(f):
-                format = str(row.strip("").split(', ')[0].strip(""))
+                print(row)
+                format = str(row.strip().split(',')[0].strip())
+                print("FORM",format)
                 assert format in ['gemm', 'conv', 'activation']
-
+                
                 if format == "conv":
                     self.load_arrays_conv(row, index)
                 elif format == "gemm":
@@ -208,6 +210,7 @@ class WorkloadManager:
         if not (self.topo_valid or self.num_layers - 1 < layer_id):
             print("ERROR: topologies.get_layer_params: Invalid layer id")
             return
+        #print(layer_id)
         layer_params = self.topo_list[layer_id]
         return layer_params
 
