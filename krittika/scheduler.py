@@ -9,16 +9,6 @@ from krittika.config.krittika_config import KrittikaConfig
 
 from krittika.chiplet_system import ChipletSys
 
-#Inputs
-    #List of chiplets that are going to be used
-    #chiplet sys
-
-#Outputs
-    #Dependency Matrix
-    #Latency Matrix
-
-
-
 class Scheduler:
     '''
         The objective of this class
@@ -35,7 +25,7 @@ class Scheduler:
         self.op_mat_obj = operand_matrix()
         self.config_obj = KrittikaConfig() 
         self.dependency_matrix = []
-        self.status_matrix = [] #(x,y,z) x-inp_dependency, y-acc_dependency, z-run-status
+        self.status_matrix = [] #(x,y) x-inp_dependency, y-run-status
         self.ready_to_run = deque()
         self.comm_latency_matrix = None
         self.end_latency_matrix = None
@@ -46,14 +36,13 @@ class Scheduler:
         self.init_latency = 0
         #hyper parameter
         self.cycles_per_sec = 1.8*math.pow(2,30)
-        self.bandwidth = 100*math.pow(2,33)
+        self.bandwidth = 1*math.pow(2,33)
         self.latency_per_hop = 1
         self.src_weightage = 1
 
         #Flags
         self.verbose = True
 
-    #
     def set_params(self,
                    chiplet_sys = ChipletSys(),
                    op_mat_obj = operand_matrix(),
@@ -64,14 +53,12 @@ class Scheduler:
         self.config_obj = config_obj
         self.verbose = verbosity
 
-    #
     def count_non_negative(self, list):
         negative_values = sum(sublist.count(-1) for sublist in list)
         total_values = sum(len(sublist) for sublist in list)
         non_negative = total_values - negative_values
         return non_negative
 
-    #def
     def non_uniform_work_dist(self, occupancy_m, N_src):
         data_dist_m = np.zeros((occupancy_m.shape[0],occupancy_m.shape[1]))
 
@@ -92,10 +79,8 @@ class Scheduler:
             total_dist = 0
             src = i+1
             for coord in coordinates[src]:
-                #print (coord)
                 total_dist = total_dist + 1 + abs(coord[0] - srcs[-1*src][0]) + abs(coord[1] - srcs[-1*src][1])
 
-            #adding 1 for source 
             total_dist = total_dist + 1 
             total_distance.append(total_dist)
             print ("i = ", i, "tot dist = ", total_dist)
@@ -125,7 +110,6 @@ class Scheduler:
         
         return data_dist_m
 
-    #
     def workload_distribution(self, uniform = 1):
         ifmap_matrix, filter_matrix, ofmap_matrix = self.op_mat_obj.get_all_operand_matrix()
 
@@ -136,7 +120,6 @@ class Scheduler:
             self.comm_latency_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
             self.end_latency_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
 
-            #Debug
             self.ifmap_size_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
 
             for inp_part in range(self.chiplet_sys.num_input_part):
@@ -144,11 +127,6 @@ class Scheduler:
                 ifmap_row_end = min(ifmap_row_start + input_rows_per_part, ifmap_matrix.shape[0])
 
                 ifmap_part = ifmap_matrix[ifmap_row_start:ifmap_row_end,:]
-                print("ifmap_matrices")
-                print(ifmap_row_start)
-                print(ifmap_row_end)
-                print("ifmap_part")
-                print(ifmap_part)
                 this_row_dependency = []
                 this_row_status = []
                 this_row_latency = []
@@ -164,21 +142,10 @@ class Scheduler:
                     self.chiplet_sys.chiplet_matrix[inp_part][filt_part].compute_node.set_operands(ifmap_opmat=ifmap_part,
                                                                                                     filter_opmat=filter_part,
                                                                                         ofmap_opmat=ofmap_part)
-                    print("filter and output matrices") 
-                    print(filt_col_start)
-                    print(filt_col_end)
-                    print("filter_part")
-                    print(filter_part)
-                    print("ofmap_part")
-                    print(ofmap_part)
                     
                     #the sizes of the ifmap and filt for this part of the communication
                     ifmap_part_size = np.sum(ifmap_part != -1)
                     self.ifmap_size_matrix[inp_part][filt_part] = ifmap_part_size
-                    
-                    # print("ifmap_part_size")
-                    # print(ifmap_part_size)
-            
 
                     if(filt_part == 0):
                         inp_dep_coord = (-1, -1)
@@ -212,7 +179,6 @@ class Scheduler:
         elif(uniform==2): ###non-unfiorm + communication
             
     # Define the parameters for the greedy function
-            #change
             N_src = self.chiplet_sys.num_input_part
             destination_list = [(i, j) for i in range(self.chiplet_sys.num_input_part) for j in range(self.chiplet_sys.num_filter_part)]
             src_list = []
@@ -227,8 +193,6 @@ class Scheduler:
                 for j in range(occupancy_m.shape[1]):
                     if(occupancy_m[i][j] != 0):
                         src_list.append((i,j))
-
-            # print(src_list)
 
             print("PLACING ROWS")
             N_left = self.chiplet_sys.num_filter_part - 1
@@ -246,11 +210,9 @@ class Scheduler:
                                 destination_list[j].append((row,col))
                                 destination_list[j] = list(set(destination_list[j]))
                     ii += 1
-                    # print(destination_list)
             print(occupancy_m)
 
             print("Updating SRC")
-            # print(destination_list)
             latency_mat = np.zeros((len(destination_list), len(destination_list[0])))
             for i in range(len(destination_list)):
                 for j in range(len(destination_list[i])):
@@ -261,7 +223,6 @@ class Scheduler:
                 thissrc = destination_list[i][np.argmin(latency_mat[i])]
                 occupancy_m[thissrc[0]][thissrc[1]] = -(i+1)
 
-            # print(latency_mat)
             print(occupancy_m)   
             self.data_dist_m = self.non_uniform_work_dist (occupancy_m, N_src)
             
@@ -277,22 +238,17 @@ class Scheduler:
             self.comm_latency_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
             self.end_latency_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
 
-            #Debug
             self.ifmap_size_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))            
             # Iterate over each source and its group
             for src in range(-1, -np.amax(np.abs(occupancy_m)).astype(int) - 1, -1):
-                #group_indices = np.argwhere(occupancy_m == src)
                 group_indices = np.argwhere(np.isin(occupancy_m, [src, -src]))
                 group_indices_src = np.argwhere(occupancy_m == src)
                 print(group_indices_src)
                 this_row_dependency = []
                 this_row_status = []                   
                 filt_col_start = 0
-                #inp_part_src, filt_part_src = group_indices_src
                 for idx_pair in group_indices:
                     inp_part, filt_part = idx_pair
-                    # print("idx_pair")
-                    # print(idx_pair)
                     filt_col_end = filt_col_start + filter_allocation_matrix[inp_part][filt_part]
                     
                     # Calculating the IFMAP and OFMAP matrix partitions based on the allocation
@@ -321,7 +277,6 @@ class Scheduler:
                 this_row_status = []                 
                 for filt_part in range(self.chiplet_sys.num_filter_part):
                      if(self.dependency_matrix[inp_part][filt_part]==(-1,-1)):
-                         #if(self.ifmap_size_matrix[inp_part][filt_part] != 0):
                          self.ready_to_run.append((inp_part, filt_part))
                          this_row_status.append([1,0])
                      else:  
@@ -364,8 +319,6 @@ class Scheduler:
                     if(occupancy_m[i][j] != 0):
                         src_list.append((i,j))
 
-            # print(src_list)
-
             print("PLACING ROWS")
             N_left = self.chiplet_sys.num_filter_part - 1
             destination_list = []
@@ -382,11 +335,9 @@ class Scheduler:
                                 destination_list[j].append((row,col))
                                 destination_list[j] = list(set(destination_list[j]))
                     ii += 1
-                    # print(destination_list)
             print(occupancy_m)
 
             print("Updating SRC")
-            # print(destination_list)
             latency_mat = np.zeros((len(destination_list), len(destination_list[0])))
             for i in range(len(destination_list)):
                 for j in range(len(destination_list[i])):
@@ -397,28 +348,22 @@ class Scheduler:
                 thissrc = destination_list[i][np.argmin(latency_mat[i])]
                 occupancy_m[thissrc[0]][thissrc[1]] = -(i+1)
 
-            # print(latency_mat)
             print(occupancy_m)               
             input_rows_per_part = math.ceil(ifmap_matrix.shape[0] / self.chiplet_sys.num_input_part)
             filter_cols_per_part = math.ceil(filter_matrix.shape[1] / self.chiplet_sys.num_filter_part)
             self.dependency_matrix = self.dependency_matrix_func(occupancy_m)
             self.comm_latency_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
             self.end_latency_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
-            #Debug
             self.ifmap_size_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
 
             for src in range(-1, -np.amax(np.abs(occupancy_m)).astype(int) - 1, -1):
-                #group_indices = np.argwhere(occupancy_m == src)
                 group_indices = np.argwhere(np.isin(occupancy_m, [src, -src]))
                 group_indices_src = np.argwhere(occupancy_m == src)
                 this_row_dependency = []
                 this_row_status = []                   
                 filt_col_start = 0
-                #inp_part_src, filt_part_src = group_indices_src
                 for idx_pair in group_indices:
                     inp_part, filt_part = idx_pair
-                    # print("idx_pair")
-                    # print(idx_pair)
                     filt_col_end = min(filt_col_start + filter_cols_per_part, filter_matrix.shape[1])                    
                     
                     # Calculating the IFMAP and OFMAP matrix partitions based on the allocation
@@ -446,7 +391,6 @@ class Scheduler:
                 this_row_status = []                 
                 for filt_part in range(self.chiplet_sys.num_filter_part):
                      if(self.dependency_matrix[inp_part][filt_part]==(-1,-1)):
-                         #if(self.ifmap_size_matrix[inp_part][filt_part] != 0):
                          self.ready_to_run.append((inp_part, filt_part))
                          this_row_status.append([1,0])
                      else:  
@@ -476,18 +420,10 @@ class Scheduler:
             print(self.ifmap_size_matrix)
 
         elif(uniform==4):  ####only non-uniform 
-                        ##TODO - Need to update this with greedy algorithm
             occupancy_m = np.zeros((self.chiplet_sys.num_input_part,self.chiplet_sys.num_filter_part))
             for i in range(occupancy_m.shape[0]):
                 occupancy_m[i] = (i+1)*np.ones(occupancy_m.shape[1])
             occupancy_m[:,0] = -1*occupancy_m[:,0]
-            # occupancy_m = np.array([[-1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-            #                 [-2.0, 2.0, 2.0, 2.0, 2.0, 2.0],
-            #                 [-3.0, 3.0, 3.0, 3.0, 3.0, 3.0],
-            #                 [-4.0, 4.0, 4.0, 4.0, 4.0, 4.0],
-            #                 [-5.0, 5.0, 5.0, 5.0, 5.0, 5.0],
-            #                 [-6.0, 6.0, 6.0, 6.0, 6.0, 6.0] ])
-            #TODO - Need to update this with greedy algorithm
             N_src = self.chiplet_sys.num_input_part
             print(occupancy_m)   
             self.data_dist_m = self.non_uniform_work_dist (occupancy_m, N_src)
@@ -504,22 +440,16 @@ class Scheduler:
             self.comm_latency_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
             self.end_latency_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))
 
-            #Debug
             self.ifmap_size_matrix = np.zeros((self.chiplet_sys.num_input_part, self.chiplet_sys.num_filter_part))            
             # Iterate over each source and its group
             for src in range(-1, -np.amax(np.abs(occupancy_m)).astype(int) - 1, -1):
-                #group_indices = np.argwhere(occupancy_m == src)
                 group_indices = np.argwhere(np.isin(occupancy_m, [src, -src]))
                 group_indices_src = np.argwhere(occupancy_m == src)
-                print(group_indices_src)
                 this_row_dependency = []
                 this_row_status = []                   
                 filt_col_start = 0
-                #inp_part_src, filt_part_src = group_indices_src
                 for idx_pair in group_indices:
                     inp_part, filt_part = idx_pair
-                    # print("idx_pair")
-                    # print(idx_pair)
                     filt_col_end = filt_col_start + filter_allocation_matrix[inp_part][filt_part]
                     
                     # Calculating the IFMAP and OFMAP matrix partitions based on the allocation
@@ -548,7 +478,6 @@ class Scheduler:
                 this_row_status = []                 
                 for filt_part in range(self.chiplet_sys.num_filter_part):
                      if(self.dependency_matrix[inp_part][filt_part]==(-1,-1)):
-                         #if(self.ifmap_size_matrix[inp_part][filt_part] != 0):
                          self.ready_to_run.append((inp_part, filt_part))
                          this_row_status.append([1,0])
                      else:  
@@ -598,8 +527,6 @@ class Scheduler:
                         if(l >= 0 and l < occupancy_m.shape[0]):
                             if(occupancy_m[i][l] == ii) or occupancy_m[i][l] == -ii:
                                 neighbour_list.append((i,l))
-                    # print("neighbour_list")                 
-                    # print(neighbour_list)
 
                     n_dist_src = 10000000
                     neigh = (-2,-2)
@@ -634,11 +561,6 @@ class Scheduler:
             filter_allocation_matrix[source_index[0], source_index[1]] += surplus
 
         return filter_allocation_matrix
-
-
-        
-
-    #
 
     def _latency(self, c1, c2):
         """ Calculate latency based on coordinates. """
@@ -719,7 +641,6 @@ class Scheduler:
                                  ofmap_backing_buf_bw=per_core_ofmap_bw
                                  )
 
-        # Demand mat
         this_node_ifmap_demand_mat, this_node_filter_demand_mat, this_node_ofmap_demand_mat \
             = chiplet_node.compute_node.get_demand_matrices()
 
@@ -733,7 +654,6 @@ class Scheduler:
                                              this_node_ofmap_demand_mat,
                                              nop_latency)
         
-        # print("ofmap_lines:", this_node_ofmap_demand_mat.shape[0])
         self.end_latency_matrix[self.ready_to_run[0][0]][self.ready_to_run[0][1]] \
             = self.comm_latency_matrix[self.ready_to_run[0][0]][self.ready_to_run[0][1]] + this_node_ofmap_demand_mat.shape[0]
 
@@ -756,9 +676,10 @@ class Scheduler:
                         if(self.ifmap_size_matrix[i][j] != 0):
                             self.ready_to_run.append((i,j))
                         self.ready_to_run = deque(set(self.ready_to_run))
-            # print(self.ready_to_run)
         print("Communication Latency Matrix")
         print(self.comm_latency_matrix)
+        print("Max Communication Latency")
+        print(np.max(self.comm_latency_matrix))
         print("End Latency Matrix")
         print(self.end_latency_matrix)
 
