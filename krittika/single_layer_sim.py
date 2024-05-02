@@ -134,7 +134,7 @@ class SingleLayerSim:
         #ifmap_matrix, filter_matrix, ofmap_matrix = self.op_mat_obj.get_all_operand_matrix()
         self.scheduler = Scheduler()
         self.scheduler.set_params(self.chiplet_sys, self.op_mat_obj, self.config_obj, self.verbose)
-        self.scheduler.workload_distribution(0) 
+        self.scheduler.workload_distribution(2)
         self.scheduler.set_memory_dependency()
         compute_unit, opt_dataflow = self.partitioner_obj.get_opt_compute_params(layer_id=self.layer_id)
         #input_rows_per_part = math.ceil(ifmap_matrix.shape[0] / self.num_input_part)
