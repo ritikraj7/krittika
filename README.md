@@ -1,3 +1,7 @@
+This is our project to add NoC support with LP and LS single DRAM port/multiple nodes support (single layer only) and SIMD profiling results to plugin cycles for ECE HML 8803
+
+
+
 Refer to Commands.md to setup the environment and then run krittika successfully.
 
 Additional things:
