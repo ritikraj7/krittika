@@ -16,7 +16,10 @@ Few Notes:
 5) COMPUTE Traces will have time taken by each layer. The overall time taken will be a print from the Krittika run. DRAM And SRAM traces are cycle-accurate.
 
 Results:
+8 layers GEMM 100,100,100 use self.enable_lp_partition
 ![image](https://github.com/5ree/krittika_hml_proj/assets/123487773/b9d2ec54-3187-4cc0-833d-6a84a99419d0)
+
+Single layer scheduling LS to account for Noc time (use self.enable_ls_partition_tile_based) Sizes used GEMM 100,100,10 - single layer only
 ![image](https://github.com/5ree/krittika_hml_proj/assets/123487773/1cbe7ef4-c59b-4c75-829d-0e30a26d0a24)
 
 
