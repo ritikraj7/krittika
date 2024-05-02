@@ -27,6 +27,11 @@ After cloning, install scalesim from path using the following command. This vers
 
 ## *Launching a run*
 Krittika can be run by using the krittika-sim.py script from the repository and providing the paths to the architecture configuration file (refer configs/krittika.cfg for example) and the topology descriptor csv file (refer scalesim repo for examples).
+In the kritika.cfg we introduced opt parameter which can be used to call the 3 opimisation strategies we implemented, below are the configurations to run each of these:
+1. for opt=0, uniform
+2. for opt=1, non-uniform + communication
+3. for opt=2, uniform + communicaton 
+4. for opt=3, non-uniform   
 
 ```$ python3 krittika-sim.py -c <path_to_config_file> -t <path_to_topology_file>```
 
