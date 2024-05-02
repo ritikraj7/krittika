@@ -1,3 +1,23 @@
+Refer to Commands.md to setup the environment and then run krittika successfully.
+
+Additional things:
+Following parameters in simulator.py control the type of Scheduling algorithm.
+1) self.enable_ls_partition( The orignal baseline)
+2) self.enable_lp_partition ( Layer pipeline)
+3) self.enable_ls_partition_tile_based ( Tile wise execution across cores to support Many Cores communicating to the one node for DRAM access to add support for a concept of time across cores, Supports only single layer execution across multiple cores)
+
+Network.cfg was added to control the type of topology used and all its relevant parameters.
+
+Few Notes:
+1) USER MODE has been used.
+2) OS Dataflow has to be used.
+3) NoC for  time was calculated by running a single layer on a single core and then using that as a reference, any extra time taken is attributed to NoC when run with multiple layers.
+4) temp_part.csv has to be updated whenever you run LS-related scheduling so beware.
+5) COMPUTE Traces will have time taken by each layer. The overall time taken will be a print from the Krittika run. DRAM And SRAM traces are cycle-accurate.
+6) 
+
+
+### BELOW CONTENT IS COPIED FROM KRITTIKA's main repository.
 # Krittika (Pleiades)
 Distibuted ML Accelerator simulator
 
