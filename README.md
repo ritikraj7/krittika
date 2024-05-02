@@ -14,7 +14,12 @@ Few Notes:
 3) NoC for  time was calculated by running a single layer on a single core and then using that as a reference, any extra time taken is attributed to NoC when run with multiple layers.
 4) temp_part.csv has to be updated whenever you run LS-related scheduling so beware.
 5) COMPUTE Traces will have time taken by each layer. The overall time taken will be a print from the Krittika run. DRAM And SRAM traces are cycle-accurate.
-6) 
+
+Results:
+![image](https://github.com/5ree/krittika_hml_proj/assets/123487773/b9d2ec54-3187-4cc0-833d-6a84a99419d0)
+![image](https://github.com/5ree/krittika_hml_proj/assets/123487773/1cbe7ef4-c59b-4c75-829d-0e30a26d0a24)
+
+
 
 
 ### BELOW CONTENT IS COPIED FROM KRITTIKA's main repository.
