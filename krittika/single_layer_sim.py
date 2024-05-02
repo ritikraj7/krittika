@@ -413,7 +413,7 @@ class SingleLayerSim:
         
         if(self.tile_number >= (self.total_tiles_ifmap_layer)): # / 3 + self.total_tiles_ifmap_layer % 3 )): ## asset checks if they iofmap and filter tiles are same always
             return  1 ## This should say you are done for this core id.
-        print("Inside mem sim all parts lp for core id",core_id,",  total tiles",self.total_tiles_ifmap_layer,"Init time",init_time)
+        #print("Inside mem sim all parts lp for core id",core_id,",  total tiles",self.total_tiles_ifmap_layer,"Init time",init_time)
         for compute_node in self.compute_node_list: ## Can remove this. TODO DO we need it tto loop 
             # Demand mat
             

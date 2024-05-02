@@ -97,7 +97,6 @@ class Simulator:
         latencies = []
         for t in t_ids:
             l = self.noc.get_latency(t)
-            print(l )
             latencies.append(l)
 
         stat_lat = self.noc.get_static_latency(0, 1, 512)
@@ -250,7 +249,7 @@ class Simulator:
             completed = 0
             extra_noc_cycles = 0
             for core_id in range(num_cores):
-                print("Time scheduled",time_scheduled[core_id ])
+                #print("Time scheduled",time_scheduled[core_id ])
                 completed_per_core = this_layer_sim[core_id].run_mem_sim_all_parts_lp(core_id,time_scheduled[core_id ])
                 #Add SIMD here to accoutn for the time it might take so that we can add the time taken to current
                 
@@ -373,17 +372,17 @@ class Simulator:
           
         
         for lid in range(num_cores):
-            #print("Core",lid,time_across_cores[core_id])
+            
             layer_params = self.workload_obj.get_layer_params(lid)
             if layer_params[0] in ["conv", "gemm"]: ## TODO mmanish remove activation    
                 if self.verbose:
                     print("SAVING TRACES")
                 this_layer_sim[lid].save_traces()
-                #print("Stat gather for core",lid)
+                
                 this_layer_sim[lid].gather_report_items_across_cores()   
        
         print("Total Cycles taken for the sim is ", time_current[max(time_current)]) 
-        print("Noc Cycles for core ",num_cores-1,"is ",noc_total_time[num_cores - 1],"Total cycles for this core is ",time_current[num_cores - 1] - time_start[num_cores -1] , time_start[num_cores - 1])
+        #print("Noc Cycles for core ",num_cores-1,"is ",noc_total_time[num_cores - 1],"Total cycles for this core is ",time_current[num_cores - 1] - time_start[num_cores -1] , time_start[num_cores - 1])
         self.runs_done = True
         self.generate_all_reports()  
 

@@ -20,9 +20,7 @@ class WorkloadManager:
         format = 'conv'
 
         for index, row in enumerate(f):
-                print(row)
                 format = str(row.strip().split(',')[0].strip())
-                print("FORM",format)
                 assert format in ['gemm', 'conv', 'activation']
                 
                 if format == "conv":
