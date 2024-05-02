@@ -34,7 +34,9 @@ In the kritika.cfg we introduced opt parameter which can be used to call the 3 o
 4. for opt=3, non-uniform   
 
 ```$ python3 krittika-sim.py -c <path_to_config_file> -t <path_to_topology_file>```
+
 Below is the example command to run the single resent layer
+
 ```$ python3 krittika/krittika-sim.py -c configs/krittika.cfg -t topologies/resnet_temp.csv -p partitions/temp_part_temp.csv```
 
 Additional optional parameters
