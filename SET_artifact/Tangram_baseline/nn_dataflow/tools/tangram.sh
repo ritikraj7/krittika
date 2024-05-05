@@ -1,0 +1,1 @@
+python nn_dataflow_search.py --word 8 --array 32 32 --regf 161 --gbuf 1048576 --dram-bw 256 --op-cost 0.018 --hier-cost 60 1.0537 0.018 0.07228 --hop-cost 5.6 --disable-bypass i o f --hybrid-partition --batch-partition --enable-gbuf-sharing --enable-save-writeback --interlayer-partition -p 4 -v -g ed $@
