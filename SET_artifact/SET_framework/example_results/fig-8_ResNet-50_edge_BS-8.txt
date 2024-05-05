@@ -1,0 +1,962 @@
+Seed: 1667996743
+Mapper eyeriss Network resnet Mesh 4*4 Batch 8
+BASE: E:3.646e+10, T:20266192, Cost:7.389e+17, Ubuf/Buf/Bus/Mac/NoC/DRAM:7.953e+08/9.511e+09/3.958e+06/5.653e+08/6.127e+09/1.946e+10
+Struct:
+	T 8/1 E:3.646e+10, T:20266192, Cost:7.389e+17 Ubuf/Buf/Bus/Mac:7.953e+08/9.511e+09/3.958e+06/5.653e+08 NoC(hops=1094074368, DRAM acc=324259072) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+		conv1 8 (B:8,H:2,W:1,K:1) util:76.56/76.56 E:9.055e+08, T:478940, Cost:4.337e+14 Ubuf/Buf/Bus/Mac:2.192e+07/2.773e+08/1.183e+05/1.699e+07 NoC(hops=23102016, DRAM acc=7663040) Buffer(max=87520, avg=8.718e+04) Buffer(max=9408, avg=9408) Buffer(max=77280, avg=7.694e+04) 1204224/9408/6422528 Max NoC: 0
+		pool1 8 (K:4,B:4,W:1,H:1) util:100/100 E:6.253e+08, T:501760, Cost:3.137e+14 Ubuf/Buf/Bus/Mac:8.459e+06/0/0/2.601e+05 NoC(hops=24084480, DRAM acc=8028160) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 6422528/0/1605632 Max NoC: 0
+		conv_2_0_a 8 (B:8,W:2,H:1,K:1) util:87.5/87.5 E:2.875e+08, T:200960, Cost:5.777e+13 Ubuf/Buf/Bus/Mac:6.907e+06/3.147e+07/3.01e+04/1.85e+06 NoC(hops=9695232, DRAM acc=3215360) Buffer(max=110592, avg=1.106e+05) Buffer(max=4096, avg=4096) Buffer(max=100352, avg=1.004e+05) 1605632/4096/1605632 Max NoC: 0
+		conv_2_0_b 8 (B:8,H:2,W:1,K:1) util:80.77/80.77 E:5.587e+08, T:206592, Cost:1.154e+14 Ubuf/Buf/Bus/Mac:1.146e+07/2.741e+08/9.747e+04/1.665e+07 NoC(hops=10358784, DRAM acc=3305472) Buffer(max=114176, avg=1.142e+05) Buffer(max=36864, avg=3.686e+04) Buffer(max=103936, avg=1.039e+05) 1605632/36864/1605632 Max NoC: 0
+		conv_2_0_c 8 (B:2,H:8,W:1,K:1) util:87.5/87.5 E:7.745e+08, T:502784, Cost:3.894e+14 Ubuf/Buf/Bus/Mac:2.255e+07/1.255e+08/1.204e+05/7.399e+06 NoC(hops=24330240, DRAM acc=8044544) Buffer(max=110592, avg=1.106e+05) Buffer(max=16384, avg=1.638e+04) Buffer(max=100352, avg=1.004e+05) 1605632/16384/6422528 Max NoC: 0
+		conv_2_br 8 (B:2,H:8,W:1,K:1) util:87.5/87.5 E:7.745e+08, T:502784, Cost:3.894e+14 Ubuf/Buf/Bus/Mac:2.255e+07/1.255e+08/1.204e+05/7.399e+06 NoC(hops=24330240, DRAM acc=8044544) Buffer(max=110592, avg=1.106e+05) Buffer(max=16384, avg=1.638e+04) Buffer(max=100352, avg=1.004e+05) 1605632/16384/6422528 Max NoC: 0
+		conv_2_0_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:1.5e+09, T:1204224, Cost:1.807e+15 Ubuf/Buf/Bus/Mac:2.03e+07/0/0/2.312e+05 NoC(hops=57802752, DRAM acc=19267584) Buffer(max=813056, avg=8.131e+05) Buffer(max=0, avg=0) Buffer(max=802816, avg=8.028e+05) 12845056/0/6422528 Max NoC: 0
+		conv_2_1_a 8 (B:2,H:8,W:1,K:1) util:87.5/87.5 E:7.649e+08, T:502784, Cost:3.846e+14 Ubuf/Buf/Bus/Mac:1.241e+07/1.262e+08/3.391e+04/7.399e+06 NoC(hops=24330240, DRAM acc=8044544) Buffer(max=411648, avg=4.116e+05) Buffer(max=16384, avg=1.638e+04) Buffer(max=401408, avg=4.014e+05) 6422528/16384/1605632 Max NoC: 0
+		conv_2_1_b 8 (B:8,H:2,W:1,K:1) util:80.77/80.77 E:5.587e+08, T:206592, Cost:1.154e+14 Ubuf/Buf/Bus/Mac:1.146e+07/2.741e+08/9.747e+04/1.665e+07 NoC(hops=10358784, DRAM acc=3305472) Buffer(max=114176, avg=1.142e+05) Buffer(max=36864, avg=3.686e+04) Buffer(max=103936, avg=1.039e+05) 1605632/36864/1605632 Max NoC: 0
+		conv_2_1_c 8 (B:2,H:8,W:1,K:1) util:87.5/87.5 E:7.745e+08, T:502784, Cost:3.894e+14 Ubuf/Buf/Bus/Mac:2.255e+07/1.255e+08/1.204e+05/7.399e+06 NoC(hops=24330240, DRAM acc=8044544) Buffer(max=110592, avg=1.106e+05) Buffer(max=16384, avg=1.638e+04) Buffer(max=100352, avg=1.004e+05) 1605632/16384/6422528 Max NoC: 0
+		conv_2_1_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:1.5e+09, T:1204224, Cost:1.807e+15 Ubuf/Buf/Bus/Mac:2.03e+07/0/0/2.312e+05 NoC(hops=57802752, DRAM acc=19267584) Buffer(max=813056, avg=8.131e+05) Buffer(max=0, avg=0) Buffer(max=802816, avg=8.028e+05) 12845056/0/6422528 Max NoC: 0
+		conv_2_2_a 8 (B:2,H:8,W:1,K:1) util:87.5/87.5 E:7.649e+08, T:502784, Cost:3.846e+14 Ubuf/Buf/Bus/Mac:1.241e+07/1.262e+08/3.391e+04/7.399e+06 NoC(hops=24330240, DRAM acc=8044544) Buffer(max=411648, avg=4.116e+05) Buffer(max=16384, avg=1.638e+04) Buffer(max=401408, avg=4.014e+05) 6422528/16384/1605632 Max NoC: 0
+		conv_2_2_b 8 (B:8,H:2,W:1,K:1) util:80.77/80.77 E:5.587e+08, T:206592, Cost:1.154e+14 Ubuf/Buf/Bus/Mac:1.146e+07/2.741e+08/9.747e+04/1.665e+07 NoC(hops=10358784, DRAM acc=3305472) Buffer(max=114176, avg=1.142e+05) Buffer(max=36864, avg=3.686e+04) Buffer(max=103936, avg=1.039e+05) 1605632/36864/1605632 Max NoC: 0
+		conv_2_2_c 8 (B:2,H:8,W:1,K:1) util:87.5/87.5 E:7.745e+08, T:502784, Cost:3.894e+14 Ubuf/Buf/Bus/Mac:2.255e+07/1.255e+08/1.204e+05/7.399e+06 NoC(hops=24330240, DRAM acc=8044544) Buffer(max=110592, avg=1.106e+05) Buffer(max=16384, avg=1.638e+04) Buffer(max=100352, avg=1.004e+05) 1605632/16384/6422528 Max NoC: 0
+		conv_2_2_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:1.5e+09, T:1204224, Cost:1.807e+15 Ubuf/Buf/Bus/Mac:2.03e+07/0/0/2.312e+05 NoC(hops=57802752, DRAM acc=19267584) Buffer(max=813056, avg=8.131e+05) Buffer(max=0, avg=0) Buffer(max=802816, avg=8.028e+05) 12845056/0/6422528 Max NoC: 0
+		conv_3_0_a 8 (W:16,H:1,B:1,K:1) util:87.5/87.5 E:5.008e+08, T:333824, Cost:1.672e+14 Ubuf/Buf/Bus/Mac:8.908e+06/7.52e+07/3.067e+04/4.228e+06 NoC(hops=16416768, DRAM acc=5341184) Buffer(max=348160, avg=2.918e+05) Buffer(max=32768, avg=3.277e+04) Buffer(max=337920, avg=2.816e+05) 6195200/32768/802816 Max NoC: 0
+		conv_3_0_b 8 (B:8,K:2,W:1,H:1) util:80.77/80.77 E:4.49e+08, T:109568, Cost:4.919e+13 Ubuf/Buf/Bus/Mac:8.442e+06/2.756e+08/6.518e+04/1.665e+07 NoC(hops=7675904, DRAM acc=1753088) Buffer(max=110592, avg=1.106e+05) Buffer(max=73728, avg=7.373e+04) Buffer(max=100352, avg=1.004e+05) 802816/147456/802816 Max NoC: 0
+		conv_3_0_c 8 (B:4,H:4,W:1,K:1) util:87.5/87.5 E:4.648e+08, T:254976, Cost:1.185e+14 Ubuf/Buf/Bus/Mac:1.322e+07/1.263e+08/7.697e+04/7.399e+06 NoC(hops=13025280, DRAM acc=4079616) Buffer(max=60416, avg=6.042e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=50176, avg=5.018e+04) 802816/65536/3211264 Max NoC: 0
+		conv_3_br 8 (W:16,H:1,B:1,K:1) util:87.5/87.5 E:9.508e+08, T:490496, Cost:4.663e+14 Ubuf/Buf/Bus/Mac:2.139e+07/3.008e+08/1.227e+05/1.691e+07 NoC(hops=25116672, DRAM acc=7847936) Buffer(max=348160, avg=2.918e+05) Buffer(max=131072, avg=1.311e+05) Buffer(max=337920, avg=2.816e+05) 6195200/131072/3211264 Max NoC: 0
+		conv_3_0_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:7.501e+08, T:602112, Cost:4.517e+14 Ubuf/Buf/Bus/Mac:1.015e+07/0/0/1.156e+05 NoC(hops=28901376, DRAM acc=9633792) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 6422528/0/3211264 Max NoC: 0
+		conv_3_1_a 8 (B:4,H:4,W:1,K:1) util:87.5/87.5 E:4.6e+08, T:254976, Cost:1.173e+14 Ubuf/Buf/Bus/Mac:8.2e+06/1.267e+08/3.45e+04/7.399e+06 NoC(hops=13025280, DRAM acc=4079616) Buffer(max=210944, avg=2.109e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=200704, avg=2.007e+05) 3211264/65536/802816 Max NoC: 0
+		conv_3_1_b 8 (B:8,K:2,W:1,H:1) util:80.77/80.77 E:4.49e+08, T:109568, Cost:4.919e+13 Ubuf/Buf/Bus/Mac:8.442e+06/2.756e+08/6.518e+04/1.665e+07 NoC(hops=7675904, DRAM acc=1753088) Buffer(max=110592, avg=1.106e+05) Buffer(max=73728, avg=7.373e+04) Buffer(max=100352, avg=1.004e+05) 802816/147456/802816 Max NoC: 0
+		conv_3_1_c 8 (B:4,H:4,W:1,K:1) util:87.5/87.5 E:4.648e+08, T:254976, Cost:1.185e+14 Ubuf/Buf/Bus/Mac:1.322e+07/1.263e+08/7.697e+04/7.399e+06 NoC(hops=13025280, DRAM acc=4079616) Buffer(max=60416, avg=6.042e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=50176, avg=5.018e+04) 802816/65536/3211264 Max NoC: 0
+		conv_3_1_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:7.501e+08, T:602112, Cost:4.517e+14 Ubuf/Buf/Bus/Mac:1.015e+07/0/0/1.156e+05 NoC(hops=28901376, DRAM acc=9633792) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 6422528/0/3211264 Max NoC: 0
+		conv_3_2_a 8 (B:4,H:4,W:1,K:1) util:87.5/87.5 E:4.6e+08, T:254976, Cost:1.173e+14 Ubuf/Buf/Bus/Mac:8.2e+06/1.267e+08/3.45e+04/7.399e+06 NoC(hops=13025280, DRAM acc=4079616) Buffer(max=210944, avg=2.109e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=200704, avg=2.007e+05) 3211264/65536/802816 Max NoC: 0
+		conv_3_2_b 8 (B:8,K:2,W:1,H:1) util:80.77/80.77 E:4.49e+08, T:109568, Cost:4.919e+13 Ubuf/Buf/Bus/Mac:8.442e+06/2.756e+08/6.518e+04/1.665e+07 NoC(hops=7675904, DRAM acc=1753088) Buffer(max=110592, avg=1.106e+05) Buffer(max=73728, avg=7.373e+04) Buffer(max=100352, avg=1.004e+05) 802816/147456/802816 Max NoC: 0
+		conv_3_2_c 8 (B:4,H:4,W:1,K:1) util:87.5/87.5 E:4.648e+08, T:254976, Cost:1.185e+14 Ubuf/Buf/Bus/Mac:1.322e+07/1.263e+08/7.697e+04/7.399e+06 NoC(hops=13025280, DRAM acc=4079616) Buffer(max=60416, avg=6.042e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=50176, avg=5.018e+04) 802816/65536/3211264 Max NoC: 0
+		conv_3_2_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:7.501e+08, T:602112, Cost:4.517e+14 Ubuf/Buf/Bus/Mac:1.015e+07/0/0/1.156e+05 NoC(hops=28901376, DRAM acc=9633792) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 6422528/0/3211264 Max NoC: 0
+		conv_3_3_a 8 (B:4,H:4,W:1,K:1) util:87.5/87.5 E:4.6e+08, T:254976, Cost:1.173e+14 Ubuf/Buf/Bus/Mac:8.2e+06/1.267e+08/3.45e+04/7.399e+06 NoC(hops=13025280, DRAM acc=4079616) Buffer(max=210944, avg=2.109e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=200704, avg=2.007e+05) 3211264/65536/802816 Max NoC: 0
+		conv_3_3_b 8 (B:8,K:2,W:1,H:1) util:80.77/80.77 E:4.49e+08, T:109568, Cost:4.919e+13 Ubuf/Buf/Bus/Mac:8.442e+06/2.756e+08/6.518e+04/1.665e+07 NoC(hops=7675904, DRAM acc=1753088) Buffer(max=110592, avg=1.106e+05) Buffer(max=73728, avg=7.373e+04) Buffer(max=100352, avg=1.004e+05) 802816/147456/802816 Max NoC: 0
+		conv_3_3_c 8 (B:4,H:4,W:1,K:1) util:87.5/87.5 E:4.648e+08, T:254976, Cost:1.185e+14 Ubuf/Buf/Bus/Mac:1.322e+07/1.263e+08/7.697e+04/7.399e+06 NoC(hops=13025280, DRAM acc=4079616) Buffer(max=60416, avg=6.042e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=50176, avg=5.018e+04) 802816/65536/3211264 Max NoC: 0
+		conv_3_3_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:7.501e+08, T:602112, Cost:4.517e+14 Ubuf/Buf/Bus/Mac:1.015e+07/0/0/1.156e+05 NoC(hops=28901376, DRAM acc=9633792) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 6422528/0/3211264 Max NoC: 0
+		conv_4_0_a 8 (W:16,H:1,B:1,K:1) util:87.5/87.5 E:2.557e+08, T:130048, Cost:3.325e+13 Ubuf/Buf/Bus/Mac:8.546e+06/7.421e+07/6.488e+04/4.228e+06 NoC(hops=7815168, DRAM acc=2080768) Buffer(max=120832, avg=1.208e+05) Buffer(max=131072, avg=1.311e+05) Buffer(max=110592, avg=1.106e+05) 2985984/131072/401408 Max NoC: 0
+		conv_4_0_b 8 (K:8,B:2,W:1,H:1) util:80.77/80.77 E:4.264e+08, T:87040, Cost:3.712e+13 Ubuf/Buf/Bus/Mac:8.899e+06/2.749e+08/5.854e+04/1.665e+07 NoC(hops=7565312, DRAM acc=1392640) Buffer(max=210944, avg=2.109e+05) Buffer(max=73728, avg=7.373e+04) Buffer(max=200704, avg=2.007e+05) 401408/589824/401408 Max NoC: 0
+		conv_4_0_c 8 (B:2,K:4,H:2,W:1) util:87.5/87.5 E:3.295e+08, T:141824, Cost:4.673e+13 Ubuf/Buf/Bus/Mac:9.046e+06/1.266e+08/4.896e+04/7.399e+06 NoC(hops=8982528, DRAM acc=2269184) Buffer(max=110592, avg=1.106e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=100352, avg=1.004e+05) 401408/262144/1605632 Max NoC: 0
+		conv_4_br 8 (W:16,H:1,B:1,K:1) util:87.5/87.5 E:6.61e+08, T:229888, Cost:1.52e+14 Ubuf/Buf/Bus/Mac:2.929e+07/2.968e+08/2.595e+05/1.691e+07 NoC(hops=17326080, DRAM acc=3678208) Buffer(max=120832, avg=1.208e+05) Buffer(max=524288, avg=5.243e+05) Buffer(max=110592, avg=1.106e+05) 2985984/524288/1605632 Max NoC: 0
+		conv_4_0_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:3.751e+08, T:301056, Cost:1.129e+14 Ubuf/Buf/Bus/Mac:5.076e+06/0/0/5.78e+04 NoC(hops=14450688, DRAM acc=4816896) Buffer(max=210944, avg=2.109e+05) Buffer(max=0, avg=0) Buffer(max=200704, avg=2.007e+05) 3211264/0/1605632 Max NoC: 0
+		conv_4_1_a 8 (B:4,K:2,H:2,W:1) util:87.5/87.5 E:3.375e+08, T:141824, Cost:4.787e+13 Ubuf/Buf/Bus/Mac:9.348e+06/1.273e+08/4.969e+04/7.399e+06 NoC(hops=10231808, DRAM acc=2269184) Buffer(max=210944, avg=2.109e+05) Buffer(max=131072, avg=1.311e+05) Buffer(max=200704, avg=2.007e+05) 1605632/262144/401408 Max NoC: 0
+		conv_4_1_b 8 (K:8,B:2,W:1,H:1) util:80.77/80.77 E:4.264e+08, T:87040, Cost:3.712e+13 Ubuf/Buf/Bus/Mac:8.899e+06/2.749e+08/5.854e+04/1.665e+07 NoC(hops=7565312, DRAM acc=1392640) Buffer(max=210944, avg=2.109e+05) Buffer(max=73728, avg=7.373e+04) Buffer(max=200704, avg=2.007e+05) 401408/589824/401408 Max NoC: 0
+		conv_4_1_c 8 (B:2,K:4,H:2,W:1) util:87.5/87.5 E:3.295e+08, T:141824, Cost:4.673e+13 Ubuf/Buf/Bus/Mac:9.046e+06/1.266e+08/4.896e+04/7.399e+06 NoC(hops=8982528, DRAM acc=2269184) Buffer(max=110592, avg=1.106e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=100352, avg=1.004e+05) 401408/262144/1605632 Max NoC: 0
+		conv_4_1_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:3.751e+08, T:301056, Cost:1.129e+14 Ubuf/Buf/Bus/Mac:5.076e+06/0/0/5.78e+04 NoC(hops=14450688, DRAM acc=4816896) Buffer(max=210944, avg=2.109e+05) Buffer(max=0, avg=0) Buffer(max=200704, avg=2.007e+05) 3211264/0/1605632 Max NoC: 0
+		conv_4_2_a 8 (B:4,K:2,H:2,W:1) util:87.5/87.5 E:3.375e+08, T:141824, Cost:4.787e+13 Ubuf/Buf/Bus/Mac:9.348e+06/1.273e+08/4.969e+04/7.399e+06 NoC(hops=10231808, DRAM acc=2269184) Buffer(max=210944, avg=2.109e+05) Buffer(max=131072, avg=1.311e+05) Buffer(max=200704, avg=2.007e+05) 1605632/262144/401408 Max NoC: 0
+		conv_4_2_b 8 (K:8,B:2,W:1,H:1) util:80.77/80.77 E:4.264e+08, T:87040, Cost:3.712e+13 Ubuf/Buf/Bus/Mac:8.899e+06/2.749e+08/5.854e+04/1.665e+07 NoC(hops=7565312, DRAM acc=1392640) Buffer(max=210944, avg=2.109e+05) Buffer(max=73728, avg=7.373e+04) Buffer(max=200704, avg=2.007e+05) 401408/589824/401408 Max NoC: 0
+		conv_4_2_c 8 (B:2,K:4,H:2,W:1) util:87.5/87.5 E:3.295e+08, T:141824, Cost:4.673e+13 Ubuf/Buf/Bus/Mac:9.046e+06/1.266e+08/4.896e+04/7.399e+06 NoC(hops=8982528, DRAM acc=2269184) Buffer(max=110592, avg=1.106e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=100352, avg=1.004e+05) 401408/262144/1605632 Max NoC: 0
+		conv_4_2_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:3.751e+08, T:301056, Cost:1.129e+14 Ubuf/Buf/Bus/Mac:5.076e+06/0/0/5.78e+04 NoC(hops=14450688, DRAM acc=4816896) Buffer(max=210944, avg=2.109e+05) Buffer(max=0, avg=0) Buffer(max=200704, avg=2.007e+05) 3211264/0/1605632 Max NoC: 0
+		conv_4_3_a 8 (B:4,K:2,H:2,W:1) util:87.5/87.5 E:3.375e+08, T:141824, Cost:4.787e+13 Ubuf/Buf/Bus/Mac:9.348e+06/1.273e+08/4.969e+04/7.399e+06 NoC(hops=10231808, DRAM acc=2269184) Buffer(max=210944, avg=2.109e+05) Buffer(max=131072, avg=1.311e+05) Buffer(max=200704, avg=2.007e+05) 1605632/262144/401408 Max NoC: 0
+		conv_4_3_b 8 (K:8,B:2,W:1,H:1) util:80.77/80.77 E:4.264e+08, T:87040, Cost:3.712e+13 Ubuf/Buf/Bus/Mac:8.899e+06/2.749e+08/5.854e+04/1.665e+07 NoC(hops=7565312, DRAM acc=1392640) Buffer(max=210944, avg=2.109e+05) Buffer(max=73728, avg=7.373e+04) Buffer(max=200704, avg=2.007e+05) 401408/589824/401408 Max NoC: 0
+		conv_4_3_c 8 (B:2,K:4,H:2,W:1) util:87.5/87.5 E:3.295e+08, T:141824, Cost:4.673e+13 Ubuf/Buf/Bus/Mac:9.046e+06/1.266e+08/4.896e+04/7.399e+06 NoC(hops=8982528, DRAM acc=2269184) Buffer(max=110592, avg=1.106e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=100352, avg=1.004e+05) 401408/262144/1605632 Max NoC: 0
+		conv_4_3_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:3.751e+08, T:301056, Cost:1.129e+14 Ubuf/Buf/Bus/Mac:5.076e+06/0/0/5.78e+04 NoC(hops=14450688, DRAM acc=4816896) Buffer(max=210944, avg=2.109e+05) Buffer(max=0, avg=0) Buffer(max=200704, avg=2.007e+05) 3211264/0/1605632 Max NoC: 0
+		conv_4_4_a 8 (B:4,K:2,H:2,W:1) util:87.5/87.5 E:3.375e+08, T:141824, Cost:4.787e+13 Ubuf/Buf/Bus/Mac:9.348e+06/1.273e+08/4.969e+04/7.399e+06 NoC(hops=10231808, DRAM acc=2269184) Buffer(max=210944, avg=2.109e+05) Buffer(max=131072, avg=1.311e+05) Buffer(max=200704, avg=2.007e+05) 1605632/262144/401408 Max NoC: 0
+		conv_4_4_b 8 (K:8,B:2,W:1,H:1) util:80.77/80.77 E:4.264e+08, T:87040, Cost:3.712e+13 Ubuf/Buf/Bus/Mac:8.899e+06/2.749e+08/5.854e+04/1.665e+07 NoC(hops=7565312, DRAM acc=1392640) Buffer(max=210944, avg=2.109e+05) Buffer(max=73728, avg=7.373e+04) Buffer(max=200704, avg=2.007e+05) 401408/589824/401408 Max NoC: 0
+		conv_4_4_c 8 (B:2,K:4,H:2,W:1) util:87.5/87.5 E:3.295e+08, T:141824, Cost:4.673e+13 Ubuf/Buf/Bus/Mac:9.046e+06/1.266e+08/4.896e+04/7.399e+06 NoC(hops=8982528, DRAM acc=2269184) Buffer(max=110592, avg=1.106e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=100352, avg=1.004e+05) 401408/262144/1605632 Max NoC: 0
+		conv_4_4_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:3.751e+08, T:301056, Cost:1.129e+14 Ubuf/Buf/Bus/Mac:5.076e+06/0/0/5.78e+04 NoC(hops=14450688, DRAM acc=4816896) Buffer(max=210944, avg=2.109e+05) Buffer(max=0, avg=0) Buffer(max=200704, avg=2.007e+05) 3211264/0/1605632 Max NoC: 0
+		conv_4_5_a 8 (B:4,K:2,H:2,W:1) util:87.5/87.5 E:3.375e+08, T:141824, Cost:4.787e+13 Ubuf/Buf/Bus/Mac:9.348e+06/1.273e+08/4.969e+04/7.399e+06 NoC(hops=10231808, DRAM acc=2269184) Buffer(max=210944, avg=2.109e+05) Buffer(max=131072, avg=1.311e+05) Buffer(max=200704, avg=2.007e+05) 1605632/262144/401408 Max NoC: 0
+		conv_4_5_b 8 (K:8,B:2,W:1,H:1) util:80.77/80.77 E:4.264e+08, T:87040, Cost:3.712e+13 Ubuf/Buf/Bus/Mac:8.899e+06/2.749e+08/5.854e+04/1.665e+07 NoC(hops=7565312, DRAM acc=1392640) Buffer(max=210944, avg=2.109e+05) Buffer(max=73728, avg=7.373e+04) Buffer(max=200704, avg=2.007e+05) 401408/589824/401408 Max NoC: 0
+		conv_4_5_c 8 (B:2,K:4,H:2,W:1) util:87.5/87.5 E:3.295e+08, T:141824, Cost:4.673e+13 Ubuf/Buf/Bus/Mac:9.046e+06/1.266e+08/4.896e+04/7.399e+06 NoC(hops=8982528, DRAM acc=2269184) Buffer(max=110592, avg=1.106e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=100352, avg=1.004e+05) 401408/262144/1605632 Max NoC: 0
+		conv_4_5_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:3.751e+08, T:301056, Cost:1.129e+14 Ubuf/Buf/Bus/Mac:5.076e+06/0/0/5.78e+04 NoC(hops=14450688, DRAM acc=4816896) Buffer(max=210944, avg=2.109e+05) Buffer(max=0, avg=0) Buffer(max=200704, avg=2.007e+05) 3211264/0/1605632 Max NoC: 0
+		conv_5_0_a 8 (W:8,K:2,H:1,B:1) util:87.5/87.5 E:2.287e+08, T:91904, Cost:2.102e+13 Ubuf/Buf/Bus/Mac:1.269e+07/7.424e+07/1.068e+05/4.228e+06 NoC(hops=8785920, DRAM acc=1470464) Buffer(max=116736, avg=1.167e+05) Buffer(max=262144, avg=2.621e+05) Buffer(max=106496, avg=1.065e+05) 1384448/524288/200704 Max NoC: 0
+		conv_5_0_b 8 (K:16,W:1,H:1,B:1) util:81.55/81.55 E:5.313e+08, T:172544, Cost:9.167e+13 Ubuf/Buf/Bus/Mac:1.329e+07/2.757e+08/1.195e+05/1.665e+07 NoC(hops=10690560, DRAM acc=2760704) Buffer(max=210944, avg=2.109e+05) Buffer(max=147456, avg=1.475e+05) Buffer(max=200704, avg=2.007e+05) 200704/2359296/200704 Max NoC: 0
+		conv_5_0_c 8 (K:16,W:1,H:1,B:1) util:87.5/87.5 E:3.136e+08, T:128256, Cost:4.022e+13 Ubuf/Buf/Bus/Mac:8.407e+06/1.267e+08/3.804e+04/7.399e+06 NoC(hops=8564736, DRAM acc=2052096) Buffer(max=210944, avg=2.109e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=200704, avg=2.007e+05) 200704/1048576/802816 Max NoC: 0
+		conv_5_br 8 (K:4,H:4,W:1,B:1) util:100/100 E:7.14e+08, T:247808, Cost:1.769e+14 Ubuf/Buf/Bus/Mac:2.605e+07/3.042e+08/1.864e+05/1.691e+07 NoC(hops=22978560, DRAM acc=3964928) Buffer(max=329728, avg=2.765e+05) Buffer(max=524288, avg=5.243e+05) Buffer(max=319488, avg=2.662e+05) 1384448/2097152/802816 Max NoC: 0
+		conv_5_0_res 8 (K:4,B:4,W:1,H:1) util:100/100 E:1.875e+08, T:150528, Cost:2.823e+13 Ubuf/Buf/Bus/Mac:2.538e+06/0/0/2.89e+04 NoC(hops=7225344, DRAM acc=2408448) Buffer(max=110592, avg=1.106e+05) Buffer(max=0, avg=0) Buffer(max=100352, avg=1.004e+05) 1605632/0/802816 Max NoC: 0
+		conv_5_1_a 8 (K:8,B:2,W:1,H:1) util:87.5/87.5 E:3.416e+08, T:128256, Cost:4.382e+13 Ubuf/Buf/Bus/Mac:1.28e+07/1.273e+08/5.802e+04/7.399e+06 NoC(hops=12668928, DRAM acc=2052096) Buffer(max=411648, avg=4.116e+05) Buffer(max=131072, avg=1.311e+05) Buffer(max=401408, avg=4.014e+05) 802816/1048576/200704 Max NoC: 0
+		conv_5_1_b 8 (K:16,W:1,H:1,B:1) util:81.55/81.55 E:5.313e+08, T:172544, Cost:9.167e+13 Ubuf/Buf/Bus/Mac:1.329e+07/2.757e+08/1.195e+05/1.665e+07 NoC(hops=10690560, DRAM acc=2760704) Buffer(max=210944, avg=2.109e+05) Buffer(max=147456, avg=1.475e+05) Buffer(max=200704, avg=2.007e+05) 200704/2359296/200704 Max NoC: 0
+		conv_5_1_c 8 (K:16,W:1,H:1,B:1) util:87.5/87.5 E:3.136e+08, T:128256, Cost:4.022e+13 Ubuf/Buf/Bus/Mac:8.407e+06/1.267e+08/3.804e+04/7.399e+06 NoC(hops=8564736, DRAM acc=2052096) Buffer(max=210944, avg=2.109e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=200704, avg=2.007e+05) 200704/1048576/802816 Max NoC: 0
+		conv_5_1_res 8 (K:4,B:4,W:1,H:1) util:100/100 E:1.875e+08, T:150528, Cost:2.823e+13 Ubuf/Buf/Bus/Mac:2.538e+06/0/0/2.89e+04 NoC(hops=7225344, DRAM acc=2408448) Buffer(max=110592, avg=1.106e+05) Buffer(max=0, avg=0) Buffer(max=100352, avg=1.004e+05) 1605632/0/802816 Max NoC: 0
+		conv_5_2_a 8 (K:8,B:2,W:1,H:1) util:87.5/87.5 E:3.416e+08, T:128256, Cost:4.382e+13 Ubuf/Buf/Bus/Mac:1.28e+07/1.273e+08/5.802e+04/7.399e+06 NoC(hops=12668928, DRAM acc=2052096) Buffer(max=411648, avg=4.116e+05) Buffer(max=131072, avg=1.311e+05) Buffer(max=401408, avg=4.014e+05) 802816/1048576/200704 Max NoC: 0
+		conv_5_2_b 8 (K:16,W:1,H:1,B:1) util:81.55/81.55 E:5.313e+08, T:172544, Cost:9.167e+13 Ubuf/Buf/Bus/Mac:1.329e+07/2.757e+08/1.195e+05/1.665e+07 NoC(hops=10690560, DRAM acc=2760704) Buffer(max=210944, avg=2.109e+05) Buffer(max=147456, avg=1.475e+05) Buffer(max=200704, avg=2.007e+05) 200704/2359296/200704 Max NoC: 0
+		conv_5_2_c 8 (K:16,W:1,H:1,B:1) util:87.5/87.5 E:3.136e+08, T:128256, Cost:4.022e+13 Ubuf/Buf/Bus/Mac:8.407e+06/1.267e+08/3.804e+04/7.399e+06 NoC(hops=8564736, DRAM acc=2052096) Buffer(max=210944, avg=2.109e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=200704, avg=2.007e+05) 200704/1048576/802816 Max NoC: 0
+		conv_5_2_res 8 (K:4,B:4,W:1,H:1) util:100/100 E:1.875e+08, T:150528, Cost:2.823e+13 Ubuf/Buf/Bus/Mac:2.538e+06/0/0/2.89e+04 NoC(hops=7225344, DRAM acc=2408448) Buffer(max=110592, avg=1.106e+05) Buffer(max=0, avg=0) Buffer(max=100352, avg=1.004e+05) 1605632/0/802816 Max NoC: 0
+		pool5 8 (K:4,B:4,W:1,H:1) util:100/100 E:6.379e+07, T:51200, Cost:3.266e+12 Ubuf/Buf/Bus/Mac:8.632e+05/0/0/1.445e+04 NoC(hops=2457600, DRAM acc=819200) Buffer(max=60416, avg=6.042e+04) Buffer(max=0, avg=0) Buffer(max=50176, avg=5.018e+04) 802816/0/16384 Max NoC: 0
+		fc 8 (K:16,W:1,H:1,B:1) util:98.44/98.44 E:1.711e+08, T:129524, Cost:2.216e+13 Ubuf/Buf/Bus/Mac:4.928e+06/5.529e+06/4.231e+04/2.973e+05 NoC(hops=6413760, DRAM acc=2072384) Buffer(max=26624, avg=2.662e+04) Buffer(max=129024, avg=1.28e+05) Buffer(max=16384, avg=1.638e+04) 16384/2048000/8000 Max NoC: 0
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+239 6.926e+17 6.571
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+479 7.309e+17 7.471
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+719 7.248e+17 7.225
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+959 7.41e+17 7.946
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+1199 7.095e+17 7.55
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+1439 7.198e+17 7.1
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+1679 7.304e+17 7.471
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+1919 6.328e+17 7.388
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+2159 6.694e+17 6.383
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+2399 6.437e+17 6.283
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+2639 6.552e+17 6.567
+[Warning] After 30 tries.
+2879 6.36e+17 6.054
+3119 6.257e+17 5.021
+3359 6.48e+17 5.096
+3599 5.747e+17 5.013
+3839 5.748e+17 4.754
+4079 5.533e+17 4.192
+[Warning] After 30 tries.
+4319 5.479e+17 4.217
+4559 5.469e+17 4.85
+4799 5.432e+17 4.646
+5039 5.3e+17 4.412
+5279 5.324e+17 4.3
+5519 5.08e+17 3.825
+5759 5.087e+17 3.458
+5999 5.022e+17 3.333
+6239 5.023e+17 3.533
+6479 5.017e+17 3.421
+Switch to best solution.
+6719 4.989e+17 3.529
+6959 4.992e+17 3.558
+7199 4.988e+17 3.058
+Elapsed: 13s Valid: 4822 (66.97%) Accept: 1900 (26.39%)
+Per OP: 198/208, 208/224, 202/2015, 215/226, 374/443, 323/742, 380/964
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+239 7.166e+17 7.508
+[Warning] After 30 tries.
+479 7.421e+17 7.562
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+719 6.618e+17 6.625
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+959 7.242e+17 7.183
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+1199 6.789e+17 7.446
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+1439 7.136e+17 7.729
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+1679 6.98e+17 6.442
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+1919 6.888e+17 6.625
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+2159 6.925e+17 6.371
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+2399 6.561e+17 7.167
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+2639 6.503e+17 6.379
+2879 6.191e+17 5.804
+3119 6.251e+17 5.938
+3359 5.955e+17 4.888
+[Warning] After 30 tries.
+3599 6.018e+17 4.492
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+3839 5.76e+17 4.954
+4079 5.589e+17 4.721
+4319 5.536e+17 4.821
+4559 5.578e+17 4.708
+4799 5.552e+17 3.95
+5039 5.117e+17 3.712
+5279 5.138e+17 3.729
+5519 5.059e+17 3.525
+5759 4.992e+17 3.408
+5999 4.991e+17 3.496
+6239 4.989e+17 3.646
+6479 4.992e+17 3.333
+Switch to best solution.
+6719 4.943e+17 3.163
+6959 4.943e+17 3.438
+7199 4.942e+17 3.725
+Elapsed: 12s Valid: 4786 (66.47%) Accept: 1806 (25.08%)
+Per OP: 170/186, 220/238, 188/2010, 200/210, 349/408, 298/703, 381/1031
+[Warning] After 30 tries.
+239 7.421e+17 6.533
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+479 7.365e+17 7.042
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+719 7.396e+17 6.546
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+959 7.275e+17 7.162
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+1199 7.421e+17 6.954
+1439 7.186e+17 6.083
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+1679 6.777e+17 7.188
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+1919 7.304e+17 7.529
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+2159 6.571e+17 8.467
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+2399 6.533e+17 6.55
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+2639 6.515e+17 7.208
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+2879 6.438e+17 6.017
+3119 6.18e+17 6.037
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+3359 5.897e+17 5.504
+3599 6.051e+17 4.875
+3839 5.812e+17 5.171
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+4079 5.704e+17 5.075
+4319 5.493e+17 5.008
+4559 5.402e+17 4.483
+4799 5.277e+17 4.138
+5039 5e+17 3.737
+5279 4.971e+17 3.321
+5519 4.908e+17 3.646
+5759 4.94e+17 3.267
+5999 4.905e+17 3.25
+6239 4.903e+17 3.258
+6479 4.904e+17 3.158
+Switch to best solution.
+6719 4.898e+17 3.008
+6959 4.916e+17 3.508
+7199 4.912e+17 3.367
+Elapsed: 14s Valid: 4455 (61.88%) Accept: 1532 (21.28%)
+Per OP: 159/179, 176/191, 150/2044, 163/174, 340/383, 286/721, 258/763
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+239 6.652e+17 7.8
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 60 tries.
+[Warning] After 30 tries.
+479 7.306e+17 7.592
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+719 7.389e+17 7.158
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+959 7.305e+17 6.463
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+1199 6.712e+17 7.671
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+1439 7.153e+17 6.421
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+1679 7.053e+17 7.312
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+1919 6.709e+17 7.229
+[Warning] After 30 tries.
+2159 6.542e+17 6.975
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+2399 6.66e+17 7.129
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+2639 6.038e+17 6.729
+2879 6.187e+17 4.817
+3119 6.217e+17 5.829
+[Warning] After 30 tries.
+3359 6.017e+17 5.075
+3599 5.511e+17 4.633
+3839 5.781e+17 4.879
+4079 5.934e+17 4.821
+4319 6.009e+17 4.483
+4559 5.738e+17 4.213
+4799 5.46e+17 4.242
+5039 5.573e+17 4.525
+5279 5.313e+17 4.317
+5519 5.3e+17 3.938
+5759 5.183e+17 3.8
+5999 5.11e+17 3.533
+6239 5.101e+17 3.825
+6479 5.104e+17 3.754
+Switch to best solution.
+6719 5.001e+17 3.529
+6959 4.995e+17 3.367
+7199 4.913e+17 3.342
+Elapsed: 12s Valid: 4733 (65.74%) Accept: 1739 (24.15%)
+Per OP: 185/216, 213/245, 159/1957, 174/186, 339/367, 297/749, 372/1013
+LP-SA: E:3.094e+10, T:15830928, Cost:4.898e+17, Ubuf/Buf/Bus/Mac/NoC/DRAM:7.855e+08/9.542e+09/5.276e+06/5.629e+08/4.973e+09/1.507e+10
+Struct:
+	T 8/1 E:3.094e+10, T:15830928, Cost:4.898e+17 Ubuf/Buf/Bus/Mac:7.855e+08/9.542e+09/5.276e+06/5.629e+08 NoC(hops=887972512, DRAM acc=251151616) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+		conv1 8 (B:8,H:2,W:1,K:1) util:76.56/76.56 E:9.055e+08, T:478940, Cost:4.337e+14 Ubuf/Buf/Bus/Mac:2.192e+07/2.773e+08/1.183e+05/1.699e+07 NoC(hops=23102016, DRAM acc=7663040) Buffer(max=87520, avg=8.718e+04) Buffer(max=9408, avg=9408) Buffer(max=77280, avg=7.694e+04) 1204224/9408/6422528 Max NoC: 0
+		pool1 8 (K:4,B:4,W:1,H:1) util:100/100 E:6.253e+08, T:501760, Cost:3.137e+14 Ubuf/Buf/Bus/Mac:8.459e+06/0/0/2.601e+05 NoC(hops=24084480, DRAM acc=8028160) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 6422528/0/1605632 Max NoC: 0
+		S 8/4 E:1.946e+09, T:1008128, Cost:1.961e+15 Ubuf/Buf/Bus/Mac:6.336e+07/5.564e+08/3.754e+05/3.329e+07 NoC(hops=57915392, DRAM acc=16130048) Buffer(max=813056, avg=2.217e+05) Buffer(max=36864, avg=2.458e+04) Buffer(max=0, avg=0) Max NoC: 0
+			conv_2_0_a 2 (W:1,H:1,B:1,K:1) util:87.5/87.5 E:4.092e+07, T:28672, Cost:1.173e+12 Ubuf/Buf/Bus/Mac:1.697e+06/7.842e+06/7301/4.624e+05 NoC(hops=1207296, DRAM acc=402432) Buffer(max=411648, avg=4.116e+05) Buffer(max=4096, avg=4096) Buffer(max=401408, avg=4.014e+05) 401408/4096/401408 Max NoC: 0
+			conv_2_0_b 2 (H:7,W:1,B:1,K:1) util:92.31/92.31 E:8.27e+07, T:34944, Cost:2.89e+12 Ubuf/Buf/Bus/Mac:2.97e+06/6.838e+07/2.635e+04/4.162e+06 NoC(hops=1180160, DRAM acc=9216) Buffer(max=81920, avg=7.987e+04) Buffer(max=36864, avg=3.686e+04) Buffer(max=71680, avg=6.963e+04) 401408/36864/401408 Max NoC: 0
+			conv_2_0_c 2 (B:2,W:2,H:1,K:1) util:87.5/87.5 E:1.694e+08, T:100608, Cost:1.704e+13 Ubuf/Buf/Bus/Mac:5.586e+06/3.147e+07/3.01e+04/1.85e+06 NoC(hops=6045696, DRAM acc=1609728) Buffer(max=110592, avg=1.106e+05) Buffer(max=16384, avg=1.638e+04) Buffer(max=100352, avg=1.004e+05) 401408/16384/1605632 Max NoC: 0
+			conv_2_br 2 (H:4,W:1,B:1,K:1) util:87.5/87.5 E:1.934e+08, T:125696, Cost:2.431e+13 Ubuf/Buf/Bus/Mac:5.586e+06/3.14e+07/3.01e+04/1.85e+06 NoC(hops=6045696, DRAM acc=2011136) Buffer(max=110592, avg=1.106e+05) Buffer(max=16384, avg=1.638e+04) Buffer(max=100352, avg=1.004e+05) 401408/16384/1605632 Max NoC: 0
+		conv_2_0_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:1.5e+09, T:1204224, Cost:1.807e+15 Ubuf/Buf/Bus/Mac:2.03e+07/0/0/2.312e+05 NoC(hops=57802752, DRAM acc=19267584) Buffer(max=813056, avg=8.131e+05) Buffer(max=0, avg=0) Buffer(max=802816, avg=8.028e+05) 12845056/0/6422528 Max NoC: 0
+		S 8/4 E:1.656e+09, T:807168, Cost:1.336e+15 Ubuf/Buf/Bus/Mac:4.644e+07/5.26e+08/2.624e+05/3.144e+07 NoC(hops=49373184, DRAM acc=12914688) Buffer(max=813056, avg=3.167e+05) Buffer(max=36864, avg=2.662e+04) Buffer(max=0, avg=0) Max NoC: 0
+			conv_2_1_a 2 (H:4,W:1,B:1,K:1) util:87.5/87.5 E:1.602e+08, T:100608, Cost:1.612e+13 Ubuf/Buf/Bus/Mac:3.051e+06/3.158e+07/8479/1.85e+06 NoC(hops=4841472, DRAM acc=1609728) Buffer(max=411648, avg=4.116e+05) Buffer(max=16384, avg=1.638e+04) Buffer(max=401408, avg=4.014e+05) 1605632/16384/401408 Max NoC: 0
+			conv_2_1_b 2 (B:2,H:4,W:1,K:1) util:80.77/80.77 E:8.44e+07, T:34944, Cost:2.949e+12 Ubuf/Buf/Bus/Mac:2.974e+06/6.853e+07/2.702e+04/4.162e+06 NoC(hops=1456128, DRAM acc=9216) Buffer(max=67584, avg=6.579e+04) Buffer(max=36864, avg=3.686e+04) Buffer(max=57344, avg=5.555e+04) 401408/36864/401408 Max NoC: 0
+			conv_2_1_c 2 (H:4,W:1,B:1,K:1) util:87.5/87.5 E:1.693e+08, T:100608, Cost:1.703e+13 Ubuf/Buf/Bus/Mac:5.586e+06/3.14e+07/3.01e+04/1.85e+06 NoC(hops=6045696, DRAM acc=1609728) Buffer(max=110592, avg=1.106e+05) Buffer(max=16384, avg=1.638e+04) Buffer(max=100352, avg=1.004e+05) 401408/16384/1605632 Max NoC: 0
+		conv_2_1_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:1.5e+09, T:1204224, Cost:1.807e+15 Ubuf/Buf/Bus/Mac:2.03e+07/0/0/2.312e+05 NoC(hops=57802752, DRAM acc=19267584) Buffer(max=813056, avg=8.131e+05) Buffer(max=0, avg=0) Buffer(max=802816, avg=8.028e+05) 12845056/0/6422528 Max NoC: 0
+		S 8/8 E:1.66e+09, T:807168, Cost:1.34e+15 Ubuf/Buf/Bus/Mac:4.831e+07/5.28e+08/2.932e+05/3.144e+07 NoC(hops=49566720, DRAM acc=12914688) Buffer(max=411648, avg=1.644e+05) Buffer(max=36864, avg=2.662e+04) Buffer(max=0, avg=0) Max NoC: 0
+			conv_2_2_a 1 (H:4,W:1,B:1,K:1) util:87.5/87.5 E:8.016e+07, T:50304, Cost:4.032e+12 Ubuf/Buf/Bus/Mac:1.56e+06/1.582e+07/4829/9.248e+05 NoC(hops=2420736, DRAM acc=804864) Buffer(max=210944, avg=2.109e+05) Buffer(max=16384, avg=1.638e+04) Buffer(max=200704, avg=2.007e+05) 802816/16384/200704 Max NoC: 0
+			conv_2_2_b 1 (W:2,H:4,B:1,K:1) util:80.77/80.77 E:4.268e+07, T:17472, Cost:7.457e+11 Ubuf/Buf/Bus/Mac:1.652e+06/3.444e+07/1.618e+04/2.081e+06 NoC(hops=752256, DRAM acc=4608) Buffer(max=39936, avg=3.901e+04) Buffer(max=36864, avg=3.686e+04) Buffer(max=29696, avg=2.877e+04) 200704/36864/200704 Max NoC: 0
+			conv_2_2_c 1 (H:4,W:1,B:1,K:1) util:87.5/87.5 E:8.472e+07, T:50304, Cost:4.262e+12 Ubuf/Buf/Bus/Mac:2.827e+06/1.573e+07/1.564e+04/9.248e+05 NoC(hops=3022848, DRAM acc=804864) Buffer(max=60416, avg=6.042e+04) Buffer(max=16384, avg=1.638e+04) Buffer(max=50176, avg=5.018e+04) 200704/16384/802816 Max NoC: 0
+		conv_2_2_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:1.5e+09, T:1204224, Cost:1.807e+15 Ubuf/Buf/Bus/Mac:2.03e+07/0/0/2.312e+05 NoC(hops=57802752, DRAM acc=19267584) Buffer(max=813056, avg=8.131e+05) Buffer(max=0, avg=0) Buffer(max=802816, avg=8.028e+05) 12845056/0/6422528 Max NoC: 0
+		S 8/8 E:1.342e+09, T:589184, Cost:7.905e+14 Ubuf/Buf/Bus/Mac:3.51e+07/4.979e+08/2.38e+05/2.934e+07 NoC(hops=38132576, DRAM acc=9426944) Buffer(max=545280, avg=1.591e+05) Buffer(max=65536, avg=5.018e+04) Buffer(max=0, avg=0) Max NoC: 0
+			conv_3_0_a 1 (W:3,H:1,B:1,K:1) util:87.5/87.5 E:6.851e+07, T:46896, Cost:3.213e+12 Ubuf/Buf/Bus/Mac:1.242e+06/9.086e+06/3815/4.955e+05 NoC(hops=2261248, DRAM acc=750336) Buffer(max=277760, avg=2.59e+05) Buffer(max=32768, avg=3.277e+04) Buffer(max=267520, avg=2.487e+05) 774400/32768/100352 Max NoC: 0
+			conv_3_0_b 1 (H:3,K:3,W:1,B:1) util:82.69/82.69 E:4.745e+07, T:16380, Cost:7.773e+11 Ubuf/Buf/Bus/Mac:1.458e+06/3.73e+07/1.396e+04/2.247e+06 NoC(hops=951704, DRAM acc=18432) Buffer(max=49664, avg=4.847e+04) Buffer(max=49536, avg=4.915e+04) Buffer(max=39424, avg=3.823e+04) 100352/147456/100352 Max NoC: 0
+			conv_3_0_c 1 (H:4,W:1,B:1,K:1) util:87.5/87.5 E:5.176e+07, T:25600, Cost:1.325e+12 Ubuf/Buf/Bus/Mac:1.688e+06/1.586e+07/1.198e+04/9.248e+05 NoC(hops=1553620, DRAM acc=409600) Buffer(max=35328, avg=3.533e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=25088, avg=2.509e+04) 100352/65536/401408 Max NoC: 0
+		conv_3_br 8 (W:16,H:1,B:1,K:1) util:87.5/87.5 E:9.508e+08, T:490496, Cost:4.663e+14 Ubuf/Buf/Bus/Mac:2.139e+07/3.008e+08/1.227e+05/1.691e+07 NoC(hops=25116672, DRAM acc=7847936) Buffer(max=348160, avg=2.918e+05) Buffer(max=131072, avg=1.311e+05) Buffer(max=337920, avg=2.816e+05) 6195200/131072/3211264 Max NoC: 0
+		conv_3_0_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:7.501e+08, T:602112, Cost:4.517e+14 Ubuf/Buf/Bus/Mac:1.015e+07/0/0/1.156e+05 NoC(hops=28901376, DRAM acc=9633792) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 6422528/0/3211264 Max NoC: 0
+		S 8/2 E:1.139e+09, T:418816, Cost:4.769e+14 Ubuf/Buf/Bus/Mac:2.66e+07/5.272e+08/1.578e+05/3.144e+07 NoC(hops=27000832, DRAM acc=6701056) Buffer(max=813056, avg=3.686e+05) Buffer(max=73728, avg=6.963e+04) Buffer(max=0, avg=0) Max NoC: 0
+			conv_3_1_a 4 (H:4,W:1,B:1,K:1) util:87.5/87.5 E:1.967e+08, T:102400, Cost:2.014e+13 Ubuf/Buf/Bus/Mac:3.41e+06/6.321e+07/1.253e+04/3.699e+06 NoC(hops=5013504, DRAM acc=1638400) Buffer(max=411648, avg=4.116e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=401408, avg=4.014e+05) 1605632/65536/401408 Max NoC: 0
+			conv_3_1_b 4 (B:2,K:2,H:2,W:1) util:80.77/80.77 E:1.667e+08, T:69888, Cost:1.165e+13 Ubuf/Buf/Bus/Mac:3.971e+06/1.372e+08/3.259e+04/8.324e+06 NoC(hops=2269184, DRAM acc=73728) Buffer(max=117760, avg=1.178e+05) Buffer(max=73728, avg=7.373e+04) Buffer(max=107520, avg=1.075e+05) 401408/147456/401408 Max NoC: 0
+			conv_3_1_c 4 (B:2,H:2,W:1,K:1) util:87.5/87.5 E:2.059e+08, T:102400, Cost:2.109e+13 Ubuf/Buf/Bus/Mac:5.921e+06/6.317e+07/3.377e+04/3.699e+06 NoC(hops=6217728, DRAM acc=1638400) Buffer(max=110592, avg=1.106e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=100352, avg=1.004e+05) 401408/65536/1605632 Max NoC: 0
+		conv_3_1_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:7.501e+08, T:602112, Cost:4.517e+14 Ubuf/Buf/Bus/Mac:1.015e+07/0/0/1.156e+05 NoC(hops=28901376, DRAM acc=9633792) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 6422528/0/3211264 Max NoC: 0
+		S 8/2 E:1.139e+09, T:418816, Cost:4.769e+14 Ubuf/Buf/Bus/Mac:2.66e+07/5.272e+08/1.578e+05/3.144e+07 NoC(hops=27000832, DRAM acc=6701056) Buffer(max=813056, avg=3.686e+05) Buffer(max=73728, avg=6.963e+04) Buffer(max=0, avg=0) Max NoC: 0
+			conv_3_2_a 4 (H:4,W:1,B:1,K:1) util:87.5/87.5 E:1.967e+08, T:102400, Cost:2.014e+13 Ubuf/Buf/Bus/Mac:3.41e+06/6.321e+07/1.253e+04/3.699e+06 NoC(hops=5013504, DRAM acc=1638400) Buffer(max=411648, avg=4.116e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=401408, avg=4.014e+05) 1605632/65536/401408 Max NoC: 0
+			conv_3_2_b 4 (B:2,K:2,H:2,W:1) util:80.77/80.77 E:1.667e+08, T:69888, Cost:1.165e+13 Ubuf/Buf/Bus/Mac:3.971e+06/1.372e+08/3.259e+04/8.324e+06 NoC(hops=2269184, DRAM acc=73728) Buffer(max=117760, avg=1.178e+05) Buffer(max=73728, avg=7.373e+04) Buffer(max=107520, avg=1.075e+05) 401408/147456/401408 Max NoC: 0
+			conv_3_2_c 4 (B:2,H:2,W:1,K:1) util:87.5/87.5 E:2.059e+08, T:102400, Cost:2.109e+13 Ubuf/Buf/Bus/Mac:5.921e+06/6.317e+07/3.377e+04/3.699e+06 NoC(hops=6217728, DRAM acc=1638400) Buffer(max=110592, avg=1.106e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=100352, avg=1.004e+05) 401408/65536/1605632 Max NoC: 0
+		conv_3_2_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:7.501e+08, T:602112, Cost:4.517e+14 Ubuf/Buf/Bus/Mac:1.015e+07/0/0/1.156e+05 NoC(hops=28901376, DRAM acc=9633792) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 6422528/0/3211264 Max NoC: 0
+		S 8/2 E:1.139e+09, T:418816, Cost:4.769e+14 Ubuf/Buf/Bus/Mac:2.66e+07/5.272e+08/1.578e+05/3.144e+07 NoC(hops=27000832, DRAM acc=6701056) Buffer(max=813056, avg=3.686e+05) Buffer(max=73728, avg=6.963e+04) Buffer(max=0, avg=0) Max NoC: 0
+			conv_3_3_a 4 (H:4,W:1,B:1,K:1) util:87.5/87.5 E:1.967e+08, T:102400, Cost:2.014e+13 Ubuf/Buf/Bus/Mac:3.41e+06/6.321e+07/1.253e+04/3.699e+06 NoC(hops=5013504, DRAM acc=1638400) Buffer(max=411648, avg=4.116e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=401408, avg=4.014e+05) 1605632/65536/401408 Max NoC: 0
+			conv_3_3_b 4 (B:2,K:2,H:2,W:1) util:80.77/80.77 E:1.667e+08, T:69888, Cost:1.165e+13 Ubuf/Buf/Bus/Mac:3.971e+06/1.372e+08/3.259e+04/8.324e+06 NoC(hops=2269184, DRAM acc=73728) Buffer(max=117760, avg=1.178e+05) Buffer(max=73728, avg=7.373e+04) Buffer(max=107520, avg=1.075e+05) 401408/147456/401408 Max NoC: 0
+			conv_3_3_c 4 (B:2,H:2,W:1,K:1) util:87.5/87.5 E:2.059e+08, T:102400, Cost:2.109e+13 Ubuf/Buf/Bus/Mac:5.921e+06/6.317e+07/3.377e+04/3.699e+06 NoC(hops=6217728, DRAM acc=1638400) Buffer(max=110592, avg=1.106e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=100352, avg=1.004e+05) 401408/65536/1605632 Max NoC: 0
+		conv_3_3_res 8 (K:2,B:2,H:2,W:2) util:100/100 E:7.501e+08, T:602112, Cost:4.517e+14 Ubuf/Buf/Bus/Mac:1.015e+07/0/0/1.156e+05 NoC(hops=28901376, DRAM acc=9633792) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 6422528/0/3211264 Max NoC: 0
+		conv_4_0_a 8 (W:16,H:1,B:1,K:1) util:87.5/87.5 E:2.557e+08, T:130048, Cost:3.325e+13 Ubuf/Buf/Bus/Mac:8.546e+06/7.421e+07/6.488e+04/4.228e+06 NoC(hops=7815168, DRAM acc=2080768) Buffer(max=120832, avg=1.208e+05) Buffer(max=131072, avg=1.311e+05) Buffer(max=110592, avg=1.106e+05) 2985984/131072/401408 Max NoC: 0
+		S 8/8 E:3.434e+09, T:1257984, Cost:4.319e+15 Ubuf/Buf/Bus/Mac:9.757e+07/1.747e+09/8.542e+05/1.019e+08 NoC(hops=71266304, DRAM acc=18120704) Buffer(max=813056, avg=3.123e+05) Buffer(max=524288, avg=3.176e+05) Buffer(max=0, avg=0) Max NoC: 0
+			conv_4_br 1 (H:2,W:1,B:1,K:1) util:87.5/87.5 E:8.674e+07, T:57344, Cost:4.974e+12 Ubuf/Buf/Bus/Mac:2.291e+06/3.379e+07/2.308e+04/1.85e+06 NoC(hops=2008064, DRAM acc=625664) Buffer(max=189952, avg=1.9e+05) Buffer(max=524288, avg=5.243e+05) Buffer(max=179712, avg=1.797e+05) 373248/524288/200704 Max NoC: 0
+			conv_4_0_b 1 (K:2,W:1,H:1,B:1) util:80.77/80.77 E:4.817e+07, T:69888, Cost:3.366e+12 Ubuf/Buf/Bus/Mac:1.184e+06/3.481e+07/1.528e+04/2.081e+06 NoC(hops=472064, DRAM acc=123904) Buffer(max=60416, avg=6.042e+04) Buffer(max=294912, avg=2.949e+05) Buffer(max=50176, avg=5.018e+04) 50176/589824/50176 Max NoC: 0
+			conv_4_0_c 1 (W:1,H:1,B:1,K:1) util:87.5/87.5 E:2.09e+07, T:57344, Cost:1.198e+12 Ubuf/Buf/Bus/Mac:1.007e+06/1.602e+07/8479/9.248e+05 NoC(hops=173568, DRAM acc=32768) Buffer(max=60416, avg=6.042e+04) Buffer(max=262144, avg=2.621e+05) Buffer(max=50176, avg=5.018e+04) 50176/262144/200704 Max NoC: 0
+			conv_4_0_res 1 (W:1,H:1,B:1,K:1) util:100/100 E:3.259e+07, T:25088, Cost:8.177e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=1404928, DRAM acc=401408) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 401408/0/200704 Max NoC: 0
+			conv_4_1_a 1 (W:1,H:1,B:1,K:1) util:87.5/87.5 E:2.245e+07, T:57344, Cost:1.288e+12 Ubuf/Buf/Bus/Mac:7.154e+05/1.604e+07/6212/9.248e+05 NoC(hops=499712, DRAM acc=32768) Buffer(max=210944, avg=2.109e+05) Buffer(max=262144, avg=2.621e+05) Buffer(max=200704, avg=2.007e+05) 200704/262144/50176 Max NoC: 0
+			conv_4_1_b 1 (K:2,W:1,H:1,B:1) util:80.77/80.77 E:4.431e+07, T:69888, Cost:3.097e+12 Ubuf/Buf/Bus/Mac:1.184e+06/3.481e+07/1.528e+04/2.081e+06 NoC(hops=321536, DRAM acc=73728) Buffer(max=60416, avg=6.042e+04) Buffer(max=294912, avg=2.949e+05) Buffer(max=50176, avg=5.018e+04) 50176/589824/50176 Max NoC: 0
+			conv_4_1_c 1 (W:1,H:1,B:1,K:1) util:87.5/87.5 E:2.09e+07, T:57344, Cost:1.198e+12 Ubuf/Buf/Bus/Mac:1.007e+06/1.602e+07/8479/9.248e+05 NoC(hops=173568, DRAM acc=32768) Buffer(max=60416, avg=6.042e+04) Buffer(max=262144, avg=2.621e+05) Buffer(max=50176, avg=5.018e+04) 50176/262144/200704 Max NoC: 0
+			conv_4_1_res 1 (W:1,H:1,B:1,K:1) util:100/100 E:3.372e+07, T:25088, Cost:8.459e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=1605632, DRAM acc=401408) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 401408/0/200704 Max NoC: 0
+			conv_4_2_a 1 (W:1,H:1,B:1,K:1) util:87.5/87.5 E:2.133e+07, T:57344, Cost:1.223e+12 Ubuf/Buf/Bus/Mac:7.154e+05/1.604e+07/6212/9.248e+05 NoC(hops=299008, DRAM acc=32768) Buffer(max=210944, avg=2.109e+05) Buffer(max=262144, avg=2.621e+05) Buffer(max=200704, avg=2.007e+05) 200704/262144/50176 Max NoC: 0
+			conv_4_2_b 1 (K:2,W:1,H:1,B:1) util:80.77/80.77 E:4.459e+07, T:69888, Cost:3.117e+12 Ubuf/Buf/Bus/Mac:1.184e+06/3.481e+07/1.528e+04/2.081e+06 NoC(hops=371712, DRAM acc=73728) Buffer(max=60416, avg=6.042e+04) Buffer(max=294912, avg=2.949e+05) Buffer(max=50176, avg=5.018e+04) 50176/589824/50176 Max NoC: 0
+			conv_4_2_c 1 (W:1,H:1,B:1,K:1) util:87.5/87.5 E:2.09e+07, T:57344, Cost:1.198e+12 Ubuf/Buf/Bus/Mac:1.007e+06/1.602e+07/8479/9.248e+05 NoC(hops=173568, DRAM acc=32768) Buffer(max=60416, avg=6.042e+04) Buffer(max=262144, avg=2.621e+05) Buffer(max=50176, avg=5.018e+04) 50176/262144/200704 Max NoC: 0
+			conv_4_2_res 1 (W:1,H:1,B:1,K:1) util:100/100 E:3.259e+07, T:25088, Cost:8.177e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=1404928, DRAM acc=401408) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 401408/0/200704 Max NoC: 0
+		S 8/8 E:1.672e+09, T:454272, Cost:7.597e+14 Ubuf/Buf/Bus/Mac:5.115e+07/9.466e+08/4.892e+05/5.581e+07 NoC(hops=33442880, DRAM acc=7184384) Buffer(max=813056, avg=1.796e+05) Buffer(max=262144, avg=1.66e+05) Buffer(max=0, avg=0) Max NoC: 0
+			conv_4_3_a 1 (H:2,W:1,B:1,K:1) util:87.5/87.5 E:3.63e+07, T:28672, Cost:1.041e+12 Ubuf/Buf/Bus/Mac:1.026e+06/1.604e+07/1.093e+04/9.248e+05 NoC(hops=765952, DRAM acc=233472) Buffer(max=110592, avg=1.106e+05) Buffer(max=262144, avg=2.621e+05) Buffer(max=100352, avg=1.004e+05) 200704/262144/50176 Max NoC: 0
+			conv_4_3_b 1 (K:5,W:1,H:1,B:1) util:80.77/80.77 E:4.625e+07, T:28392, Cost:1.313e+12 Ubuf/Buf/Bus/Mac:1.358e+06/3.542e+07/1.553e+04/2.113e+06 NoC(hops=522240, DRAM acc=73728) Buffer(max=60416, avg=6.042e+04) Buffer(max=119808, avg=1.18e+05) Buffer(max=50176, avg=5.018e+04) 50176/589824/50176 Max NoC: 0
+			conv_4_3_c 1 (K:2,W:1,H:1,B:1) util:87.5/87.5 E:2.166e+07, T:28672, Cost:6.209e+11 Ubuf/Buf/Bus/Mac:1.06e+06/1.602e+07/8479/9.248e+05 NoC(hops=299400, DRAM acc=32768) Buffer(max=60416, avg=6.042e+04) Buffer(max=131072, avg=1.311e+05) Buffer(max=50176, avg=5.018e+04) 50176/262144/200704 Max NoC: 0
+			conv_4_3_res 1 (W:1,H:1,B:1,K:1) util:100/100 E:3.316e+07, T:25088, Cost:8.318e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=1505280, DRAM acc=401408) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 401408/0/200704 Max NoC: 0
+			conv_4_4_a 1 (H:2,W:1,B:1,K:1) util:87.5/87.5 E:2.257e+07, T:28672, Cost:6.472e+11 Ubuf/Buf/Bus/Mac:1.026e+06/1.604e+07/1.093e+04/9.248e+05 NoC(hops=464896, DRAM acc=32768) Buffer(max=110592, avg=1.106e+05) Buffer(max=262144, avg=2.621e+05) Buffer(max=100352, avg=1.004e+05) 200704/262144/50176 Max NoC: 0
+			conv_4_4_b 1 (K:4,W:1,H:1,B:1) util:80.77/80.77 E:4.912e+07, T:34944, Cost:1.716e+12 Ubuf/Buf/Bus/Mac:1.289e+06/3.481e+07/1.528e+04/2.081e+06 NoC(hops=622592, DRAM acc=123904) Buffer(max=60416, avg=6.042e+04) Buffer(max=147456, avg=1.475e+05) Buffer(max=50176, avg=5.018e+04) 50176/589824/50176 Max NoC: 0
+		S 8/8 E:2.018e+09, T:693760, Cost:1.4e+15 Ubuf/Buf/Bus/Mac:7.499e+07/9.368e+08/6.807e+05/5.376e+07 NoC(hops=50982912, DRAM acc=11100160) Buffer(max=813056, avg=2.724e+05) Buffer(max=524288, avg=2.668e+05) Buffer(max=0, avg=0) Max NoC: 0
+			conv_4_4_c 1 (K:2,W:1,H:1,B:1) util:87.5/87.5 E:2.494e+07, T:28672, Cost:7.152e+11 Ubuf/Buf/Bus/Mac:1.06e+06/1.602e+07/8479/9.248e+05 NoC(hops=349184, DRAM acc=82944) Buffer(max=60416, avg=6.042e+04) Buffer(max=131072, avg=1.311e+05) Buffer(max=50176, avg=5.018e+04) 50176/262144/200704 Max NoC: 0
+			conv_4_4_res 1 (W:1,H:1,B:1,K:1) util:100/100 E:3.316e+07, T:25088, Cost:8.318e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=1505280, DRAM acc=401408) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 401408/0/200704 Max NoC: 0
+			conv_4_5_a 1 (H:2,W:1,B:1,K:1) util:87.5/87.5 E:2.201e+07, T:28672, Cost:6.311e+11 Ubuf/Buf/Bus/Mac:1.026e+06/1.604e+07/1.093e+04/9.248e+05 NoC(hops=364544, DRAM acc=32768) Buffer(max=110592, avg=1.106e+05) Buffer(max=262144, avg=2.621e+05) Buffer(max=100352, avg=1.004e+05) 200704/262144/50176 Max NoC: 0
+			conv_4_5_b 1 (K:4,W:1,H:1,B:1) util:80.77/80.77 E:4.568e+07, T:34944, Cost:1.596e+12 Ubuf/Buf/Bus/Mac:1.289e+06/3.481e+07/1.528e+04/2.081e+06 NoC(hops=547328, DRAM acc=73728) Buffer(max=60416, avg=6.042e+04) Buffer(max=147456, avg=1.475e+05) Buffer(max=50176, avg=5.018e+04) 50176/589824/50176 Max NoC: 0
+			conv_4_5_c 1 (K:2,W:1,H:1,B:1) util:87.5/87.5 E:2.137e+07, T:28672, Cost:6.128e+11 Ubuf/Buf/Bus/Mac:1.06e+06/1.602e+07/8479/9.248e+05 NoC(hops=248832, DRAM acc=32768) Buffer(max=60416, avg=6.042e+04) Buffer(max=131072, avg=1.311e+05) Buffer(max=50176, avg=5.018e+04) 50176/262144/200704 Max NoC: 0
+			conv_4_5_res 1 (W:1,H:1,B:1,K:1) util:100/100 E:3.259e+07, T:25088, Cost:8.177e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=1404928, DRAM acc=401408) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 401408/0/200704 Max NoC: 0
+			conv_5_br 1 (K:4,W:1,H:1,B:1) util:87.5/87.5 E:7.245e+07, T:28672, Cost:2.077e+12 Ubuf/Buf/Bus/Mac:3.671e+06/3.421e+07/4.191e+04/1.85e+06 NoC(hops=1952768, DRAM acc=362496) Buffer(max=183296, avg=1.833e+05) Buffer(max=524288, avg=5.243e+05) Buffer(max=173056, avg=1.731e+05) 173056/2097152/100352 Max NoC: 0
+		conv_5_0_a 8 (W:8,K:2,H:1,B:1) util:87.5/87.5 E:2.287e+08, T:91904, Cost:2.102e+13 Ubuf/Buf/Bus/Mac:1.269e+07/7.424e+07/1.068e+05/4.228e+06 NoC(hops=8785920, DRAM acc=1470464) Buffer(max=116736, avg=1.167e+05) Buffer(max=262144, avg=2.621e+05) Buffer(max=106496, avg=1.065e+05) 1384448/524288/200704 Max NoC: 0
+		S 8/4 E:8.915e+08, T:325888, Cost:2.905e+14 Ubuf/Buf/Bus/Mac:2.961e+07/4.116e+08/3.107e+05/2.434e+07 NoC(hops=20138472, DRAM acc=5214208) Buffer(max=813056, avg=1.545e+05) Buffer(max=239616, avg=2.272e+05) Buffer(max=0, avg=0) Max NoC: 0
+			conv_5_0_b 2 (K:10,W:1,H:1,B:1) util:80.77/80.77 E:1.312e+08, T:40000, Cost:5.246e+12 Ubuf/Buf/Bus/Mac:4.415e+06/7.078e+07/5.396e+04/4.227e+06 NoC(hops=2371584, DRAM acc=640000) Buffer(max=60416, avg=6.042e+04) Buffer(max=239616, avg=2.359e+05) Buffer(max=50176, avg=5.018e+04) 50176/2359296/50176 Max NoC: 0
+			conv_5_0_c 2 (K:5,W:1,H:1,B:1) util:86.24/86.24 E:5.823e+07, T:23296, Cost:1.356e+12 Ubuf/Buf/Bus/Mac:2.352e+06/3.213e+07/2.371e+04/1.851e+06 NoC(hops=1097484, DRAM acc=262144) Buffer(max=60416, avg=6.042e+04) Buffer(max=209920, avg=2.097e+05) Buffer(max=50176, avg=5.018e+04) 50176/1048576/200704 Max NoC: 0
+			conv_5_0_res 2 (W:1,H:1,B:1,K:1) util:100/100 E:3.349e+07, T:25088, Cost:8.403e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=1565550, DRAM acc=401408) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 401408/0/200704 Max NoC: 0
+		S 8/4 E:1.43e+09, T:507136, Cost:7.254e+14 Ubuf/Buf/Bus/Mac:4.968e+07/6.685e+08/5.363e+05/3.903e+07 NoC(hops=33175088, DRAM acc=8114176) Buffer(max=813056, avg=2.674e+05) Buffer(max=396288, avg=3.67e+05) Buffer(max=0, avg=0) Max NoC: 0
+			conv_5_1_a 2 (K:3,W:1,H:1,B:1) util:86.99/86.99 E:7.487e+07, T:38528, Cost:2.884e+12 Ubuf/Buf/Bus/Mac:2.425e+06/3.221e+07/2.406e+04/1.853e+06 NoC(hops=1890304, DRAM acc=462848) Buffer(max=210944, avg=2.109e+05) Buffer(max=350208, avg=3.495e+05) Buffer(max=200704, avg=2.007e+05) 200704/1048576/50176 Max NoC: 0
+			conv_5_1_b 2 (K:6,W:1,H:1,B:1) util:79.7/79.7 E:1.276e+08, T:47586, Cost:6.074e+12 Ubuf/Buf/Bus/Mac:4.689e+06/7.058e+07/6.225e+04/4.194e+06 NoC(hops=2271428, DRAM acc=589824) Buffer(max=60416, avg=6.042e+04) Buffer(max=396288, avg=3.932e+05) Buffer(max=50176, avg=5.018e+04) 50176/2359296/50176 Max NoC: 0
+			conv_5_1_c 2 (K:3,W:1,H:1,B:1) util:86.86/86.86 E:5.752e+07, T:38528, Cost:2.216e+12 Ubuf/Buf/Bus/Mac:2.246e+06/3.214e+07/2.371e+04/1.851e+06 NoC(hops=987332, DRAM acc=262144) Buffer(max=60416, avg=6.042e+04) Buffer(max=349696, avg=3.495e+05) Buffer(max=50176, avg=5.018e+04) 50176/1048576/200704 Max NoC: 0
+			conv_5_1_res 2 (W:1,H:1,B:1,K:1) util:100/100 E:3.372e+07, T:25088, Cost:8.459e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=1605632, DRAM acc=401408) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 401408/0/200704 Max NoC: 0
+			conv_5_2_a 2 (K:3,W:1,H:1,B:1) util:86.99/86.99 E:6.387e+07, T:38528, Cost:2.461e+12 Ubuf/Buf/Bus/Mac:2.425e+06/3.221e+07/2.406e+04/1.853e+06 NoC(hops=1539076, DRAM acc=312320) Buffer(max=210944, avg=2.109e+05) Buffer(max=350208, avg=3.495e+05) Buffer(max=200704, avg=2.007e+05) 200704/1048576/50176 Max NoC: 0
+		S 8/4 E:8.338e+08, T:280000, Cost:2.335e+14 Ubuf/Buf/Bus/Mac:3.007e+07/4.092e+08/3.075e+05/2.413e+07 NoC(hops=18644712, DRAM acc=4427776) Buffer(max=813056, avg=1.733e+05) Buffer(max=262656, avg=2.434e+05) Buffer(max=0, avg=0) Max NoC: 0
+			conv_5_2_b 2 (K:9,W:1,H:1,B:1) util:76.73/76.73 E:1.298e+08, T:40000, Cost:5.194e+12 Ubuf/Buf/Bus/Mac:4.316e+06/7.018e+07/5.317e+04/4.17e+06 NoC(hops=2271232, DRAM acc=640000) Buffer(max=60416, avg=6.042e+04) Buffer(max=262656, avg=2.621e+05) Buffer(max=50176, avg=5.018e+04) 50176/2359296/50176 Max NoC: 0
+			conv_5_2_c 2 (K:5,W:1,H:1,B:1) util:86.24/86.24 E:5.82e+07, T:23296, Cost:1.356e+12 Ubuf/Buf/Bus/Mac:2.352e+06/3.213e+07/2.371e+04/1.851e+06 NoC(hops=1093172, DRAM acc=262144) Buffer(max=60416, avg=6.042e+04) Buffer(max=209920, avg=2.097e+05) Buffer(max=50176, avg=5.018e+04) 50176/1048576/200704 Max NoC: 0
+			conv_5_2_res 2 (W:1,H:1,B:1,K:1) util:100/100 E:1.875e+07, T:12544, Cost:2.352e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=1083782, DRAM acc=200704) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 401408/0/200704 Max NoC: 0
+			pool5 2 (W:1,H:1,B:1,K:1) util:100/100 E:1.658e+06, T:256, Cost:4.244e+08 Ubuf/Buf/Bus/Mac:2.158e+05/0/0/3613 NoC(hops=212992, DRAM acc=4096) Buffer(max=210944, avg=2.109e+05) Buffer(max=0, avg=0) Buffer(max=200704, avg=2.007e+05) 200704/0/4096 Max NoC: 0
+		fc 8 (K:16,W:1,H:1,B:1) util:98.44/98.44 E:1.711e+08, T:129524, Cost:2.216e+13 Ubuf/Buf/Bus/Mac:4.928e+06/5.529e+06/4.231e+04/2.973e+05 NoC(hops=6413760, DRAM acc=2072384) Buffer(max=26624, avg=2.662e+04) Buffer(max=129024, avg=1.28e+05) Buffer(max=16384, avg=1.638e+04) 16384/2048000/8000 Max NoC: 0
+239 2.737e+17 4.608
+479 2.782e+17 4.708
+719 3.278e+17 4.787
+959 3.024e+17 4.688
+1199 2.504e+17 3.779
+1439 2.701e+17 5.388
+1679 2.459e+17 5.308
+1919 2.557e+17 4.829
+2159 2.531e+17 5.033
+2399 2.373e+17 5.017
+2639 2.398e+17 4.433
+2879 2.395e+17 4.092
+3119 2.384e+17 4.646
+3359 2.346e+17 4.338
+3599 2.394e+17 4.562
+3839 2.434e+17 4.45
+4079 2.272e+17 3.792
+4319 2.286e+17 3.667
+4559 2.279e+17 3.208
+4799 2.239e+17 3.496
+5039 2.242e+17 3.658
+5279 2.245e+17 3.312
+5519 2.229e+17 3.742
+5759 2.246e+17 3.375
+5999 2.22e+17 3.579
+6239 2.209e+17 3.625
+6479 2.211e+17 3.558
+Switch to best solution.
+6719 2.208e+17 3.587
+6959 2.209e+17 4.138
+7199 2.208e+17 3.458
+Elapsed: 21s Valid: 6532 (90.72%) Accept: 1403 (19.49%)
+Per OP: 89/151, 103/172, 61/3986, 68/68, 324/324, 277/763, 481/1068
+239 3.658e+17 5.188
+[Warning] After 30 tries.
+479 2.814e+17 5.379
+[Warning] After 30 tries.
+719 3.486e+17 5.325
+959 2.47e+17 4.963
+1199 2.526e+17 5.388
+[Warning] After 30 tries.
+1439 2.778e+17 5.329
+[Warning] After 30 tries.
+1679 2.48e+17 4.692
+1919 2.372e+17 5.521
+2159 2.36e+17 4.871
+[Warning] After 30 tries.
+2399 2.333e+17 5.696
+2639 2.403e+17 4.963
+2879 2.366e+17 4.979
+3119 2.396e+17 4.733
+[Warning] After 30 tries.
+3359 2.34e+17 5.067
+3599 2.337e+17 4.871
+3839 2.342e+17 5.188
+4079 2.313e+17 5.054
+4319 2.319e+17 5.267
+4559 2.313e+17 5.117
+4799 2.314e+17 4.954
+5039 2.314e+17 5.25
+[Warning] After 30 tries.
+5279 2.322e+17 5.575
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+5519 2.312e+17 5.042
+[Warning] After 30 tries.
+5759 2.312e+17 5.042
+[Warning] After 30 tries.
+5999 2.312e+17 5.292
+6239 2.312e+17 5.121
+6479 2.312e+17 5.383
+Switch to best solution.
+6719 2.301e+17 5.267
+6959 2.301e+17 5.104
+[Warning] After 30 tries.
+7199 2.301e+17 5.65
+Elapsed: 15s Valid: 6664 (92.56%) Accept: 738 (10.25%)
+Per OP: 79/170, 86/183, 53/5094, 59/59, 34/34, 29/29, 398/1095
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+239 3.606e+17 5.679
+[Warning] After 30 tries.
+479 2.702e+17 5.721
+[Warning] After 30 tries.
+719 2.861e+17 5.763
+959 3.146e+17 5.154
+[Warning] After 30 tries.
+1199 2.887e+17 5.658
+1439 2.854e+17 5.129
+1679 2.9e+17 5.275
+1919 2.959e+17 5.05
+2159 2.764e+17 5.317
+[Warning] After 30 tries.
+2399 2.552e+17 4.979
+2639 2.427e+17 5.267
+2879 2.447e+17 5.475
+[Warning] After 30 tries.
+3119 2.577e+17 5.167
+3359 2.539e+17 5.642
+[Warning] After 30 tries.
+3599 2.367e+17 5.438
+3839 2.36e+17 5.471
+4079 2.376e+17 5.171
+4319 2.41e+17 4.808
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+4559 2.383e+17 5.392
+4799 2.373e+17 5.075
+5039 2.351e+17 5.088
+5279 2.363e+17 5.588
+5519 2.35e+17 4.917
+5759 2.35e+17 5.204
+5999 2.35e+17 5.383
+6239 2.35e+17 5.354
+[Warning] After 30 tries.
+6479 2.35e+17 5.567
+Switch to best solution.
+[Warning] After 30 tries.
+6719 2.35e+17 5.171
+[Warning] After 30 tries.
+6959 2.35e+17 5.008
+[Warning] After 30 tries.
+7199 2.35e+17 5.571
+Elapsed: 14s Valid: 6631 (92.1%) Accept: 950 (13.19%)
+Per OP: 104/175, 92/164, 113/4998, 120/120, 11/11, 9/9, 501/1154
+239 3.323e+17 5.383
+479 2.987e+17 5.292
+719 2.578e+17 5.129
+959 2.898e+17 5.817
+1199 2.653e+17 5.408
+1439 2.619e+17 5.317
+1679 2.553e+17 5.475
+1919 2.39e+17 5.246
+[Warning] After 30 tries.
+2159 2.487e+17 4.487
+[Warning] After 30 tries.
+2399 2.596e+17 5.725
+[Warning] After 30 tries.
+2639 2.383e+17 5.246
+[Warning] After 30 tries.
+2879 2.483e+17 5.246
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+3119 2.501e+17 4.692
+3359 2.55e+17 5.217
+3599 2.489e+17 5.154
+[Warning] After 30 tries.
+3839 2.417e+17 5.55
+4079 2.311e+17 4.858
+4319 2.344e+17 4.879
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+4559 2.322e+17 5.221
+[Warning] After 30 tries.
+4799 2.328e+17 5.229
+[Warning] After 30 tries.
+5039 2.302e+17 4.708
+5279 2.31e+17 4.754
+5519 2.293e+17 5.404
+5759 2.293e+17 5.029
+[Warning] After 30 tries.
+5999 2.293e+17 4.696
+6239 2.293e+17 5.204
+6479 2.293e+17 5.571
+Switch to best solution.
+6719 2.293e+17 5.075
+[Warning] After 30 tries.
+[Warning] After 30 tries.
+6959 2.293e+17 5.708
+[Warning] After 30 tries.
+7199 2.293e+17 5.454
+Elapsed: 18s Valid: 6650 (92.36%) Accept: 905 (12.57%)
+Per OP: 90/170, 105/180, 85/4971, 93/93, 18/18, 17/18, 497/1200
+LS-SA: E:2.285e+10, T:9663492, Cost:2.208e+17, Ubuf/Buf/Bus/Mac/NoC/DRAM:1.012e+09/9.569e+09/7.456e+06/5.622e+08/3.299e+09/8.398e+09
+Struct:
+	T 8/4 E:2.285e+10, T:9663492, Cost:2.208e+17 Ubuf/Buf/Bus/Mac:1.012e+09/9.569e+09/7.456e+06/5.622e+08 NoC(hops=589148416, DRAM acc=139971840) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+		T 2/1 E:3.951e+08, T:164343, Cost:6.493e+13 Ubuf/Buf/Bus/Mac:1.957e+07/1.787e+08/1.041e+05/1.079e+07 NoC(hops=8218832, DRAM acc=2331504) Buffer(max=192016, avg=1.908e+05) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+			conv1 2 (B:2,K:4,H:2,W:1) util:76.56/76.56 E:1.065e+08, T:19383, Cost:2.065e+12 Ubuf/Buf/Bus/Mac:6.422e+06/6.933e+07/2.958e+04/4.249e+06 NoC(hops=1406160, DRAM acc=310128) Buffer(max=87520, avg=8.718e+04) Buffer(max=2352, avg=2352) Buffer(max=77280, avg=7.694e+04) 301056/9408/1605632 Max NoC: 0
+			pool1 2 (B:2,K:4,H:2,W:1) util:99.77/99.77 E:3.31e+07, T:25088, Cost:8.305e+11 Ubuf/Buf/Bus/Mac:2.13e+06/0/0/6.503e+04 NoC(hops=1218560, DRAM acc=401408) Buffer(max=112384, avg=1.115e+05) Buffer(max=0, avg=0) Buffer(max=102144, avg=1.012e+05) 1605632/0/401408 Max NoC: 0
+			conv_2_0_a 2 (B:2,W:4,H:2,K:1) util:87.5/87.5 E:1.317e+07, T:1792, Cost:2.361e+10 Ubuf/Buf/Bus/Mac:1.779e+06/7.966e+06/8423/4.624e+05 NoC(hops=517120, DRAM acc=1024) Buffer(max=35328, avg=3.533e+04) Buffer(max=4096, avg=4096) Buffer(max=25088, avg=2.509e+04) 401408/4096/401408 Max NoC: 0
+			conv_2_0_b 2 (B:2,W:4,H:2,K:1) util:80.77/80.77 E:7.882e+07, T:17472, Cost:1.377e+12 Ubuf/Buf/Bus/Mac:3.385e+06/6.958e+07/3.244e+04/4.162e+06 NoC(hops=198656, DRAM acc=9216) Buffer(max=39936, avg=3.901e+04) Buffer(max=36864, avg=3.686e+04) Buffer(max=29696, avg=2.877e+04) 401408/36864/401408 Max NoC: 0
+			conv_2_0_c 2 (B:2,W:4,H:2,K:1) util:87.5/87.5 E:1.635e+08, T:100608, Cost:1.645e+13 Ubuf/Buf/Bus/Mac:5.848e+06/3.187e+07/3.369e+04/1.85e+06 NoC(hops=4878336, DRAM acc=1609728) Buffer(max=35328, avg=3.533e+04) Buffer(max=16384, avg=1.638e+04) Buffer(max=25088, avg=2.509e+04) 401408/16384/1605632 Max NoC: 0
+		T 2/1 E:1.176e+09, T:704128, Cost:8.284e+14 Ubuf/Buf/Bus/Mac:4.904e+07/3.139e+08/2.032e+05/1.88e+07 NoC(hops=31700992, DRAM acc=10283008) Buffer(max=342272, avg=3.35e+05) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+			conv_2_br 2 (B:2,H:8,W:1,K:1) util:87.5/87.5 E:7.061e+07, T:25344, Cost:1.79e+12 Ubuf/Buf/Bus/Mac:5.845e+06/3.147e+07/3.364e+04/1.85e+06 NoC(hops=1265664, DRAM acc=405504) Buffer(max=35328, avg=3.533e+04) Buffer(max=16384, avg=1.638e+04) Buffer(max=25088, avg=2.509e+04) 401408/16384/1605632 Max NoC: 0
+			conv_2_0_res 2 (B:2,H:8,W:1,K:1) util:100/100 E:2.518e+08, T:200704, Cost:5.053e+13 Ubuf/Buf/Bus/Mac:5.076e+06/0/0/5.78e+04 NoC(hops=9633792, DRAM acc=3211264) Buffer(max=210944, avg=2.109e+05) Buffer(max=0, avg=0) Buffer(max=200704, avg=2.007e+05) 3211264/0/1605632 Max NoC: 0
+			conv_2_1_a 2 (B:2,H:8,W:1,K:1) util:87.5/87.5 E:3.74e+07, T:7168, Cost:2.681e+11 Ubuf/Buf/Bus/Mac:3.31e+06/3.164e+07/1.202e+04/1.85e+06 NoC(hops=61440, DRAM acc=4096) Buffer(max=110592, avg=1.106e+05) Buffer(max=16384, avg=1.638e+04) Buffer(max=100352, avg=1.004e+05) 1605632/16384/401408 Max NoC: 0
+			conv_2_1_b 2 (B:2,H:8,W:1,K:1) util:80.77/80.77 E:7.828e+07, T:17472, Cost:1.368e+12 Ubuf/Buf/Bus/Mac:3.423e+06/6.853e+07/3.233e+04/4.162e+06 NoC(hops=281600, DRAM acc=9216) Buffer(max=42496, avg=4.16e+04) Buffer(max=36864, avg=3.686e+04) Buffer(max=32256, avg=3.136e+04) 401408/36864/401408 Max NoC: 0
+			conv_2_1_c 2 (B:2,H:8,W:1,K:1) util:87.5/87.5 E:3.979e+07, T:7168, Cost:2.852e+11 Ubuf/Buf/Bus/Mac:5.845e+06/3.147e+07/3.364e+04/1.85e+06 NoC(hops=61440, DRAM acc=4096) Buffer(max=35328, avg=3.533e+04) Buffer(max=16384, avg=1.638e+04) Buffer(max=25088, avg=2.509e+04) 401408/16384/1605632 Max NoC: 0
+			conv_2_1_res 2 (B:2,H:8,W:1,K:1) util:100/100 E:2.518e+08, T:200704, Cost:5.053e+13 Ubuf/Buf/Bus/Mac:5.076e+06/0/0/5.78e+04 NoC(hops=9633792, DRAM acc=3211264) Buffer(max=210944, avg=2.109e+05) Buffer(max=0, avg=0) Buffer(max=200704, avg=2.007e+05) 3211264/0/1605632 Max NoC: 0
+			conv_2_2_a 2 (B:2,H:8,W:1,K:1) util:87.5/87.5 E:3.74e+07, T:7168, Cost:2.681e+11 Ubuf/Buf/Bus/Mac:3.31e+06/3.164e+07/1.202e+04/1.85e+06 NoC(hops=61440, DRAM acc=4096) Buffer(max=110592, avg=1.106e+05) Buffer(max=16384, avg=1.638e+04) Buffer(max=100352, avg=1.004e+05) 1605632/16384/401408 Max NoC: 0
+			conv_2_2_b 2 (B:2,H:8,W:1,K:1) util:80.77/80.77 E:7.828e+07, T:17472, Cost:1.368e+12 Ubuf/Buf/Bus/Mac:3.423e+06/6.853e+07/3.233e+04/4.162e+06 NoC(hops=281600, DRAM acc=9216) Buffer(max=42496, avg=4.16e+04) Buffer(max=36864, avg=3.686e+04) Buffer(max=32256, avg=3.136e+04) 401408/36864/401408 Max NoC: 0
+			conv_2_2_c 2 (B:2,H:8,W:1,K:1) util:87.5/87.5 E:3.979e+07, T:7168, Cost:2.852e+11 Ubuf/Buf/Bus/Mac:5.845e+06/3.147e+07/3.364e+04/1.85e+06 NoC(hops=61440, DRAM acc=4096) Buffer(max=35328, avg=3.533e+04) Buffer(max=16384, avg=1.638e+04) Buffer(max=25088, avg=2.509e+04) 401408/16384/1605632 Max NoC: 0
+			conv_2_2_res 2 (B:2,H:8,W:1,K:1) util:100/100 E:2.518e+08, T:200704, Cost:5.053e+13 Ubuf/Buf/Bus/Mac:5.076e+06/0/0/5.78e+04 NoC(hops=9633792, DRAM acc=3211264) Buffer(max=210944, avg=2.109e+05) Buffer(max=0, avg=0) Buffer(max=200704, avg=2.007e+05) 3211264/0/1605632 Max NoC: 0
+			conv_3_0_a 2 (B:2,H:8,W:1,K:1) util:100/100 E:3.966e+07, T:13056, Cost:5.178e+11 Ubuf/Buf/Bus/Mac:2.814e+06/1.918e+07/1.364e+04/1.057e+06 NoC(hops=724992, DRAM acc=208896) Buffer(max=108800, avg=9.472e+04) Buffer(max=32768, avg=3.277e+04) Buffer(max=98560, avg=8.448e+04) 1548800/32768/200704 Max NoC: 0
+		T 2/1 E:9.384e+08, T:398272, Cost:3.737e+14 Ubuf/Buf/Bus/Mac:3.399e+07/4.151e+08/2.35e+05/2.444e+07 NoC(hops=21206016, DRAM acc=5765120) Buffer(max=340480, avg=3.129e+05) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+			conv_3_0_b 2 (B:2,K:4,H:2,W:1) util:80.77/80.77 E:9.823e+07, T:17472, Cost:1.716e+12 Ubuf/Buf/Bus/Mac:2.749e+06/6.891e+07/2.16e+04/4.162e+06 NoC(hops=1299456, DRAM acc=251904) Buffer(max=64000, avg=6.4e+04) Buffer(max=36864, avg=3.686e+04) Buffer(max=53760, avg=5.376e+04) 200704/147456/200704 Max NoC: 0
+			conv_3_0_c 2 (B:2,W:2,K:2,H:2) util:87.5/87.5 E:1.033e+08, T:51200, Cost:5.29e+12 Ubuf/Buf/Bus/Mac:3.66e+06/3.198e+07/2.404e+04/1.85e+06 NoC(hops=2972672, DRAM acc=819200) Buffer(max=35328, avg=3.533e+04) Buffer(max=32768, avg=3.277e+04) Buffer(max=25088, avg=2.509e+04) 200704/65536/802816 Max NoC: 0
+			conv_3_br 2 (H:16,W:1,B:1,K:1) util:100/100 E:1.787e+08, T:72448, Cost:1.294e+13 Ubuf/Buf/Bus/Mac:6.746e+06/7.642e+07/5.456e+04/4.228e+06 NoC(hops=3870720, DRAM acc=1159168) Buffer(max=94720, avg=8.064e+04) Buffer(max=131072, avg=1.311e+05) Buffer(max=84480, avg=7.04e+04) 1548800/131072/802816 Max NoC: 0
+			conv_3_0_res 2 (H:16,W:1,B:1,K:1) util:100/100 E:1.259e+08, T:100352, Cost:1.263e+13 Ubuf/Buf/Bus/Mac:2.538e+06/0/0/3.303e+04 NoC(hops=4816896, DRAM acc=1605632) Buffer(max=124928, avg=1.106e+05) Buffer(max=0, avg=0) Buffer(max=114688, avg=1.004e+05) 1605632/0/802816 Max NoC: 0
+			conv_3_1_a 2 (H:16,W:1,B:1,K:1) util:100/100 E:4.363e+07, T:7168, Cost:3.127e+11 Ubuf/Buf/Bus/Mac:2.939e+06/3.619e+07/2.33e+04/2.114e+06 NoC(hops=245760, DRAM acc=16384) Buffer(max=67584, avg=6.042e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=57344, avg=5.018e+04) 802816/65536/200704 Max NoC: 0
+			conv_3_1_b 2 (H:4,B:2,K:2,W:1) util:80.77/80.77 E:8.333e+07, T:17472, Cost:1.456e+12 Ubuf/Buf/Bus/Mac:3.133e+06/6.891e+07/3.222e+04/4.162e+06 NoC(hops=872448, DRAM acc=36864) Buffer(max=42496, avg=4.07e+04) Buffer(max=73728, avg=7.373e+04) Buffer(max=32256, avg=3.046e+04) 200704/147456/200704 Max NoC: 0
+			conv_3_1_c 2 (H:4,B:2,K:2,W:1) util:87.5/87.5 E:4.013e+07, T:7168, Cost:2.877e+11 Ubuf/Buf/Bus/Mac:3.656e+06/3.172e+07/2.396e+04/1.85e+06 NoC(hops=339968, DRAM acc=16384) Buffer(max=35328, avg=3.533e+04) Buffer(max=32768, avg=3.277e+04) Buffer(max=25088, avg=2.509e+04) 200704/65536/802816 Max NoC: 0
+			conv_3_1_res 2 (H:4,B:2,K:2,W:1) util:100/100 E:1.259e+08, T:100352, Cost:1.263e+13 Ubuf/Buf/Bus/Mac:2.538e+06/0/0/2.89e+04 NoC(hops=4816896, DRAM acc=1605632) Buffer(max=110592, avg=1.106e+05) Buffer(max=0, avg=0) Buffer(max=100352, avg=1.004e+05) 1605632/0/802816 Max NoC: 0
+			conv_3_2_a 2 (H:4,B:2,W:2,K:1) util:87.5/87.5 E:4.144e+07, T:7168, Cost:2.971e+11 Ubuf/Buf/Bus/Mac:2.896e+06/3.207e+07/2.308e+04/1.85e+06 NoC(hops=647168, DRAM acc=16384) Buffer(max=60416, avg=6.042e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=50176, avg=5.018e+04) 802816/65536/200704 Max NoC: 0
+			conv_3_2_b 2 (H:4,B:2,K:2,W:1) util:80.77/80.77 E:9.79e+07, T:17472, Cost:1.711e+12 Ubuf/Buf/Bus/Mac:3.133e+06/6.891e+07/3.222e+04/4.162e+06 NoC(hops=1324032, DRAM acc=237568) Buffer(max=42496, avg=4.07e+04) Buffer(max=73728, avg=7.373e+04) Buffer(max=32256, avg=3.046e+04) 200704/147456/200704 Max NoC: 0
+		T 2/1 E:6.076e+08, T:279360, Cost:1.697e+14 Ubuf/Buf/Bus/Mac:2.681e+07/2.328e+08/1.883e+05/1.347e+07 NoC(hops=16524288, DRAM acc=4030464) Buffer(max=459264, avg=4.593e+05) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+			conv_3_2_c 2 (H:4,K:2,B:2,W:1) util:87.5/87.5 E:5.54e+07, T:13568, Cost:7.516e+11 Ubuf/Buf/Bus/Mac:3.656e+06/3.172e+07/2.396e+04/1.85e+06 NoC(hops=915456, DRAM acc=217088) Buffer(max=35328, avg=3.533e+04) Buffer(max=32768, avg=3.277e+04) Buffer(max=25088, avg=2.509e+04) 200704/65536/802816 Max NoC: 0
+			conv_3_2_res 2 (H:4,K:2,B:2,W:1) util:100/100 E:1.259e+08, T:100352, Cost:1.263e+13 Ubuf/Buf/Bus/Mac:2.538e+06/0/0/2.89e+04 NoC(hops=4816896, DRAM acc=1605632) Buffer(max=110592, avg=1.106e+05) Buffer(max=0, avg=0) Buffer(max=100352, avg=1.004e+05) 1605632/0/802816 Max NoC: 0
+			conv_3_3_a 2 (H:4,W:2,B:2,K:1) util:87.5/87.5 E:4.144e+07, T:7168, Cost:2.971e+11 Ubuf/Buf/Bus/Mac:2.896e+06/3.207e+07/2.308e+04/1.85e+06 NoC(hops=647168, DRAM acc=16384) Buffer(max=60416, avg=6.042e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=50176, avg=5.018e+04) 802816/65536/200704 Max NoC: 0
+			conv_3_3_b 2 (H:4,K:2,B:2,W:1) util:80.77/80.77 E:8.29e+07, T:17472, Cost:1.448e+12 Ubuf/Buf/Bus/Mac:3.133e+06/6.891e+07/3.222e+04/4.162e+06 NoC(hops=794624, DRAM acc=36864) Buffer(max=42496, avg=4.07e+04) Buffer(max=73728, avg=7.373e+04) Buffer(max=32256, avg=3.046e+04) 200704/147456/200704 Max NoC: 0
+			conv_3_3_c 2 (H:4,K:2,B:2,W:1) util:87.5/87.5 E:4.055e+07, T:7168, Cost:2.906e+11 Ubuf/Buf/Bus/Mac:3.656e+06/3.172e+07/2.396e+04/1.85e+06 NoC(hops=413696, DRAM acc=16384) Buffer(max=35328, avg=3.533e+04) Buffer(max=32768, avg=3.277e+04) Buffer(max=25088, avg=2.509e+04) 200704/65536/802816 Max NoC: 0
+			conv_3_3_res 2 (H:4,K:2,B:2,W:1) util:100/100 E:1.259e+08, T:100352, Cost:1.263e+13 Ubuf/Buf/Bus/Mac:2.538e+06/0/0/2.89e+04 NoC(hops=4816896, DRAM acc=1605632) Buffer(max=110592, avg=1.106e+05) Buffer(max=0, avg=0) Buffer(max=100352, avg=1.004e+05) 1605632/0/802816 Max NoC: 0
+			conv_4_br 2 (H:2,W:2,K:2,B:2) util:87.5/87.5 E:1.356e+08, T:33280, Cost:4.512e+12 Ubuf/Buf/Bus/Mac:8.39e+06/6.838e+07/8.508e+04/3.699e+06 NoC(hops=4119552, DRAM acc=532480) Buffer(max=96768, avg=9.677e+04) Buffer(max=262144, avg=2.621e+05) Buffer(max=86528, avg=8.653e+04) 746496/524288/401408 Max NoC: 0
+		T 2/1 E:1.694e+09, T:556288, Cost:9.422e+14 Ubuf/Buf/Bus/Mac:7.842e+07/8.6e+08/6.752e+05/5.016e+07 NoC(hops=44709888, DRAM acc=7567360) Buffer(max=495616, avg=4.956e+05) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+			conv_4_0_a 2 (H:16,W:1,B:1,K:1) util:100/100 E:5.824e+07, T:26240, Cost:1.528e+12 Ubuf/Buf/Bus/Mac:3.535e+06/1.916e+07/4.011e+04/1.057e+06 NoC(hops=1652736, DRAM acc=419840) Buffer(max=37888, avg=3.789e+04) Buffer(max=131072, avg=1.311e+05) Buffer(max=27648, avg=2.765e+04) 746496/131072/100352 Max NoC: 0
+			conv_4_0_b 2 (H:2,K:8,W:1,B:1) util:80.77/80.77 E:9.45e+07, T:17472, Cost:1.651e+12 Ubuf/Buf/Bus/Mac:3.278e+06/6.902e+07/3.056e+04/4.162e+06 NoC(hops=1635328, DRAM acc=147456) Buffer(max=67584, avg=6.758e+04) Buffer(max=73728, avg=7.373e+04) Buffer(max=57344, avg=5.734e+04) 100352/589824/100352 Max NoC: 0
+			conv_4_0_c 2 (H:2,K:4,B:2,W:1) util:87.5/87.5 E:4.621e+07, T:7168, Cost:3.312e+11 Ubuf/Buf/Bus/Mac:3.09e+06/3.204e+07/2.639e+04/1.85e+06 NoC(hops=941056, DRAM acc=65536) Buffer(max=35328, avg=3.533e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=25088, avg=2.509e+04) 100352/262144/401408 Max NoC: 0
+			conv_4_0_res 2 (H:2,K:4,B:2,W:1) util:100/100 E:6.294e+07, T:50176, Cost:3.158e+12 Ubuf/Buf/Bus/Mac:1.269e+06/0/0/1.445e+04 NoC(hops=2408448, DRAM acc=802816) Buffer(max=60416, avg=6.042e+04) Buffer(max=0, avg=0) Buffer(max=50176, avg=5.018e+04) 802816/0/401408 Max NoC: 0
+			conv_4_1_a 2 (H:2,W:2,K:2,B:2) util:87.5/87.5 E:5.121e+07, T:7168, Cost:3.67e+11 Ubuf/Buf/Bus/Mac:4.063e+06/3.261e+07/4.191e+04/1.85e+06 NoC(hops=1554432, DRAM acc=65536) Buffer(max=60416, avg=6.042e+04) Buffer(max=131072, avg=1.311e+05) Buffer(max=50176, avg=5.018e+04) 401408/262144/100352 Max NoC: 0
+			conv_4_1_b 2 (K:8,B:2,W:1,H:1) util:80.77/80.77 E:9.444e+07, T:17472, Cost:1.65e+12 Ubuf/Buf/Bus/Mac:3.157e+06/6.962e+07/3.056e+04/4.162e+06 NoC(hops=1540096, DRAM acc=147456) Buffer(max=60416, avg=6.042e+04) Buffer(max=73728, avg=7.373e+04) Buffer(max=50176, avg=5.018e+04) 100352/589824/100352 Max NoC: 0
+			conv_4_1_c 2 (B:2,K:4,H:2,W:1) util:87.5/87.5 E:4.649e+07, T:7168, Cost:3.332e+11 Ubuf/Buf/Bus/Mac:3.09e+06/3.204e+07/2.639e+04/1.85e+06 NoC(hops=991232, DRAM acc=65536) Buffer(max=35328, avg=3.533e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=25088, avg=2.509e+04) 100352/262144/401408 Max NoC: 0
+			conv_4_1_res 2 (B:2,K:4,H:2,W:1) util:100/100 E:6.294e+07, T:50176, Cost:3.158e+12 Ubuf/Buf/Bus/Mac:1.269e+06/0/0/1.445e+04 NoC(hops=2408448, DRAM acc=802816) Buffer(max=60416, avg=6.042e+04) Buffer(max=0, avg=0) Buffer(max=50176, avg=5.018e+04) 802816/0/401408 Max NoC: 0
+			conv_4_2_a 2 (B:2,W:2,K:2,H:2) util:87.5/87.5 E:5.121e+07, T:7168, Cost:3.67e+11 Ubuf/Buf/Bus/Mac:4.063e+06/3.261e+07/4.191e+04/1.85e+06 NoC(hops=1554432, DRAM acc=65536) Buffer(max=60416, avg=6.042e+04) Buffer(max=131072, avg=1.311e+05) Buffer(max=50176, avg=5.018e+04) 401408/262144/100352 Max NoC: 0
+			conv_4_2_b 2 (B:2,K:8,W:1,H:1) util:80.77/80.77 E:9.429e+07, T:17472, Cost:1.647e+12 Ubuf/Buf/Bus/Mac:3.157e+06/6.962e+07/3.056e+04/4.162e+06 NoC(hops=1513472, DRAM acc=147456) Buffer(max=60416, avg=6.042e+04) Buffer(max=73728, avg=7.373e+04) Buffer(max=50176, avg=5.018e+04) 100352/589824/100352 Max NoC: 0
+			conv_4_2_c 2 (B:2,K:4,H:2,W:1) util:87.5/87.5 E:4.621e+07, T:7168, Cost:3.312e+11 Ubuf/Buf/Bus/Mac:3.09e+06/3.204e+07/2.639e+04/1.85e+06 NoC(hops=941056, DRAM acc=65536) Buffer(max=35328, avg=3.533e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=25088, avg=2.509e+04) 100352/262144/401408 Max NoC: 0
+			conv_4_2_res 2 (B:2,K:4,H:2,W:1) util:100/100 E:6.294e+07, T:50176, Cost:3.158e+12 Ubuf/Buf/Bus/Mac:1.269e+06/0/0/1.445e+04 NoC(hops=2408448, DRAM acc=802816) Buffer(max=60416, avg=6.042e+04) Buffer(max=0, avg=0) Buffer(max=50176, avg=5.018e+04) 802816/0/401408 Max NoC: 0
+			conv_4_3_a 2 (B:2,W:2,K:2,H:2) util:87.5/87.5 E:5.121e+07, T:7168, Cost:3.67e+11 Ubuf/Buf/Bus/Mac:4.063e+06/3.261e+07/4.191e+04/1.85e+06 NoC(hops=1554432, DRAM acc=65536) Buffer(max=60416, avg=6.042e+04) Buffer(max=131072, avg=1.311e+05) Buffer(max=50176, avg=5.018e+04) 401408/262144/100352 Max NoC: 0
+			conv_4_3_b 2 (B:2,K:8,W:1,H:1) util:80.77/80.77 E:9.429e+07, T:17472, Cost:1.647e+12 Ubuf/Buf/Bus/Mac:3.157e+06/6.962e+07/3.056e+04/4.162e+06 NoC(hops=1513472, DRAM acc=147456) Buffer(max=60416, avg=6.042e+04) Buffer(max=73728, avg=7.373e+04) Buffer(max=50176, avg=5.018e+04) 100352/589824/100352 Max NoC: 0
+			conv_4_3_c 2 (B:2,K:4,H:2,W:1) util:87.5/87.5 E:4.621e+07, T:7168, Cost:3.312e+11 Ubuf/Buf/Bus/Mac:3.09e+06/3.204e+07/2.639e+04/1.85e+06 NoC(hops=941056, DRAM acc=65536) Buffer(max=35328, avg=3.533e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=25088, avg=2.509e+04) 100352/262144/401408 Max NoC: 0
+			conv_4_3_res 2 (B:2,K:4,H:2,W:1) util:100/100 E:6.294e+07, T:50176, Cost:3.158e+12 Ubuf/Buf/Bus/Mac:1.269e+06/0/0/1.445e+04 NoC(hops=2408448, DRAM acc=802816) Buffer(max=60416, avg=6.042e+04) Buffer(max=0, avg=0) Buffer(max=50176, avg=5.018e+04) 802816/0/401408 Max NoC: 0
+			conv_4_4_a 2 (B:2,W:2,K:2,H:2) util:87.5/87.5 E:5.121e+07, T:7168, Cost:3.67e+11 Ubuf/Buf/Bus/Mac:4.063e+06/3.261e+07/4.191e+04/1.85e+06 NoC(hops=1554432, DRAM acc=65536) Buffer(max=60416, avg=6.042e+04) Buffer(max=131072, avg=1.311e+05) Buffer(max=50176, avg=5.018e+04) 401408/262144/100352 Max NoC: 0
+			conv_4_4_b 2 (B:2,K:8,W:1,H:1) util:80.77/80.77 E:9.429e+07, T:17472, Cost:1.647e+12 Ubuf/Buf/Bus/Mac:3.157e+06/6.962e+07/3.056e+04/4.162e+06 NoC(hops=1513472, DRAM acc=147456) Buffer(max=60416, avg=6.042e+04) Buffer(max=73728, avg=7.373e+04) Buffer(max=50176, avg=5.018e+04) 100352/589824/100352 Max NoC: 0
+			conv_4_4_c 2 (B:2,K:4,H:2,W:1) util:87.5/87.5 E:4.621e+07, T:7168, Cost:3.312e+11 Ubuf/Buf/Bus/Mac:3.09e+06/3.204e+07/2.639e+04/1.85e+06 NoC(hops=941056, DRAM acc=65536) Buffer(max=35328, avg=3.533e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=25088, avg=2.509e+04) 100352/262144/401408 Max NoC: 0
+			conv_4_4_res 2 (B:2,K:4,H:2,W:1) util:100/100 E:6.294e+07, T:50176, Cost:3.158e+12 Ubuf/Buf/Bus/Mac:1.269e+06/0/0/1.445e+04 NoC(hops=2408448, DRAM acc=802816) Buffer(max=60416, avg=6.042e+04) Buffer(max=0, avg=0) Buffer(max=50176, avg=5.018e+04) 802816/0/401408 Max NoC: 0
+			conv_4_5_a 2 (B:2,W:2,K:2,H:2) util:87.5/87.5 E:5.121e+07, T:7168, Cost:3.67e+11 Ubuf/Buf/Bus/Mac:4.063e+06/3.261e+07/4.191e+04/1.85e+06 NoC(hops=1554432, DRAM acc=65536) Buffer(max=60416, avg=6.042e+04) Buffer(max=131072, avg=1.311e+05) Buffer(max=50176, avg=5.018e+04) 401408/262144/100352 Max NoC: 0
+			conv_4_5_b 2 (B:2,K:8,W:1,H:1) util:80.77/80.77 E:9.429e+07, T:17472, Cost:1.647e+12 Ubuf/Buf/Bus/Mac:3.157e+06/6.962e+07/3.056e+04/4.162e+06 NoC(hops=1513472, DRAM acc=147456) Buffer(max=60416, avg=6.042e+04) Buffer(max=73728, avg=7.373e+04) Buffer(max=50176, avg=5.018e+04) 100352/589824/100352 Max NoC: 0
+			conv_4_5_c 2 (B:2,K:4,H:2,W:1) util:87.5/87.5 E:4.621e+07, T:7168, Cost:3.312e+11 Ubuf/Buf/Bus/Mac:3.09e+06/3.204e+07/2.639e+04/1.85e+06 NoC(hops=941056, DRAM acc=65536) Buffer(max=35328, avg=3.533e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=25088, avg=2.509e+04) 100352/262144/401408 Max NoC: 0
+			conv_4_5_res 2 (B:2,K:4,H:2,W:1) util:100/100 E:6.294e+07, T:50176, Cost:3.158e+12 Ubuf/Buf/Bus/Mac:1.269e+06/0/0/1.445e+04 NoC(hops=2408448, DRAM acc=802816) Buffer(max=60416, avg=6.042e+04) Buffer(max=0, avg=0) Buffer(max=50176, avg=5.018e+04) 802816/0/401408 Max NoC: 0
+			conv_5_br 2 (B:2,K:8,W:1,H:1) util:87.5/87.5 E:1.581e+08, T:45312, Cost:7.165e+12 Ubuf/Buf/Bus/Mac:9.353e+06/6.841e+07/8.383e+04/3.699e+06 NoC(hops=5908480, DRAM acc=724992) Buffer(max=183296, avg=1.833e+05) Buffer(max=262144, avg=2.621e+05) Buffer(max=173056, avg=1.731e+05) 346112/2097152/200704 Max NoC: 0
+		T 2/1 E:6.472e+08, T:212416, Cost:1.375e+14 Ubuf/Buf/Bus/Mac:3.338e+07/2.883e+08/3.341e+05/1.679e+07 NoC(hops=18660352, DRAM acc=3398656) Buffer(max=496640, avg=4.92e+05) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+			conv_5_0_a 2 (H:8,K:2,W:1,B:1) util:100/100 E:5.704e+07, T:19840, Cost:1.132e+12 Ubuf/Buf/Bus/Mac:6.16e+06/1.924e+07/7.771e+04/1.057e+06 NoC(hops=2045952, DRAM acc=317440) Buffer(max=36864, avg=3.686e+04) Buffer(max=262144, avg=2.621e+05) Buffer(max=26624, avg=2.662e+04) 346112/524288/50176 Max NoC: 0
+			conv_5_0_b 2 (K:16,W:1,H:1,B:1) util:81.55/81.55 E:1.287e+08, T:36864, Cost:4.746e+12 Ubuf/Buf/Bus/Mac:5.187e+06/6.982e+07/6.173e+04/4.162e+06 NoC(hops=2522112, DRAM acc=589824) Buffer(max=60416, avg=6.042e+04) Buffer(max=147456, avg=1.475e+05) Buffer(max=50176, avg=5.018e+04) 50176/2359296/50176 Max NoC: 0
+			conv_5_0_c 2 (K:16,W:1,H:1,B:1) util:87.5/87.5 E:6.122e+07, T:16384, Cost:1.003e+12 Ubuf/Buf/Bus/Mac:2.931e+06/3.207e+07/2.367e+04/1.85e+06 NoC(hops=1539072, DRAM acc=262144) Buffer(max=60416, avg=6.042e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=50176, avg=5.018e+04) 50176/1048576/200704 Max NoC: 0
+			conv_5_0_res 2 (K:16,W:1,H:1,B:1) util:98/98 E:3.147e+07, T:25088, Cost:7.895e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=1204224, DRAM acc=401408) Buffer(max=35328, avg=3.533e+04) Buffer(max=0, avg=0) Buffer(max=25088, avg=2.509e+04) 401408/0/200704 Max NoC: 0
+			conv_5_1_a 2 (K:8,B:2,W:1,H:1) util:87.5/87.5 E:7.171e+07, T:16384, Cost:1.175e+12 Ubuf/Buf/Bus/Mac:4.857e+06/3.262e+07/4.282e+04/1.85e+06 NoC(hops=2966528, DRAM acc=262144) Buffer(max=110592, avg=1.106e+05) Buffer(max=131072, avg=1.311e+05) Buffer(max=100352, avg=1.004e+05) 200704/1048576/50176 Max NoC: 0
+			conv_5_1_b 2 (K:16,W:1,H:1,B:1) util:81.55/81.55 E:1.287e+08, T:36864, Cost:4.746e+12 Ubuf/Buf/Bus/Mac:5.187e+06/6.982e+07/6.173e+04/4.162e+06 NoC(hops=2522112, DRAM acc=589824) Buffer(max=60416, avg=6.042e+04) Buffer(max=147456, avg=1.475e+05) Buffer(max=50176, avg=5.018e+04) 50176/2359296/50176 Max NoC: 0
+			conv_5_1_c 2 (K:16,W:1,H:1,B:1) util:87.5/87.5 E:6.122e+07, T:16384, Cost:1.003e+12 Ubuf/Buf/Bus/Mac:2.931e+06/3.207e+07/2.367e+04/1.85e+06 NoC(hops=1539072, DRAM acc=262144) Buffer(max=60416, avg=6.042e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=50176, avg=5.018e+04) 50176/1048576/200704 Max NoC: 0
+			conv_5_1_res 2 (K:16,W:1,H:1,B:1) util:98/98 E:3.147e+07, T:25088, Cost:7.895e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=1204224, DRAM acc=401408) Buffer(max=35328, avg=3.533e+04) Buffer(max=0, avg=0) Buffer(max=25088, avg=2.509e+04) 401408/0/200704 Max NoC: 0
+			conv_5_2_a 2 (K:8,B:2,W:1,H:1) util:87.5/87.5 E:7.556e+07, T:19520, Cost:1.475e+12 Ubuf/Buf/Bus/Mac:4.857e+06/3.262e+07/4.282e+04/1.85e+06 NoC(hops=3117056, DRAM acc=312320) Buffer(max=110592, avg=1.106e+05) Buffer(max=131072, avg=1.311e+05) Buffer(max=100352, avg=1.004e+05) 200704/1048576/50176 Max NoC: 0
+		T 2/1 E:2.535e+08, T:101066, Cost:2.562e+13 Ubuf/Buf/Bus/Mac:1.183e+07/1.034e+08/1.238e+05/6.097e+06 NoC(hops=6266736, DRAM acc=1616848) Buffer(max=323584, avg=3.236e+05) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+			conv_5_2_b 2 (K:16,W:1,H:1,B:1) util:81.55/81.55 E:1.318e+08, T:40000, Cost:5.27e+12 Ubuf/Buf/Bus/Mac:5.187e+06/6.982e+07/6.173e+04/4.162e+06 NoC(hops=2522112, DRAM acc=640000) Buffer(max=60416, avg=6.042e+04) Buffer(max=147456, avg=1.475e+05) Buffer(max=50176, avg=5.018e+04) 50176/2359296/50176 Max NoC: 0
+			conv_5_2_c 2 (K:16,W:1,H:1,B:1) util:87.5/87.5 E:6.122e+07, T:16384, Cost:1.003e+12 Ubuf/Buf/Bus/Mac:2.931e+06/3.207e+07/2.367e+04/1.85e+06 NoC(hops=1539072, DRAM acc=262144) Buffer(max=60416, avg=6.042e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=50176, avg=5.018e+04) 50176/1048576/200704 Max NoC: 0
+			conv_5_2_res 2 (K:16,W:1,H:1,B:1) util:98/98 E:1.606e+07, T:12544, Cost:2.014e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=602112, DRAM acc=200704) Buffer(max=35328, avg=3.533e+04) Buffer(max=0, avg=0) Buffer(max=25088, avg=2.509e+04) 401408/0/200704 Max NoC: 0
+			pool5 2 (K:16,W:1,H:1,B:1) util:94.23/94.23 E:2.194e+05, T:13, Cost:2.852e+06 Ubuf/Buf/Bus/Mac:2.158e+05/0/0/3613 NoC(hops=0, DRAM acc=0) Buffer(max=22784, avg=2.278e+04) Buffer(max=0, avg=0) Buffer(max=12544, avg=1.254e+04) 200704/0/4096 Max NoC: 0
+			fc 2 (K:16,W:1,H:1,B:1) util:98.44/98.44 E:4.429e+07, T:32125, Cost:1.423e+12 Ubuf/Buf/Bus/Mac:2.863e+06/1.494e+06/3.845e+04/7.432e+04 NoC(hops=1603440, DRAM acc=514000) Buffer(max=14336, avg=1.434e+04) Buffer(max=129024, avg=1.28e+05) Buffer(max=4096, avg=4096) 4096/2048000/2000 Max NoC: 0
+[Warning] After 30 tries.
+239 5.061e+17 3.308
+479 2.876e+17 2.833
+719 2.571e+17 2.587
+959 2.685e+17 2.904
+1199 2.733e+17 2.833
+1439 2.287e+17 2.938
+1679 2.272e+17 3.121
+1919 2.282e+17 2.913
+2159 1.997e+17 2.829
+2399 1.945e+17 3.1
+2639 2.053e+17 2.896
+2879 1.824e+17 2.854
+3119 1.76e+17 2.571
+3359 1.676e+17 2.883
+3599 1.651e+17 2.812
+3839 1.606e+17 2.742
+4079 1.626e+17 2.733
+4319 1.609e+17 2.837
+4559 1.559e+17 2.825
+4799 1.573e+17 3.158
+5039 1.533e+17 3.233
+5279 1.542e+17 2.7
+5519 1.54e+17 2.675
+5759 1.537e+17 3.158
+5999 1.529e+17 3.108
+6239 1.533e+17 2.692
+6479 1.531e+17 2.783
+Switch to best solution.
+6719 1.529e+17 3.433
+6959 1.53e+17 3
+7199 1.529e+17 3.054
+Elapsed: 9s Valid: 5036 (69.94%) Accept: 1094 (15.19%)
+Per OP: 71/118, 54/101, 279/2473, 306/1098, 31/39, 37/53, 316/1154
+239 3.959e+17 3.596
+479 3.103e+17 3.154
+719 2.019e+17 3.362
+959 1.904e+17 2.962
+1199 2.052e+17 3.108
+1439 2.105e+17 3.079
+1679 1.863e+17 3.058
+1919 1.845e+17 3.083
+2159 1.887e+17 3.171
+2399 1.772e+17 3.271
+2639 1.839e+17 3.158
+2879 1.619e+17 3.013
+3119 1.509e+17 2.879
+3359 1.589e+17 3.121
+3599 1.583e+17 2.967
+3839 1.475e+17 2.892
+4079 1.458e+17 3.079
+4319 1.446e+17 3.321
+4559 1.389e+17 3.096
+4799 1.28e+17 3.196
+5039 1.237e+17 2.817
+5279 1.237e+17 3.038
+5519 1.238e+17 3.225
+5759 1.235e+17 2.946
+5999 1.237e+17 3.058
+6239 1.238e+17 2.929
+6479 1.237e+17 2.892
+Switch to best solution.
+6719 1.235e+17 3.288
+6959 1.235e+17 2.788
+7199 1.235e+17 3.008
+Elapsed: 11s Valid: 5648 (78.44%) Accept: 1097 (15.24%)
+Per OP: 61/129, 59/112, 307/3074, 331/1248, 1/1, 6/6, 332/1078
+239 4.306e+17 2.913
+479 4.158e+17 3.038
+719 2.764e+17 3.242
+959 2.373e+17 3.271
+1199 2.193e+17 2.754
+1439 2.238e+17 3.233
+1679 2.133e+17 3.146
+1919 2.056e+17 2.542
+2159 2.072e+17 2.858
+2399 2.063e+17 3.062
+2639 1.836e+17 2.629
+2879 1.875e+17 2.6
+3119 1.922e+17 2.996
+3359 1.799e+17 2.804
+3599 1.775e+17 2.867
+3839 1.791e+17 3.321
+4079 1.694e+17 2.858
+4319 1.712e+17 3.237
+4559 1.706e+17 2.804
+4799 1.702e+17 3.029
+5039 1.71e+17 2.9
+5279 1.718e+17 2.842
+5519 1.723e+17 2.729
+5759 1.701e+17 2.987
+5999 1.701e+17 2.962
+6239 1.701e+17 2.783
+6479 1.701e+17 3.046
+Switch to best solution.
+6719 1.694e+17 3.042
+6959 1.694e+17 2.904
+7199 1.694e+17 3.013
+Elapsed: 11s Valid: 5575 (77.43%) Accept: 981 (13.62%)
+Per OP: 37/107, 43/103, 272/2842, 295/1298, 12/13, 15/19, 307/1193
+239 3.192e+17 3.712
+479 3.21e+17 2.867
+719 3.234e+17 3.188
+959 2.685e+17 3.1
+1199 2.644e+17 3.167
+1439 2.301e+17 2.596
+1679 2.32e+17 2.858
+1919 2.216e+17 3.221
+2159 2.071e+17 3.083
+2399 2.072e+17 2.962
+2639 2.123e+17 2.983
+2879 2.162e+17 2.971
+3119 2.023e+17 3.3
+3359 1.988e+17 2.9
+3599 1.769e+17 2.883
+3839 1.836e+17 2.992
+4079 1.757e+17 3.042
+4319 1.785e+17 3.008
+4559 1.773e+17 2.587
+4799 1.753e+17 3.025
+5039 1.751e+17 3.025
+5279 1.753e+17 2.875
+5519 1.766e+17 2.825
+5759 1.751e+17 3.263
+5999 1.755e+17 3.171
+6239 1.754e+17 3.075
+6479 1.726e+17 2.754
+6719 1.695e+17 2.908
+6959 1.695e+17 3.104
+7199 1.695e+17 2.933
+Elapsed: 8s Valid: 5443 (75.6%) Accept: 1079 (14.99%)
+Per OP: 57/115, 63/125, 306/2834, 332/1237, 0/0, 3/3, 318/1129
+SA-BASE: E:1.956e+10, T:6314440, Cost:1.235e+17, Ubuf/Buf/Bus/Mac/NoC/DRAM:1.174e+09/9.725e+09/9.844e+06/5.683e+08/3.366e+09/4.713e+09
+Struct: 
+	T 8/8 E:1.956e+10, T:6314440, Cost:1.235e+17 Ubuf/Buf/Bus/Mac:1.174e+09/9.725e+09/9.844e+06/5.683e+08 NoC(hops=601048560, DRAM acc=78551128) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+		T 1/1 E:3.06e+08, T:94610, Cost:2.895e+13 Ubuf/Buf/Bus/Mac:1.938e+07/1.58e+08/9.735e+04/9.423e+06 NoC(hops=8646923, DRAM acc=1177891) Buffer(max=214336, avg=2.032e+05) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+			conv1 1 (H:2,K:4,W:2,B:1) util:76.56/76.56 E:5.364e+07, T:9907, Cost:5.314e+11 Ubuf/Buf/Bus/Mac:3.246e+06/3.472e+07/1.513e+04/2.124e+06 NoC(hops=718539, DRAM acc=158499) Buffer(max=49915, avg=4.957e+04) Buffer(max=2352, avg=2352) Buffer(max=39675, avg=3.933e+04) 150528/9408/802816 Max NoC: 0
+			pool1 1 (H:2,K:4,W:2,B:1) util:99.32/99.32 E:1.308e+06, T:111, Cost:1.451e+08 Ubuf/Buf/Bus/Mac:1.073e+06/0/0/3.251e+04 NoC(hops=36160, DRAM acc=0) Buffer(max=62224, avg=6.132e+04) Buffer(max=0, avg=0) Buffer(max=51984, avg=5.108e+04) 802816/0/200704 Max NoC: 0
+			S 1/1 E:9.253e+07, T:18000, Cost:1.666e+12 Ubuf/Buf/Bus/Mac:8.68e+06/7.146e+07/5.199e+04/4.232e+06 NoC(hops=1348864, DRAM acc=9216) Buffer(max=83264, avg=7.571e+04) Buffer(max=30720, avg=2.714e+04) Buffer(max=90944, avg=7.802e+04) Max NoC: 0
+				conv_2_br 1 (H:2,W:2,B:1,K:1) util:87.5/87.5 E:2.229e+07, T:14336, Cost:3.195e+11 Ubuf/Buf/Bus/Mac:2.828e+06/1.58e+07/1.565e+04/9.248e+05 NoC(hops=463872, DRAM acc=2048) Buffer(max=60416, avg=6.042e+04) Buffer(max=16384, avg=1.638e+04) Buffer(max=50176, avg=5.018e+04) 200704/16384/802816 Max NoC: 0
+				T 1/1 E:7.025e+07, T:18000, Cost:1.264e+12 Ubuf/Buf/Bus/Mac:5.852e+06/5.566e+07/3.634e+04/3.307e+06 NoC(hops=884992, DRAM acc=7168) Buffer(max=83264, avg=8.081e+04) Buffer(max=30720, avg=3.072e+04) Buffer(max=90944, avg=8.73e+04) Max NoC: 0
+					conv_2_0_a 1 (H:2,W:6,B:1,K:1) util:87.5/87.5 E:7.494e+06, T:1280, Cost:9.592e+09 Ubuf/Buf/Bus/Mac:9.352e+05/4.296e+06/4769/2.477e+05 NoC(hops=353408, DRAM acc=512) Buffer(max=28160, avg=2.697e+04) Buffer(max=4096, avg=4096) Buffer(max=17920, avg=1.673e+04) 200704/4096/200704 Max NoC: 0
+					conv_2_0_b 1 (H:2,W:3,K:2,B:1) util:80.77/80.77 E:4.121e+07, T:11856, Cost:4.885e+11 Ubuf/Buf/Bus/Mac:1.807e+06/3.522e+07/1.507e+04/2.118e+06 NoC(hops=315520, DRAM acc=4608) Buffer(max=49216, avg=4.736e+04) Buffer(max=18432, avg=1.843e+04) Buffer(max=38976, avg=3.712e+04) 200704/36864/200704 Max NoC: 0
+					conv_2_0_c 1 (H:2,W:3,K:2,B:1) util:87.5/87.5 E:2.155e+07, T:4864, Cost:1.048e+11 Ubuf/Buf/Bus/Mac:3.109e+06/1.615e+07/1.651e+04/9.414e+05 NoC(hops=216064, DRAM acc=2048) Buffer(max=44288, avg=4.369e+04) Buffer(max=8192, avg=8192) Buffer(max=34048, avg=3.345e+04) 200704/16384/802816 Max NoC: 0
+			conv_2_0_res 1 (H:2,W:4,K:2,B:1) util:100/100 E:8.06e+07, T:50176, Cost:4.044e+12 Ubuf/Buf/Bus/Mac:2.538e+06/0/0/2.89e+04 NoC(hops=5332992, DRAM acc=802816) Buffer(max=110592, avg=1.106e+05) Buffer(max=0, avg=0) Buffer(max=100352, avg=1.004e+05) 1605632/0/802816 Max NoC: 0
+			conv_2_1_a 1 (H:2,W:8,B:1,K:1) util:87.5/87.5 E:2.157e+07, T:3584, Cost:7.731e+10 Ubuf/Buf/Bus/Mac:1.808e+06/1.629e+07/8626/9.248e+05 NoC(hops=432128, DRAM acc=2048) Buffer(max=60416, avg=6.042e+04) Buffer(max=16384, avg=1.638e+04) Buffer(max=50176, avg=5.018e+04) 802816/16384/200704 Max NoC: 0
+			conv_2_1_b 1 (H:2,W:8,B:1,K:1) util:80.77/80.77 E:5.63e+07, T:12832, Cost:7.225e+11 Ubuf/Buf/Bus/Mac:2.039e+06/3.548e+07/2.16e+04/2.081e+06 NoC(hops=778240, DRAM acc=205312) Buffer(max=26944, avg=2.648e+04) Buffer(max=36864, avg=3.686e+04) Buffer(max=16704, avg=1.624e+04) 200704/36864/200704 Max NoC: 0
+		T 1/1 E:1.031e+09, T:372377, Cost:3.84e+14 Ubuf/Buf/Bus/Mac:6.175e+07/4.998e+08/4.727e+05/2.924e+07 NoC(hops=35185982, DRAM acc=4046336) Buffer(max=928768, avg=4.829e+05) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+			conv_2_1_c 1 (H:8,W:2,B:1,K:1) util:87.5/87.5 E:3.551e+07, T:12672, Cost:4.5e+11 Ubuf/Buf/Bus/Mac:3.061e+06/1.58e+07/1.919e+04/9.248e+05 NoC(hops=632832, DRAM acc=202752) Buffer(max=22784, avg=2.278e+04) Buffer(max=16384, avg=1.638e+04) Buffer(max=12544, avg=1.254e+04) 200704/16384/802816 Max NoC: 0
+			conv_2_1_res 1 (H:8,W:2,B:1,K:1) util:100/100 E:1.259e+08, T:100352, Cost:1.263e+13 Ubuf/Buf/Bus/Mac:2.538e+06/0/0/2.89e+04 NoC(hops=4816896, DRAM acc=1605632) Buffer(max=110592, avg=1.106e+05) Buffer(max=0, avg=0) Buffer(max=100352, avg=1.004e+05) 1605632/0/802816 Max NoC: 0
+			conv_2_2_a 1 (H:8,W:2,B:1,K:1) util:87.5/87.5 E:1.891e+07, T:3584, Cost:6.778e+10 Ubuf/Buf/Bus/Mac:1.795e+06/1.589e+07/8405/9.248e+05 NoC(hops=30720, DRAM acc=2048) Buffer(max=60416, avg=6.042e+04) Buffer(max=16384, avg=1.638e+04) Buffer(max=50176, avg=5.018e+04) 802816/16384/200704 Max NoC: 0
+			conv_2_2_b 1 (H:8,W:2,B:1,K:1) util:80.77/80.77 E:3.962e+07, T:8736, Cost:3.461e+11 Ubuf/Buf/Bus/Mac:2.033e+06/3.444e+07/2.149e+04/2.081e+06 NoC(hops=137216, DRAM acc=4608) Buffer(max=26944, avg=2.648e+04) Buffer(max=36864, avg=3.686e+04) Buffer(max=16704, avg=1.624e+04) 200704/36864/200704 Max NoC: 0
+			conv_2_2_c 1 (H:8,W:2,B:1,K:1) util:87.5/87.5 E:2.01e+07, T:3584, Cost:7.204e+10 Ubuf/Buf/Bus/Mac:3.061e+06/1.58e+07/1.919e+04/9.248e+05 NoC(hops=30720, DRAM acc=2048) Buffer(max=22784, avg=2.278e+04) Buffer(max=16384, avg=1.638e+04) Buffer(max=12544, avg=1.254e+04) 200704/16384/802816 Max NoC: 0
+			conv_2_2_res 1 (H:8,W:2,B:1,K:1) util:100/100 E:6.422e+07, T:50176, Cost:3.222e+12 Ubuf/Buf/Bus/Mac:2.538e+06/0/0/2.89e+04 NoC(hops=2408448, DRAM acc=802816) Buffer(max=110592, avg=1.106e+05) Buffer(max=0, avg=0) Buffer(max=100352, avg=1.004e+05) 1605632/0/802816 Max NoC: 0
+			S 1/1 E:1.17e+08, T:19900, Cost:2.328e+12 Ubuf/Buf/Bus/Mac:6.012e+06/8.072e+07/4.534e+04/4.627e+06 NoC(hops=4149016, DRAM acc=38912) Buffer(max=142080, avg=1.198e+05) Buffer(max=131072, avg=1.034e+05) Buffer(max=131840, avg=1.096e+05) Max NoC: 0
+				conv_3_br 1 (H:7,W:1,B:1,K:1) util:100/100 E:4.976e+07, T:14336, Cost:7.134e+11 Ubuf/Buf/Bus/Mac:3.091e+06/3.356e+07/2.387e+04/1.85e+06 NoC(hops=1830144, DRAM acc=16384) Buffer(max=108800, avg=1.088e+05) Buffer(max=131072, avg=1.311e+05) Buffer(max=98560, avg=9.856e+04) 774400/131072/401408 Max NoC: 0
+				T 1/1 E:6.722e+07, T:19900, Cost:1.338e+12 Ubuf/Buf/Bus/Mac:2.921e+06/4.716e+07/2.147e+04/2.778e+06 NoC(hops=2318872, DRAM acc=22528) Buffer(max=142080, avg=1.284e+05) Buffer(max=82304, avg=8.192e+04) Buffer(max=131840, avg=1.181e+05) Max NoC: 0
+					conv_3_0_a 1 (W:3,H:3,B:1,K:1) util:90.91/90.91 E:2.166e+07, T:3520, Cost:7.623e+10 Ubuf/Buf/Bus/Mac:1.463e+06/9.862e+06/7506/5.308e+05 NoC(hops=1704960, DRAM acc=4096) Buffer(max=102656, avg=9.014e+04) Buffer(max=32768, avg=3.277e+04) Buffer(max=92416, avg=7.99e+04) 774400/32768/100352 Max NoC: 0
+					conv_3_0_b 1 (H:3,K:3,W:1,B:1) util:82.69/82.69 E:4.556e+07, T:16380, Cost:7.463e+11 Ubuf/Buf/Bus/Mac:1.458e+06/3.73e+07/1.396e+04/2.247e+06 NoC(hops=613912, DRAM acc=18432) Buffer(max=49664, avg=4.847e+04) Buffer(max=49536, avg=4.915e+04) Buffer(max=39424, avg=3.823e+04) 100352/147456/100352 Max NoC: 0
+			S 1/1 E:5.321e+07, T:14532, Cost:7.733e+11 Ubuf/Buf/Bus/Mac:4.443e+06/3.202e+07/2.356e+04/1.864e+06 NoC(hops=2477246, DRAM acc=16384) Buffer(max=135680, avg=9.805e+04) Buffer(max=65536, avg=4.915e+04) Buffer(max=125440, avg=8.781e+04) Max NoC: 0
+				T 1/1 E:2.67e+07, T:7266, Cost:1.94e+11 Ubuf/Buf/Bus/Mac:3.064e+06/1.599e+07/1.202e+04/9.393e+05 NoC(hops=1107134, DRAM acc=8192) Buffer(max=135680, avg=1.357e+05) Buffer(max=32768, avg=3.277e+04) Buffer(max=125440, avg=1.254e+05) Max NoC: 0
+					conv_3_0_c 1 (W:2,K:2,H:2,B:1) util:87.5/87.5 E:2.156e+07, T:7168, Cost:1.545e+11 Ubuf/Buf/Bus/Mac:1.795e+06/1.599e+07/1.202e+04/9.248e+05 NoC(hops=419006, DRAM acc=8192) Buffer(max=35328, avg=3.533e+04) Buffer(max=32768, avg=3.277e+04) Buffer(max=25088, avg=2.509e+04) 100352/65536/401408 Max NoC: 0
+					conv_3_0_res 1 (W:2,K:2,H:2,B:1) util:100/100 E:5.137e+06, T:98, Cost:5.034e+08 Ubuf/Buf/Bus/Mac:1.269e+06/0/0/1.445e+04 NoC(hops=688128, DRAM acc=0) Buffer(max=110592, avg=1.106e+05) Buffer(max=0, avg=0) Buffer(max=100352, avg=1.004e+05) 802816/0/401408 Max NoC: 0
+				conv_3_1_a 1 (H:4,W:2,B:1,K:1) util:87.5/87.5 E:2.651e+07, T:7168, Cost:1.901e+11 Ubuf/Buf/Bus/Mac:1.379e+06/1.603e+07/1.154e+04/9.248e+05 NoC(hops=1370112, DRAM acc=8192) Buffer(max=60416, avg=6.042e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=50176, avg=5.018e+04) 401408/65536/100352 Max NoC: 0
+			S 1/1 E:1.184e+08, T:50176, Cost:5.94e+12 Ubuf/Buf/Bus/Mac:7.268e+06/5.391e+07/7.116e+04/3.235e+06 NoC(hops=5038080, DRAM acc=428032) Buffer(max=813056, avg=7.923e+04) Buffer(max=212992, avg=2.13e+05) Buffer(max=802816, avg=6.899e+04) Max NoC: 0
+				T 1/1 E:7.005e+07, T:12320, Cost:8.63e+11 Ubuf/Buf/Bus/Mac:5.999e+06/5.391e+07/7.116e+04/3.22e+06 NoC(hops=937984, DRAM acc=26624) Buffer(max=31744, avg=3.031e+04) Buffer(max=212992, avg=2.13e+05) Buffer(max=21504, avg=2.007e+04) Max NoC: 0
+					conv_3_1_b 1 (H:15,W:1,B:1,K:1) util:92.31/92.31 E:4.828e+07, T:8736, Cost:4.218e+11 Ubuf/Buf/Bus/Mac:3.396e+06/3.691e+07/4.569e+04/2.23e+06 NoC(hops=819200, DRAM acc=18432) Buffer(max=24576, avg=2.362e+04) Buffer(max=147456, avg=1.475e+05) Buffer(max=14336, avg=1.338e+04) 100352/147456/100352 Max NoC: 0
+					conv_3_1_c 1 (H:15,W:1,B:1,K:1) util:100/100 E:2.177e+07, T:3584, Cost:7.801e+10 Ubuf/Buf/Bus/Mac:2.602e+06/1.699e+07/2.547e+04/9.909e+05 NoC(hops=118784, DRAM acc=8192) Buffer(max=17408, avg=1.693e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=7168, avg=6690) 100352/65536/401408 Max NoC: 0
+				conv_3_1_res 1 (W:1,H:1,B:1,K:1) util:100/100 E:4.833e+07, T:25088, Cost:1.212e+12 Ubuf/Buf/Bus/Mac:1.269e+06/0/0/1.445e+04 NoC(hops=4100096, DRAM acc=401408) Buffer(max=813056, avg=8.131e+05) Buffer(max=0, avg=0) Buffer(max=802816, avg=8.028e+05) 802816/0/401408 Max NoC: 0
+			conv_3_2_a 1 (H:4,W:4,B:1,K:1) util:87.5/87.5 E:2.719e+07, T:3584, Cost:9.744e+10 Ubuf/Buf/Bus/Mac:2.018e+06/1.63e+07/2.127e+04/9.248e+05 NoC(hops=1327104, DRAM acc=8192) Buffer(max=35328, avg=3.533e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=25088, avg=2.509e+04) 401408/65536/100352 Max NoC: 0
+			conv_3_2_b 1 (H:4,W:2,K:2,B:1) util:80.77/80.77 E:4.24e+07, T:8736, Cost:3.704e+11 Ubuf/Buf/Bus/Mac:2.211e+06/3.48e+07/2.68e+04/2.081e+06 NoC(hops=388864, DRAM acc=18432) Buffer(max=27520, avg=2.656e+04) Buffer(max=73728, avg=7.373e+04) Buffer(max=17280, avg=1.632e+04) 100352/147456/100352 Max NoC: 0
+			conv_3_2_c 1 (H:4,W:2,K:2,B:1) util:87.5/87.5 E:2.048e+07, T:3584, Cost:7.341e+10 Ubuf/Buf/Bus/Mac:2.106e+06/1.599e+07/1.674e+04/9.248e+05 NoC(hops=169984, DRAM acc=8192) Buffer(max=22784, avg=2.278e+04) Buffer(max=32768, avg=3.277e+04) Buffer(max=12544, avg=1.254e+04) 100352/65536/401408 Max NoC: 0
+			S 1/1 E:1.348e+08, T:50176, Cost:6.764e+12 Ubuf/Buf/Bus/Mac:9.196e+06/7.094e+07/9.093e+04/4.226e+06 NoC(hops=4318208, DRAM acc=436224) Buffer(max=813056, avg=9.805e+04) Buffer(max=278528, avg=2.785e+05) Buffer(max=802816, avg=9.408e+04) Max NoC: 0
+				conv_3_2_res 1 (W:1,H:1,B:1,K:1) util:100/100 E:3.886e+07, T:25088, Cost:9.748e+11 Ubuf/Buf/Bus/Mac:1.269e+06/0/0/1.445e+04 NoC(hops=2408448, DRAM acc=401408) Buffer(max=813056, avg=8.131e+05) Buffer(max=0, avg=0) Buffer(max=802816, avg=8.028e+05) 802816/0/401408 Max NoC: 0
+				T 1/1 E:9.596e+07, T:15904, Cost:1.526e+12 Ubuf/Buf/Bus/Mac:7.927e+06/7.094e+07/9.093e+04/4.211e+06 NoC(hops=1909760, DRAM acc=34816) Buffer(max=53248, avg=5.038e+04) Buffer(max=278528, avg=2.785e+05) Buffer(max=50176, avg=4.683e+04) Max NoC: 0
+					conv_3_3_a 1 (H:15,W:1,B:1,K:1) util:100/100 E:2.82e+07, T:3584, Cost:1.011e+11 Ubuf/Buf/Bus/Mac:1.929e+06/1.704e+07/1.977e+04/9.909e+05 NoC(hops=1380352, DRAM acc=8192) Buffer(max=38912, avg=3.7e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=28672, avg=2.676e+04) 401408/65536/100352 Max NoC: 0
+					conv_3_3_b 1 (H:15,W:1,B:1,K:1) util:92.31/92.31 E:4.599e+07, T:8736, Cost:4.018e+11 Ubuf/Buf/Bus/Mac:3.396e+06/3.691e+07/4.569e+04/2.23e+06 NoC(hops=410624, DRAM acc=18432) Buffer(max=24576, avg=2.362e+04) Buffer(max=147456, avg=1.475e+05) Buffer(max=14336, avg=1.338e+04) 100352/147456/100352 Max NoC: 0
+					conv_3_3_c 1 (H:15,W:1,B:1,K:1) util:100/100 E:2.177e+07, T:3584, Cost:7.801e+10 Ubuf/Buf/Bus/Mac:2.602e+06/1.699e+07/2.547e+04/9.909e+05 NoC(hops=118784, DRAM acc=8192) Buffer(max=17408, avg=1.693e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=7168, avg=6690) 100352/65536/401408 Max NoC: 0
+			conv_3_3_res 1 (H:4,K:4,W:1,B:1) util:100/100 E:1.036e+07, T:49, Cost:5.074e+08 Ubuf/Buf/Bus/Mac:1.269e+06/0/0/1.445e+04 NoC(hops=1619968, DRAM acc=0) Buffer(max=60416, avg=6.042e+04) Buffer(max=0, avg=0) Buffer(max=50176, avg=5.018e+04) 802816/0/401408 Max NoC: 0
+			S 1/1 E:7.188e+07, T:9632, Cost:6.923e+11 Ubuf/Buf/Bus/Mac:5.453e+06/4.291e+07/5.329e+04/2.316e+06 NoC(hops=2899392, DRAM acc=81920) Buffer(max=96768, avg=9.677e+04) Buffer(max=175104, avg=1.638e+05) Buffer(max=86528, avg=8.653e+04) Max NoC: 0
+				conv_4_0_a 1 (W:2,H:2,B:1,K:1) util:87.5/87.5 E:1.608e+07, T:7168, Cost:1.152e+11 Ubuf/Buf/Bus/Mac:1.162e+06/8.548e+06/1.064e+04/4.624e+05 NoC(hops=877056, DRAM acc=16384) Buffer(max=96768, avg=9.677e+04) Buffer(max=131072, avg=1.311e+05) Buffer(max=86528, avg=8.653e+04) 373248/131072/50176 Max NoC: 0
+				conv_4_br 1 (H:2,K:3,W:2,B:1) util:86.99/86.99 E:5.58e+07, T:9632, Cost:5.375e+11 Ubuf/Buf/Bus/Mac:4.291e+06/3.436e+07/4.266e+04/1.853e+06 NoC(hops=2022336, DRAM acc=65536) Buffer(max=96768, avg=9.677e+04) Buffer(max=175104, avg=1.748e+05) Buffer(max=86528, avg=8.653e+04) 373248/524288/200704 Max NoC: 0
+			S 1/1 E:9.908e+07, T:27720, Cost:2.747e+12 Ubuf/Buf/Bus/Mac:4.435e+06/5.399e+07/3.442e+04/3.194e+06 NoC(hops=3392680, DRAM acc=307200) Buffer(max=411648, avg=9.805e+04) Buffer(max=93952, avg=9.175e+04) Buffer(max=401408, avg=8.781e+04) Max NoC: 0
+				T 1/1 E:7.595e+07, T:13860, Cost:1.053e+12 Ubuf/Buf/Bus/Mac:3.8e+06/5.399e+07/3.442e+04/3.187e+06 NoC(hops=1526004, DRAM acc=106496) Buffer(max=78336, avg=7.714e+04) Buffer(max=93952, avg=9.175e+04) Buffer(max=68096, avg=6.69e+04) Max NoC: 0
+					conv_4_0_b 1 (K:15,W:1,H:1,B:1) util:80.77/80.77 E:5.049e+07, T:9828, Cost:4.962e+11 Ubuf/Buf/Bus/Mac:1.926e+06/3.662e+07/1.617e+04/2.195e+06 NoC(hops=948736, DRAM acc=73728) Buffer(max=60416, avg=6.042e+04) Buffer(max=41472, avg=3.932e+04) Buffer(max=50176, avg=5.018e+04) 50176/589824/50176 Max NoC: 0
+					conv_4_0_c 1 (H:3,K:5,W:1,B:1) util:88.98/88.98 E:2.545e+07, T:4032, Cost:1.026e+11 Ubuf/Buf/Bus/Mac:1.875e+06/1.737e+07/1.825e+04/9.919e+05 NoC(hops=577268, DRAM acc=32768) Buffer(max=28160, avg=2.697e+04) Buffer(max=52480, avg=5.243e+04) Buffer(max=17920, avg=1.673e+04) 50176/262144/200704 Max NoC: 0
+				conv_4_0_res 1 (W:1,H:1,B:1,K:1) util:100/100 E:2.314e+07, T:12544, Cost:2.902e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=1866676, DRAM acc=200704) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 401408/0/200704 Max NoC: 0
+			conv_4_1_a 1 (H:2,K:4,W:2,B:1) util:87.5/87.5 E:3.21e+07, T:5184, Cost:1.664e+11 Ubuf/Buf/Bus/Mac:2.317e+06/1.631e+07/2.096e+04/9.248e+05 NoC(hops=1348608, DRAM acc=82944) Buffer(max=60416, avg=6.042e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=50176, avg=5.018e+04) 200704/262144/50176 Max NoC: 0
+		T 1/1 E:5.15e+08, T:146920, Cost:7.566e+13 Ubuf/Buf/Bus/Mac:2.987e+07/2.726e+08/2.763e+05/1.6e+07 NoC(hops=15100660, DRAM acc=1861632) Buffer(max=506624, avg=5.002e+05) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+			conv_4_1_b 1 (K:16,W:1,H:1,B:1) util:80.77/80.77 E:5.172e+07, T:8736, Cost:4.518e+11 Ubuf/Buf/Bus/Mac:1.924e+06/3.481e+07/1.528e+04/2.081e+06 NoC(hops=973824, DRAM acc=123904) Buffer(max=60416, avg=6.042e+04) Buffer(max=36864, avg=3.686e+04) Buffer(max=50176, avg=5.018e+04) 50176/589824/50176 Max NoC: 0
+			conv_4_1_c 1 (H:2,K:8,W:1,B:1) util:87.5/87.5 E:2.38e+07, T:3584, Cost:8.529e+10 Ubuf/Buf/Bus/Mac:1.688e+06/1.602e+07/1.32e+04/9.248e+05 NoC(hops=569088, DRAM acc=32768) Buffer(max=35328, avg=3.533e+04) Buffer(max=32768, avg=3.277e+04) Buffer(max=25088, avg=2.509e+04) 50176/262144/200704 Max NoC: 0
+			conv_4_1_res 1 (H:2,K:8,W:1,B:1) util:98/98 E:3.147e+07, T:25088, Cost:7.895e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=1204224, DRAM acc=401408) Buffer(max=35328, avg=3.533e+04) Buffer(max=0, avg=0) Buffer(max=25088, avg=2.509e+04) 401408/0/200704 Max NoC: 0
+			conv_4_2_a 1 (H:2,K:4,W:2,B:1) util:87.5/87.5 E:2.712e+07, T:3584, Cost:9.72e+10 Ubuf/Buf/Bus/Mac:2.317e+06/1.631e+07/2.096e+04/9.248e+05 NoC(hops=997376, DRAM acc=32768) Buffer(max=60416, avg=6.042e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=50176, avg=5.018e+04) 200704/262144/50176 Max NoC: 0
+			conv_4_2_b 1 (H:2,K:8,W:1,B:1) util:80.77/80.77 E:4.818e+07, T:8736, Cost:4.209e+11 Ubuf/Buf/Bus/Mac:2.26e+06/3.481e+07/2.59e+04/2.081e+06 NoC(hops=817664, DRAM acc=73728) Buffer(max=38912, avg=3.891e+04) Buffer(max=73728, avg=7.373e+04) Buffer(max=28672, avg=2.867e+04) 50176/589824/50176 Max NoC: 0
+			conv_4_2_c 1 (H:2,K:8,W:1,B:1) util:87.5/87.5 E:2.359e+07, T:3584, Cost:8.454e+10 Ubuf/Buf/Bus/Mac:1.688e+06/1.602e+07/1.32e+04/9.248e+05 NoC(hops=531456, DRAM acc=32768) Buffer(max=35328, avg=3.533e+04) Buffer(max=32768, avg=3.277e+04) Buffer(max=25088, avg=2.509e+04) 50176/262144/200704 Max NoC: 0
+			conv_4_2_res 1 (H:2,K:8,W:1,B:1) util:98/98 E:3.147e+07, T:25088, Cost:7.895e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=1204224, DRAM acc=401408) Buffer(max=35328, avg=3.533e+04) Buffer(max=0, avg=0) Buffer(max=25088, avg=2.509e+04) 401408/0/200704 Max NoC: 0
+			conv_4_3_a 1 (H:2,K:4,W:2,B:1) util:87.5/87.5 E:2.712e+07, T:3584, Cost:9.72e+10 Ubuf/Buf/Bus/Mac:2.317e+06/1.631e+07/2.096e+04/9.248e+05 NoC(hops=997376, DRAM acc=32768) Buffer(max=60416, avg=6.042e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=50176, avg=5.018e+04) 200704/262144/50176 Max NoC: 0
+			conv_4_3_b 1 (H:2,K:8,W:1,B:1) util:80.77/80.77 E:4.818e+07, T:8736, Cost:4.209e+11 Ubuf/Buf/Bus/Mac:2.26e+06/3.481e+07/2.59e+04/2.081e+06 NoC(hops=817664, DRAM acc=73728) Buffer(max=38912, avg=3.891e+04) Buffer(max=73728, avg=7.373e+04) Buffer(max=28672, avg=2.867e+04) 50176/589824/50176 Max NoC: 0
+			conv_4_3_c 1 (H:2,K:8,W:1,B:1) util:87.5/87.5 E:2.359e+07, T:3584, Cost:8.454e+10 Ubuf/Buf/Bus/Mac:1.688e+06/1.602e+07/1.32e+04/9.248e+05 NoC(hops=531456, DRAM acc=32768) Buffer(max=35328, avg=3.533e+04) Buffer(max=32768, avg=3.277e+04) Buffer(max=25088, avg=2.509e+04) 50176/262144/200704 Max NoC: 0
+			S 1/1 E:1.268e+08, T:34888, Cost:4.425e+12 Ubuf/Buf/Bus/Mac:9.506e+06/7.118e+07/1.067e+05/4.185e+06 NoC(hops=3831824, DRAM acc=339968) Buffer(max=411648, avg=9.805e+04) Buffer(max=356096, avg=3.539e+05) Buffer(max=401408, avg=1.004e+05) Max NoC: 0
+				conv_4_3_res 1 (W:1,H:1,B:1,K:1) util:100/100 E:1.943e+07, T:12544, Cost:2.437e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=1204224, DRAM acc=200704) Buffer(max=411648, avg=4.116e+05) Buffer(max=0, avg=0) Buffer(max=401408, avg=4.014e+05) 401408/0/200704 Max NoC: 0
+				T 1/1 E:1.074e+08, T:17444, Cost:1.874e+12 Ubuf/Buf/Bus/Mac:8.872e+06/7.118e+07/1.067e+05/4.177e+06 NoC(hops=2627600, DRAM acc=139264) Buffer(max=78336, avg=7.714e+04) Buffer(max=356096, avg=3.539e+05) Buffer(max=82432, avg=8.028e+04) Max NoC: 0
+					conv_4_4_a 1 (H:15,W:1,B:1,K:1) util:100/100 E:3.156e+07, T:3584, Cost:1.131e+11 Ubuf/Buf/Bus/Mac:5.071e+06/1.719e+07/7.23e+04/9.909e+05 NoC(hops=1120256, DRAM acc=32768) Buffer(max=24576, avg=2.458e+04) Buffer(max=262144, avg=2.621e+05) Buffer(max=14336, avg=1.434e+04) 200704/262144/50176 Max NoC: 0
+					conv_4_4_b 1 (K:15,W:1,H:1,B:1) util:80.77/80.77 E:5.039e+07, T:9828, Cost:4.953e+11 Ubuf/Buf/Bus/Mac:1.926e+06/3.662e+07/1.617e+04/2.195e+06 NoC(hops=930816, DRAM acc=73728) Buffer(max=60416, avg=6.042e+04) Buffer(max=41472, avg=3.932e+04) Buffer(max=50176, avg=5.018e+04) 50176/589824/50176 Max NoC: 0
+					conv_4_4_c 1 (H:3,K:5,W:1,B:1) util:88.98/88.98 E:2.545e+07, T:4032, Cost:1.026e+11 Ubuf/Buf/Bus/Mac:1.875e+06/1.737e+07/1.825e+04/9.919e+05 NoC(hops=576528, DRAM acc=32768) Buffer(max=28160, avg=2.697e+04) Buffer(max=52480, avg=5.243e+04) Buffer(max=17920, avg=1.673e+04) 50176/262144/200704 Max NoC: 0
+			conv_4_4_res 1 (H:16,W:1,B:1,K:1) util:100/100 E:2.095e+07, T:12544, Cost:2.628e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/8258 NoC(hops=1476580, DRAM acc=200704) Buffer(max=38912, avg=3.891e+04) Buffer(max=0, avg=0) Buffer(max=28672, avg=2.867e+04) 401408/0/200704 Max NoC: 0
+			conv_4_5_a 1 (H:2,K:4,W:2,B:1) util:87.5/87.5 E:3.097e+07, T:5184, Cost:1.606e+11 Ubuf/Buf/Bus/Mac:2.317e+06/1.631e+07/2.096e+04/9.248e+05 NoC(hops=1147904, DRAM acc=82944) Buffer(max=60416, avg=6.042e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=50176, avg=5.018e+04) 200704/262144/50176 Max NoC: 0
+		T 1/1 E:5.28e+08, T:143296, Cost:7.565e+13 Ubuf/Buf/Bus/Mac:3.074e+07/2.681e+08/3.251e+05/1.54e+07 NoC(hops=14325189, DRAM acc=2219520) Buffer(max=991232, avg=9.041e+05) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+			conv_4_5_b 1 (K:16,W:1,H:1,B:1) util:80.77/80.77 E:5.172e+07, T:8736, Cost:4.518e+11 Ubuf/Buf/Bus/Mac:1.924e+06/3.481e+07/1.528e+04/2.081e+06 NoC(hops=973824, DRAM acc=123904) Buffer(max=60416, avg=6.042e+04) Buffer(max=36864, avg=3.686e+04) Buffer(max=50176, avg=5.018e+04) 50176/589824/50176 Max NoC: 0
+			conv_4_5_c 1 (H:2,K:8,W:1,B:1) util:87.5/87.5 E:2.38e+07, T:3584, Cost:8.529e+10 Ubuf/Buf/Bus/Mac:1.688e+06/1.602e+07/1.32e+04/9.248e+05 NoC(hops=569088, DRAM acc=32768) Buffer(max=35328, avg=3.533e+04) Buffer(max=32768, avg=3.277e+04) Buffer(max=25088, avg=2.509e+04) 50176/262144/200704 Max NoC: 0
+			conv_4_5_res 1 (H:2,K:8,W:1,B:1) util:98/98 E:1.606e+07, T:12544, Cost:2.014e+11 Ubuf/Buf/Bus/Mac:6.344e+05/0/0/7225 NoC(hops=602112, DRAM acc=200704) Buffer(max=35328, avg=3.533e+04) Buffer(max=0, avg=0) Buffer(max=25088, avg=2.509e+04) 401408/0/200704 Max NoC: 0
+			S 1/1 E:1.877e+08, T:30720, Cost:5.766e+12 Ubuf/Buf/Bus/Mac:1.16e+07/9.68e+07/1.322e+05/5.424e+06 NoC(hops=5094304, DRAM acc=753664) Buffer(max=183296, avg=1.407e+05) Buffer(max=450048, avg=4.096e+05) Buffer(max=173056, avg=1.462e+05) Max NoC: 0
+				T 1/1 E:1.211e+08, T:30720, Cost:3.722e+12 Ubuf/Buf/Bus/Mac:7.555e+06/6.243e+07/9.013e+04/3.571e+06 NoC(hops=3216288, DRAM acc=491520) Buffer(max=128512, avg=1.152e+05) Buffer(max=450048, avg=4.456e+05) Buffer(max=143360, avg=1.3e+05) Max NoC: 0
+					conv_5_0_a 1 (K:5,H:2,W:1,B:1) util:99.04/99.04 E:2.439e+07, T:4096, Cost:9.989e+10 Ubuf/Buf/Bus/Mac:2.221e+06/1.003e+07/2.024e+04/5.316e+05 NoC(hops=1366016, DRAM acc=65536) Buffer(max=103424, avg=9.011e+04) Buffer(max=105472, avg=1.049e+05) Buffer(max=93184, avg=7.987e+04) 173056/524288/25088 Max NoC: 0
+					conv_5_0_b 1 (K:10,W:1,H:1,B:1) util:80.77/80.77 E:6.588e+07, T:18432, Cost:1.214e+12 Ubuf/Buf/Bus/Mac:3.47e+06/3.599e+07/4.854e+04/2.113e+06 NoC(hops=1170896, DRAM acc=294912) Buffer(max=35328, avg=3.533e+04) Buffer(max=239616, avg=2.359e+05) Buffer(max=25088, avg=2.509e+04) 25088/2359296/25088 Max NoC: 0
+					conv_5_0_c 1 (K:10,W:1,H:1,B:1) util:86.24/86.24 E:3.088e+07, T:8192, Cost:2.53e+11 Ubuf/Buf/Bus/Mac:1.864e+06/1.64e+07/2.135e+04/9.257e+05 NoC(hops=679376, DRAM acc=131072) Buffer(max=35328, avg=3.533e+04) Buffer(max=104960, avg=1.049e+05) Buffer(max=25088, avg=2.509e+04) 25088/1048576/100352 Max NoC: 0
+				conv_5_br 1 (K:6,W:1,H:1,B:1) util:86.99/86.99 E:6.656e+07, T:19264, Cost:1.282e+12 Ubuf/Buf/Bus/Mac:4.044e+06/3.437e+07/4.207e+04/1.853e+06 NoC(hops=1878016, DRAM acc=262144) Buffer(max=183296, avg=1.833e+05) Buffer(max=350208, avg=3.495e+05) Buffer(max=173056, avg=1.731e+05) 173056/2097152/100352 Max NoC: 0
+			S 1/1 E:1.313e+08, T:53248, Cost:6.992e+12 Ubuf/Buf/Bus/Mac:7.602e+06/6.865e+07/9.093e+04/3.952e+06 NoC(hops=3142736, DRAM acc=557056) Buffer(max=160768, avg=8.55e+04) Buffer(max=285696, avg=2.785e+05) Buffer(max=150528, avg=7.526e+04) Max NoC: 0
+				T 1/1 E:3.41e+07, T:14385, Cost:4.905e+11 Ubuf/Buf/Bus/Mac:2.184e+06/1.631e+07/2.141e+04/9.285e+05 NoC(hops=1212594, DRAM acc=131072) Buffer(max=160768, avg=1.608e+05) Buffer(max=262144, avg=2.621e+05) Buffer(max=150528, avg=1.505e+05) Max NoC: 0
+					conv_5_0_res 1 (K:4,W:1,H:1,B:1) util:100/100 E:3.223e+06, T:49, Cost:1.579e+08 Ubuf/Buf/Bus/Mac:3.172e+05/0/0/3613 NoC(hops=518322, DRAM acc=0) Buffer(max=60416, avg=6.042e+04) Buffer(max=0, avg=0) Buffer(max=50176, avg=5.018e+04) 200704/0/100352 Max NoC: 0
+					conv_5_1_a 1 (K:4,W:1,H:1,B:1) util:87.5/87.5 E:3.088e+07, T:14336, Cost:4.426e+11 Ubuf/Buf/Bus/Mac:1.867e+06/1.631e+07/2.141e+04/9.248e+05 NoC(hops=694272, DRAM acc=131072) Buffer(max=110592, avg=1.106e+05) Buffer(max=262144, avg=2.621e+05) Buffer(max=100352, avg=1.004e+05) 100352/1048576/25088 Max NoC: 0
+				T 1/1 E:9.722e+07, T:26624, Cost:2.588e+12 Ubuf/Buf/Bus/Mac:5.418e+06/5.234e+07/6.952e+04/3.024e+06 NoC(hops=1930142, DRAM acc=425984) Buffer(max=60416, avg=6.042e+04) Buffer(max=285696, avg=2.84e+05) Buffer(max=50176, avg=5.018e+04) Max NoC: 0
+					conv_5_1_b 1 (K:12,W:1,H:1,B:1) util:78.93/78.93 E:6.615e+07, T:18432, Cost:1.219e+12 Ubuf/Buf/Bus/Mac:3.499e+06/3.589e+07/4.814e+04/2.097e+06 NoC(hops=1235968, DRAM acc=294912) Buffer(max=35328, avg=3.533e+04) Buffer(max=198144, avg=1.966e+05) Buffer(max=25088, avg=2.509e+04) 25088/2359296/25088 Max NoC: 0
+					conv_5_1_c 1 (K:12,W:1,H:1,B:1) util:85.01/85.01 E:3.106e+07, T:8192, Cost:2.545e+11 Ubuf/Buf/Bus/Mac:1.919e+06/1.645e+07/2.138e+04/9.267e+05 NoC(hops=694174, DRAM acc=131072) Buffer(max=35328, avg=3.533e+04) Buffer(max=87552, avg=8.738e+04) Buffer(max=25088, avg=2.509e+04) 25088/1048576/100352 Max NoC: 0
+			conv_5_1_res 1 (K:8,W:2,H:1,B:1) util:100/100 E:1.031e+07, T:6272, Cost:6.466e+10 Ubuf/Buf/Bus/Mac:3.172e+05/0/0/4129 NoC(hops=708309, DRAM acc=100352) Buffer(max=24576, avg=2.278e+04) Buffer(max=0, avg=0) Buffer(max=14336, avg=1.254e+04) 200704/0/100352 Max NoC: 0
+			conv_5_2_a 1 (K:16,W:1,H:1,B:1) util:87.5/87.5 E:3.889e+07, T:8192, Cost:3.186e+11 Ubuf/Buf/Bus/Mac:3.136e+06/1.631e+07/2.141e+04/9.248e+05 NoC(hops=1898496, DRAM acc=131072) Buffer(max=110592, avg=1.106e+05) Buffer(max=65536, avg=6.554e+04) Buffer(max=100352, avg=1.004e+05) 100352/1048576/25088 Max NoC: 0
+			conv_5_2_b 1 (K:16,W:1,H:1,B:1) util:81.55/81.55 E:6.816e+07, T:20000, Cost:1.363e+12 Ubuf/Buf/Bus/Mac:3.836e+06/3.551e+07/5.21e+04/2.081e+06 NoC(hops=1336320, DRAM acc=320000) Buffer(max=35328, avg=3.533e+04) Buffer(max=147456, avg=1.475e+05) Buffer(max=25088, avg=2.509e+04) 25088/2359296/25088 Max NoC: 0
+		T 1/1 E:6.441e+07, T:32102, Cost:2.068e+12 Ubuf/Buf/Bus/Mac:4.962e+06/1.712e+07/5.907e+04/9.674e+05 NoC(hops=1872316, DRAM acc=513512) Buffer(max=147584, avg=1.466e+05) Buffer(max=0, avg=0) Buffer(max=0, avg=0) Max NoC: 0
+			conv_5_2_c 1 (K:16,W:1,H:1,B:1) util:87.5/87.5 E:3.294e+07, T:9760, Cost:3.215e+11 Ubuf/Buf/Bus/Mac:2.018e+06/1.63e+07/2.127e+04/9.248e+05 NoC(hops=769536, DRAM acc=156160) Buffer(max=35328, avg=3.533e+04) Buffer(max=65536, avg=6.554e+04) Buffer(max=25088, avg=2.509e+04) 25088/1048576/100352 Max NoC: 0
+			conv_5_2_res 1 (K:16,W:1,H:1,B:1) util:94.23/94.23 E:8.028e+06, T:6272, Cost:5.035e+10 Ubuf/Buf/Bus/Mac:3.172e+05/0/0/3613 NoC(hops=301056, DRAM acc=100352) Buffer(max=22784, avg=2.278e+04) Buffer(max=0, avg=0) Buffer(max=12544, avg=1.254e+04) 200704/0/100352 Max NoC: 0
+			pool5 1 (K:16,W:1,H:1,B:1) util:87.5/87.5 E:1.097e+05, T:7, Cost:7.679e+05 Ubuf/Buf/Bus/Mac:1.079e+05/0/0/1806 NoC(hops=0, DRAM acc=0) Buffer(max=16512, avg=1.651e+04) Buffer(max=0, avg=0) Buffer(max=6272, avg=6272) 100352/0/2048 Max NoC: 0
+			fc 1 (K:16,W:1,H:1,B:1) util:98.44/98.44 E:2.333e+07, T:16063, Cost:3.747e+11 Ubuf/Buf/Bus/Mac:2.519e+06/8.217e+05/3.78e+04/3.716e+04 NoC(hops=801724, DRAM acc=257000) Buffer(max=12288, avg=1.229e+04) Buffer(max=129024, avg=1.28e+05) Buffer(max=2048, avg=2048) 2048/2048000/1000 Max NoC: 0

@@ -1,0 +1,9 @@
+seed 1667996682
+mapper 1
+net 2
+xLen 4
+yLen 4
+stride 2
+batch 64
+runLP 1
+runLS 1
