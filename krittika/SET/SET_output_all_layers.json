@@ -1,0 +1,891 @@
+{
+    "RA_tree": {
+        "Main": {
+            "Type": "T_cut",
+            "children": [
+                {
+                    "Type": "Cut",
+                    "ID": "T1"
+                },
+                {
+                    "Type": "Cut",
+                    "ID": "T5"
+                },
+                {
+                    "Type": "Cut",
+                    "ID": "T11"
+                },
+                {
+                    "Type": "Cut",
+                    "ID": "T12"
+                }
+            ]
+        },
+        "T1": {
+            "Type": "T_cut",
+            "children": [
+                {
+                    "Type": "Leaf",
+                    "ID": 0
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 1
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 2
+                },
+                {
+                    "Type": "Cut",
+                    "ID": "S1"
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 6
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 7
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 8
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 9
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 10
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 11
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 12
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 13
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 14
+                },
+                {
+                    "Type": "Cut",
+                    "ID": "S2"
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 24
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 25
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 26
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 27
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 28
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 29
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 30
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 31
+                },
+                {
+                    "Type": "Cut",
+                    "ID": "S3"
+                },
+                {
+                    "Type": "Cut",
+                    "ID": "S4"
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 37
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 38
+                }
+            ]
+        },
+        "S1": {
+            "Type": "S_cut",
+            "children": [
+                {
+                    "Type": "Cut",
+                    "ID": "T2"
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 5
+                }
+            ]
+        },
+        "T2": {
+            "Type": "T_cut",
+            "children": [
+                {
+                    "Type": "Leaf",
+                    "ID": 3
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 4
+                }
+            ]
+        },
+        "S2": {
+            "Type": "S_cut",
+            "children": [
+                {
+                    "Type": "Leaf",
+                    "ID": 15
+                },
+                {
+                    "Type": "Cut",
+                    "ID": "T3"
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 23
+                }
+            ]
+        },
+        "T3": {
+            "Type": "T_cut",
+            "children": [
+                {
+                    "Type": "Leaf",
+                    "ID": 16
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 17
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 18
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 19
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 20
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 21
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 22
+                }
+            ]
+        },
+        "S3": {
+            "Type": "S_cut",
+            "children": [
+                {
+                    "Type": "Cut",
+                    "ID": "T4"
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 34
+                }
+            ]
+        },
+        "T4": {
+            "Type": "T_cut",
+            "children": [
+                {
+                    "Type": "Leaf",
+                    "ID": 32
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 33
+                }
+            ]
+        },
+        "S4": {
+            "Type": "S_cut",
+            "children": [
+                {
+                    "Type": "Leaf",
+                    "ID": 35
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 36
+                }
+            ]
+        },
+        "T5": {
+            "Type": "T_cut",
+            "children": [
+                {
+                    "Type": "Leaf",
+                    "ID": 39
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 40
+                },
+                {
+                    "Type": "Cut",
+                    "ID": "S5"
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 45
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 46
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 47
+                },
+                {
+                    "Type": "Cut",
+                    "ID": "S6"
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 52
+                },
+                {
+                    "Type": "Cut",
+                    "ID": "S7"
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 57
+                },
+                {
+                    "Type": "Cut",
+                    "ID": "S8"
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 61
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 62
+                }
+            ]
+        },
+        "S5": {
+            "Type": "S_cut",
+            "children": [
+                {
+                    "Type": "Cut",
+                    "ID": "T6"
+                },
+                {
+                    "Type": "Cut",
+                    "ID": "T7"
+                }
+            ]
+        },
+        "T6": {
+            "Type": "T_cut",
+            "children": [
+                {
+                    "Type": "Leaf",
+                    "ID": 41
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 42
+                }
+            ]
+        },
+        "T7": {
+            "Type": "T_cut",
+            "children": [
+                {
+                    "Type": "Leaf",
+                    "ID": 43
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 44
+                }
+            ]
+        },
+        "S6": {
+            "Type": "S_cut",
+            "children": [
+                {
+                    "Type": "Cut",
+                    "ID": "T8"
+                },
+                {
+                    "Type": "Cut",
+                    "ID": "T9"
+                }
+            ]
+        },
+        "T8": {
+            "Type": "T_cut",
+            "children": [
+                {
+                    "Type": "Leaf",
+                    "ID": 48
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 49
+                }
+            ]
+        },
+        "T9": {
+            "Type": "T_cut",
+            "children": [
+                {
+                    "Type": "Leaf",
+                    "ID": 50
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 51
+                }
+            ]
+        },
+        "S7": {
+            "Type": "S_cut",
+            "children": [
+                {
+                    "Type": "Leaf",
+                    "ID": 53
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 54
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 55
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 56
+                }
+            ]
+        },
+        "S8": {
+            "Type": "S_cut",
+            "children": [
+                {
+                    "Type": "Cut",
+                    "ID": "T10"
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 60
+                }
+            ]
+        },
+        "T10": {
+            "Type": "T_cut",
+            "children": [
+                {
+                    "Type": "Leaf",
+                    "ID": 58
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 59
+                }
+            ]
+        },
+        "T11": {
+            "Type": "T_cut",
+            "children": [
+                {
+                    "Type": "Leaf",
+                    "ID": 63
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 64
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 65
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 66
+                }
+            ]
+        },
+        "T12": {
+            "Type": "T_cut",
+            "children": [
+                {
+                    "Type": "Leaf",
+                    "ID": 67
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 68
+                },
+                {
+                    "Type": "Leaf",
+                    "ID": 69
+                }
+            ]
+        }
+    },
+    "Layers": {
+        "0": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "1": {
+            "comp": "activation",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "2": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "3": {
+            "comp": "conv",
+            "num_cores": 12,
+            "input_part": 4,
+            "filter_part": 3
+        },
+        "4": {
+            "comp": "conv",
+            "num_cores": 12,
+            "input_part": 4,
+            "filter_part": 3
+        },
+        "5": {
+            "comp": "conv",
+            "num_cores": 4,
+            "input_part": 2,
+            "filter_part": 2
+        },
+        "6": {
+            "comp": "activation",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "7": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "8": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "9": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "10": {
+            "comp": "activation",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "11": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "12": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "13": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "14": {
+            "comp": "activation",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "15": {
+            "comp": "conv",
+            "num_cores": 3,
+            "input_part": 3,
+            "filter_part": 1
+        },
+        "16": {
+            "comp": "conv",
+            "num_cores": 12,
+            "input_part": 4,
+            "filter_part": 3
+        },
+        "17": {
+            "comp": "conv",
+            "num_cores": 12,
+            "input_part": 4,
+            "filter_part": 3
+        },
+        "18": {
+            "comp": "conv",
+            "num_cores": 12,
+            "input_part": 3,
+            "filter_part": 4
+        },
+        "19": {
+            "comp": "activation",
+            "num_cores": 12,
+            "input_part": 3,
+            "filter_part": 4
+        },
+        "20": {
+            "comp": "conv",
+            "num_cores": 12,
+            "input_part": 4,
+            "filter_part": 3
+        },
+        "21": {
+            "comp": "conv",
+            "num_cores": 12,
+            "input_part": 4,
+            "filter_part": 3
+        },
+        "22": {
+            "comp": "conv",
+            "num_cores": 12,
+            "input_part": 3,
+            "filter_part": 4
+        },
+        "23": {
+            "comp": "activation",
+            "num_cores": 1,
+            "input_part": 1,
+            "filter_part": 1
+        },
+        "24": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "25": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "26": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "27": {
+            "comp": "activation",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "28": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "29": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "30": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "31": {
+            "comp": "activation",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "32": {
+            "comp": "conv",
+            "num_cores": 9,
+            "input_part": 3,
+            "filter_part": 3
+        },
+        "33": {
+            "comp": "conv",
+            "num_cores": 9,
+            "input_part": 3,
+            "filter_part": 3
+        },
+        "34": {
+            "comp": "conv",
+            "num_cores": 7,
+            "input_part": 1,
+            "filter_part": 7
+        },
+        "35": {
+            "comp": "conv",
+            "num_cores": 15,
+            "input_part": 3,
+            "filter_part": 5
+        },
+        "36": {
+            "comp": "activation",
+            "num_cores": 1,
+            "input_part": 1,
+            "filter_part": 1
+        },
+        "37": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "38": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "39": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "40": {
+            "comp": "activation",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "41": {
+            "comp": "conv",
+            "num_cores": 12,
+            "input_part": 3,
+            "filter_part": 4
+        },
+        "42": {
+            "comp": "conv",
+            "num_cores": 12,
+            "input_part": 3,
+            "filter_part": 4
+        },
+        "43": {
+            "comp": "conv",
+            "num_cores": 4,
+            "input_part": 2,
+            "filter_part": 2
+        },
+        "44": {
+            "comp": "activation",
+            "num_cores": 4,
+            "input_part": 2,
+            "filter_part": 2
+        },
+        "45": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "46": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "47": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "48": {
+            "comp": "activation",
+            "num_cores": 4,
+            "input_part": 2,
+            "filter_part": 2
+        },
+        "49": {
+            "comp": "conv",
+            "num_cores": 4,
+            "input_part": 2,
+            "filter_part": 2
+        },
+        "50": {
+            "comp": "conv",
+            "num_cores": 12,
+            "input_part": 3,
+            "filter_part": 4
+        },
+        "51": {
+            "comp": "conv",
+            "num_cores": 12,
+            "input_part": 3,
+            "filter_part": 4
+        },
+        "52": {
+            "comp": "activation",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "53": {
+            "comp": "conv",
+            "num_cores": 4,
+            "input_part": 2,
+            "filter_part": 2
+        },
+        "54": {
+            "comp": "conv",
+            "num_cores": 7,
+            "input_part": 1,
+            "filter_part": 7
+        },
+        "55": {
+            "comp": "conv",
+            "num_cores": 4,
+            "input_part": 2,
+            "filter_part": 2
+        },
+        "56": {
+            "comp": "activation",
+            "num_cores": 1,
+            "input_part": 1,
+            "filter_part": 1
+        },
+        "57": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "58": {
+            "comp": "conv",
+            "num_cores": 10,
+            "input_part": 5,
+            "filter_part": 2
+        },
+        "59": {
+            "comp": "conv",
+            "num_cores": 10,
+            "input_part": 5,
+            "filter_part": 2
+        },
+        "60": {
+            "comp": "conv",
+            "num_cores": 6,
+            "input_part": 3,
+            "filter_part": 2
+        },
+        "61": {
+            "comp": "activation",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "62": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "63": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 16,
+            "filter_part": 1
+        },
+        "64": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "65": {
+            "comp": "activation",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "66": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "67": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 16,
+            "filter_part": 1
+        },
+        "68": {
+            "comp": "conv",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        },
+        "69": {
+            "comp": "activation",
+            "num_cores": 16,
+            "input_part": 4,
+            "filter_part": 4
+        }
+    }
+}
