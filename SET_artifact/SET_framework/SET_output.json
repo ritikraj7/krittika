@@ -1,0 +1,110 @@
+{
+    "SET_optimal": {
+        "RA_tree": {
+            "Main": {
+                "Type": "T_cut",
+                "children": [
+                    {
+                        "Type": "Cut",
+                        "ID": "T1"
+                    }
+                ]
+            },
+            "T1": {
+                "Type": "T_cut",
+                "children": [
+                    {
+                        "Type": "Leaf",
+                        "ID": 0
+                    },
+                    {
+                        "Type": "Leaf",
+                        "ID": 1
+                    },
+                    {
+                        "Type": "Leaf",
+                        "ID": 2
+                    },
+                    {
+                        "Type": "Cut",
+                        "ID": "S1"
+                    },
+                    {
+                        "Type": "Leaf",
+                        "ID": 6
+                    }
+                ]
+            },
+            "S1": {
+                "Type": "S_cut",
+                "children": [
+                    {
+                        "Type": "Cut",
+                        "ID": "T2"
+                    },
+                    {
+                        "Type": "Leaf",
+                        "ID": 5
+                    }
+                ]
+            },
+            "T2": {
+                "Type": "T_cut",
+                "children": [
+                    {
+                        "Type": "Leaf",
+                        "ID": 3
+                    },
+                    {
+                        "Type": "Leaf",
+                        "ID": 4
+                    }
+                ]
+            }
+        },
+        "Layers": {
+            "0": {
+                "comp": "conv",
+                "num_cores": 16,
+                "input_part": 4,
+                "filter_part": 4
+            },
+            "1": {
+                "comp": "activation",
+                "num_cores": 16,
+                "input_part": 4,
+                "filter_part": 4
+            },
+            "2": {
+                "comp": "conv",
+                "num_cores": 16,
+                "input_part": 4,
+                "filter_part": 4
+            },
+            "3": {
+                "comp": "conv",
+                "num_cores": 12,
+                "input_part": 4,
+                "filter_part": 3
+            },
+            "4": {
+                "comp": "conv",
+                "num_cores": 12,
+                "input_part": 4,
+                "filter_part": 3
+            },
+            "5": {
+                "comp": "conv",
+                "num_cores": 4,
+                "input_part": 2,
+                "filter_part": 2
+            },
+            "6": {
+                "comp": "activation",
+                "num_cores": 16,
+                "input_part": 4,
+                "filter_part": 4
+            }
+        }
+    }
+}
