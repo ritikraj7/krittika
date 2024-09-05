@@ -1,3 +1,0 @@
-conv,  224, 224,    11, 11,    3,      96,     4
-gemm, 100, 150, 100
-activation, relu
