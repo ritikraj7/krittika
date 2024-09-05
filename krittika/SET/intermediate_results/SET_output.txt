@@ -172,7 +172,7 @@ Switch to best solution.
 6959 3.572e+06 5.054
 [Warning] After 30 tries.
 7199 3.572e+06 5.621
-Elapsed: 2s Valid: 4047 (56.21%) Accept: 1977 (27.46%)
+Elapsed: 3s Valid: 4047 (56.21%) Accept: 1977 (27.46%)
 Per OP: 382/416, 327/360, 416/1194, 423/920, 0/0, 0/0, 429/1157
 [Warning] After 30 tries.
 [Warning] After 30 tries.
@@ -286,7 +286,7 @@ Switch to best solution.
 [Warning] After 30 tries.
 6959 3.546e+06 5.142
 7199 3.543e+06 4.575
-Elapsed: 2s Valid: 4168 (57.89%) Accept: 2073 (28.79%)
+Elapsed: 3s Valid: 4168 (57.89%) Accept: 2073 (28.79%)
 Per OP: 378/410, 356/376, 455/1226, 464/942, 0/0, 0/0, 420/1214
 [Warning] After 30 tries.
 [Warning] After 30 tries.
@@ -385,7 +385,7 @@ Per OP: 378/410, 356/376, 455/1226, 464/942, 0/0, 0/0, 420/1214
 [Warning] After 30 tries.
 6959 3.572e+06 5.421
 7199 3.565e+06 4.342
-Elapsed: 2s Valid: 4071 (56.54%) Accept: 1956 (27.17%)
+Elapsed: 3s Valid: 4071 (56.54%) Accept: 1956 (27.17%)
 Per OP: 340/375, 350/382, 425/1271, 435/880, 0/0, 0/0, 406/1163
 [Warning] After 30 tries.
 [Warning] After 30 tries.
@@ -504,7 +504,7 @@ Switch to best solution.
 [Warning] After 30 tries.
 6959 3.582e+06 5.254
 7199 3.555e+06 5.112
-Elapsed: 2s Valid: 4281 (59.46%) Accept: 1989 (27.62%)
+Elapsed: 3s Valid: 4281 (59.46%) Accept: 1989 (27.62%)
 Per OP: 331/367, 359/397, 441/1287, 451/960, 0/0, 0/0, 407/1270
 LP-SA: E:6.023e+09, T:3543423, Cost:3.543e+06, Ubuf/Buf/Bus/Mac/NoC/DRAM:3.915e+08/9.595e+08/0/7.171e+07/1.354e+09/3.246e+09
 Struct:
@@ -629,7 +629,7 @@ Switch to best solution.
 [Warning] After 30 tries.
 6959 2.494e+06 4.429
 7199 2.494e+06 4.737
-Elapsed: 21s Valid: 7079 (98.32%) Accept: 1564 (21.72%)
+Elapsed: 26s Valid: 7079 (98.32%) Accept: 1564 (21.72%)
 Per OP: 169/218, 176/232, 273/5390, 277/277, 0/0, 0/0, 669/962
 239 2.992e+06 4.417
 479 3.158e+06 4.942
@@ -667,7 +667,7 @@ Switch to best solution.
 6719 2.509e+06 4.267
 6959 2.506e+06 4.821
 7199 2.506e+06 4.346
-Elapsed: 15s Valid: 7097 (98.57%) Accept: 1799 (24.99%)
+Elapsed: 18s Valid: 7097 (98.57%) Accept: 1799 (24.99%)
 Per OP: 154/206, 165/228, 301/5074, 306/306, 0/0, 0/0, 873/1283
 [Warning] After 30 tries.
 [Warning] After 30 tries.
@@ -708,7 +708,7 @@ Switch to best solution.
 6959 2.504e+06 4.117
 [Warning] After 30 tries.
 7199 2.504e+06 4.229
-Elapsed: 24s Valid: 7100 (98.61%) Accept: 1416 (19.67%)
+Elapsed: 30s Valid: 7100 (98.61%) Accept: 1416 (19.67%)
 Per OP: 151/219, 146/192, 240/5461, 244/244, 0/0, 0/0, 635/984
 [Warning] After 30 tries.
 [Warning] After 30 tries.
@@ -752,7 +752,7 @@ Switch to best solution.
 6719 2.505e+06 4.237
 6959 2.505e+06 4.383
 7199 2.502e+06 3.975
-Elapsed: 28s Valid: 7110 (98.75%) Accept: 1448 (20.11%)
+Elapsed: 34s Valid: 7110 (98.75%) Accept: 1448 (20.11%)
 Per OP: 156/219, 158/220, 254/5554, 258/258, 0/0, 0/0, 622/859
 LS-SA: E:5.105e+09, T:2494478, Cost:2.494e+06, Ubuf/Buf/Bus/Mac/NoC/DRAM:4.494e+08/9.796e+08/0/7.341e+07/1.238e+09/2.364e+09
 Struct:
@@ -862,7 +862,7 @@ Struct:
 6719 2.16e+06 2.237
 6959 2.16e+06 2.383
 7199 2.16e+06 2.371
-Elapsed: 21s Valid: 5189 (72.07%) Accept: 1229 (17.07%)
+Elapsed: 27s Valid: 5189 (72.07%) Accept: 1229 (17.07%)
 Per OP: 87/133, 61/108, 337/2966, 351/1127, 0/0, 0/0, 393/855
 239 3.099e+06 2.45
 479 2.672e+06 2.325
@@ -895,7 +895,7 @@ Switch to best solution.
 6719 2.085e+06 2.263
 6959 2.085e+06 2.312
 7199 2.076e+06 2.204
-Elapsed: 18s Valid: 5016 (69.67%) Accept: 1485 (20.62%)
+Elapsed: 23s Valid: 5016 (69.67%) Accept: 1485 (20.62%)
 Per OP: 60/105, 48/110, 450/2713, 469/1091, 0/0, 0/0, 458/997
 239 3.33e+06 3.05
 479 3.273e+06 2.667
@@ -928,7 +928,7 @@ Switch to best solution.
 6719 2.115e+06 2.333
 6959 2.115e+06 2.317
 7199 2.115e+06 1.913
-Elapsed: 20s Valid: 5257 (73.01%) Accept: 1519 (21.1%)
+Elapsed: 25s Valid: 5257 (73.01%) Accept: 1519 (21.1%)
 Per OP: 79/108, 71/106, 442/2910, 461/1064, 0/0, 0/0, 466/1069
 239 2.494e+06 2.529
 479 2.761e+06 2.492
@@ -961,7 +961,7 @@ Switch to best solution.
 6719 2.13e+06 1.979
 6959 2.13e+06 2.337
 7199 2.13e+06 2.421
-Elapsed: 35s Valid: 4603 (63.93%) Accept: 908 (12.61%)
+Elapsed: 45s Valid: 4603 (63.93%) Accept: 908 (12.61%)
 Per OP: 64/100, 70/106, 263/3111, 278/660, 0/0, 0/0, 233/626
 SA-BASE: E:4.485e+09, T:2076252, Cost:2.076e+06, Ubuf/Buf/Bus/Mac/NoC/DRAM:3.686e+08/9.687e+08/0/7.243e+07/1.117e+09/1.959e+09
 Struct: 
