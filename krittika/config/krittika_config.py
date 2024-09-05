@@ -39,6 +39,9 @@ class KrittikaConfig:
         self.per_unit_user_filter_interface_bw = 1
         self.per_unit_user_ofmap_interface_bw = 1
 
+        #Optimisation
+        self.opt = 0
+
         # Flags
         self.config_valid = False
 
@@ -130,6 +133,9 @@ class KrittikaConfig:
         self.per_unit_user_ifmap_interface_bw = ifmap_bw
         self.per_unit_user_filter_interface_bw = filter_bw
         self.per_unit_user_ofmap_interface_bw = ofmap_bw
+        
+        section = 'OPTIMISATION'
+        self.opt = int(cfg.get(section,'Opt'))
 
         self.config_valid = True
 
@@ -146,7 +152,8 @@ class KrittikaConfig:
                         partition_mode='',
                         ifmap_sram_kb=1, filter_sram_kb=1, ofmap_sram_kb=1,
                         bw_use_mode='',
-                        per_core_ifmap_bw=1, per_core_filter_bw=1, per_core_ofmap_bw=1
+                        per_core_ifmap_bw=1, per_core_filter_bw=1, per_core_ofmap_bw=1,
+                        opt=0
                         ):
 
         assert run_name != '', 'Please provide a valid run name'
@@ -166,6 +173,8 @@ class KrittikaConfig:
         assert per_core_ifmap_bw > 0, 'Bandwidth should be positive integer'
         assert per_core_filter_bw > 0, 'Bandwidth should be positive integer'
         assert per_core_ofmap_bw > 0, 'Bandwidth should be positive integer'
+        assert opt > 0, 'optimisation should be in the range 0 to 3'
+        assert opt < 4, 'optimisation should be in the range 0 to 3'
 
         self.config_valid = True
 
@@ -183,6 +192,12 @@ class KrittikaConfig:
         self.set_bandwidth_use_mode(bw_use_mode=bw_use_mode)
         self.set_interface_bandwidths(per_core_ifmap_bw=per_core_ifmap_bw, per_core_filter_bw=per_core_filter_bw,
                                       per_core_ofmap_bw=per_core_ofmap_bw)
+        self.set_opt(opt=opt)
+    
+    #
+    def set_opt(self, opt):
+        self.opt = opt
+        print("Opt is:", opt)
 
     #
     def set_run_name(self, input_run_name=''):

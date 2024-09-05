@@ -1,5 +1,7 @@
 import math
 import os.path
+import numpy as np
+import csv
 
 from scalesim.compute.operand_matrix import operand_matrix
 from scalesim.memory.double_buffered_scratchpad_mem import double_buffered_scratchpad
@@ -7,6 +9,11 @@ from scalesim.memory.double_buffered_scratchpad_mem import double_buffered_scrat
 from krittika.config.krittika_config import KrittikaConfig
 from krittika.partition_manager import PartitionManager
 from krittika.compute.compute_node import ComputeNode
+
+#++Sahith
+from krittika.chiplet_node import ChipletNode
+from krittika.chiplet_system import ChipletSys
+from krittika.scheduler import Scheduler
 
 
 class SingleLayerSim:
@@ -25,12 +32,18 @@ class SingleLayerSim:
         self.partitioner_obj = PartitionManager()
         self.config_obj = KrittikaConfig()
 
+        #++Sahith
+        self.chiplet_sys = ChipletSys()
+        self.scheduler = Scheduler()
+
         # Variables determining state
         self.layer_id = 0
         self.num_input_part = 0
         self.num_filter_part = 0
         self.compute_node_list = []
         self.all_node_mem_objects = []
+        #++Sahith
+        self.chiplet_node_list = []
 
         #
         self.log_top_path = './'
@@ -93,6 +106,13 @@ class SingleLayerSim:
         self.config_obj = config_obj
         self.op_mat_obj = op_mat_obj
         self.partitioner_obj = partitioner_obj
+        self.num_input_part, self.num_filter_part = self.partitioner_obj.get_layer_partitions(layer_id=self.layer_id)
+        self.chiplet_sys.set_params(self.num_input_part,self.num_filter_part)
+
+        #++Debug
+        # for row in self.chiplet_sys.chiplet_matrix:
+        #     for i in row:
+        #         print(i.y,i.x)        
 
         self.layer_id = layer_id
 
@@ -100,55 +120,78 @@ class SingleLayerSim:
 
     #
     def run(self):
-        self.num_input_part, self.num_filter_part = self.partitioner_obj.get_layer_partitions(layer_id=self.layer_id)
+        #self.num_input_part, self.num_filter_part = self.partitioner_obj.get_layer_partitions(layer_id=self.layer_id)
 
-        self.compute_node_list = []
+        #self.compute_node_list = []
+        #++Sahith
+        self.chiplet_node_list = []
 
-        self.run_compute_all_parts()
+        self.run_compute_all_parts() 
         self.run_mem_sim_all_parts()
 
     #
     def run_compute_all_parts(self):
-        ifmap_matrix, filter_matrix, ofmap_matrix = self.op_mat_obj.get_all_operand_matrix()
+        #ifmap_matrix, filter_matrix, ofmap_matrix = self.op_mat_obj.get_all_operand_matrix()
+        self.scheduler = Scheduler()
+        self.scheduler.set_params(self.chiplet_sys, self.op_mat_obj, self.config_obj, self.verbose)
+        self.scheduler.workload_distribution(self.config_obj.opt)
+        self.scheduler.set_memory_dependency()
         compute_unit, opt_dataflow = self.partitioner_obj.get_opt_compute_params(layer_id=self.layer_id)
-        input_rows_per_part = math.ceil(ifmap_matrix.shape[0] / self.num_input_part)
-        filter_cols_per_part = math.ceil(filter_matrix.shape[1] / self.num_filter_part)
+        #input_rows_per_part = math.ceil(ifmap_matrix.shape[0] / self.num_input_part)
+        #filter_cols_per_part = math.ceil(filter_matrix.shape[1] / self.num_filter_part)
 
         for inp_part in range(self.num_input_part):
-            ifmap_row_start = inp_part * input_rows_per_part
-            ifmap_row_end = min(ifmap_row_start + input_rows_per_part, ifmap_matrix.shape[0])
+            #ifmap_row_start = inp_part * input_rows_per_part
+            #ifmap_row_end = min(ifmap_row_start + input_rows_per_part, ifmap_matrix.shape[0])
 
-            ifmap_part = ifmap_matrix[ifmap_row_start:ifmap_row_end,:]
+            #ifmap_part = ifmap_matrix[ifmap_row_start:ifmap_row_end,:]
 
             for filt_part in range(self.num_filter_part):
 
-                filt_col_start = filt_part * filter_cols_per_part
-                filt_col_end = min(filt_col_start + filter_cols_per_part, filter_matrix.shape[1])
+                #filt_col_start = filt_part * filter_cols_per_part
+                #filt_col_end = min(filt_col_start + filter_cols_per_part, filter_matrix.shape[1])
 
-                filter_part = filter_matrix[:, filt_col_start: filt_col_end]
-                ofmap_part = ofmap_matrix[ifmap_row_start: ifmap_row_end, filt_col_start:filt_col_end]
+                #filter_part = filter_matrix[:, filt_col_start: filt_col_end]
+                #ofmap_part = ofmap_matrix[ifmap_row_start: ifmap_row_end, filt_col_start:filt_col_end]
 
-                this_part_compute_node = ComputeNode()
-                this_part_compute_node.set_params(config=self.config_obj,
-                                                  compute_unit=compute_unit,
-                                                  dataflow=opt_dataflow)
+                #----------------------------------------------------------
 
-                this_part_compute_node.set_operands(ifmap_opmat=ifmap_part,
-                                                    filter_opmat=filter_part,
-                                                    ofmap_opmat=ofmap_part)
-                this_part_compute_node.calc_demand_matrices()
+                #this_part_compute_node = ComputeNode()
+                #this_part_compute_node.set_params(config=self.config_obj,
+                #                                  compute_unit=compute_unit,
+                #                                  dataflow=opt_dataflow)
 
-                self.compute_node_list += [this_part_compute_node]
+                #this_part_compute_node.set_operands(ifmap_opmat=ifmap_part,
+                #                                    filter_opmat=filter_part,
+                #                                    ofmap_opmat=ofmap_part)
+                #this_part_compute_node.calc_demand_matrices()
+
+                #self.compute_node_list += [this_part_compute_node]
+
+                ifmap_size_matrix = self.scheduler.get_ifmap_size_matrix()
+                if(ifmap_size_matrix[inp_part][filt_part] != 0):
+                    #++Sahith
+                    this_part_chiplet_node = self.chiplet_sys.chiplet_matrix[inp_part][filt_part]
+                    #this_part_chiplet_node = ChipletNode()
+                    this_part_chiplet_node.compute_node.set_params(config=self.config_obj,
+                                                    compute_unit=compute_unit,
+                                                    dataflow=opt_dataflow)
+
+                    #this_part_chiplet_node.compute_node.set_operands(ifmap_opmat=ifmap_part,
+                    #                                    filter_opmat=filter_part,
+                    #                                    ofmap_opmat=ofmap_part)
+                    this_part_chiplet_node.compute_node.calc_demand_matrices()
+
+                    self.chiplet_node_list += [this_part_chiplet_node]
 
         self.compute_done = True
         
     #
     def run_simd_all_parts(self, operand_matrix, optype = 'relu'):
         
-        self.num_input_part = 1
-        self.num_filter_part = self.config_obj.get_num_cores()
+        self.num_input_part, self.num_filter_part = self.partitioner_obj.get_layer_partitions(layer_id=self.layer_id)
 
-        input_rows_per_part = math.ceil((operand_matrix.shape[0]) / (self.num_input_part*self.num_filter_part))
+        input_rows_per_part = math.ceil((operand_matrix.shape[0]*operand_matrix.shape[1]) / (self.num_input_part*self.num_filter_part))
 
         for inp_part in range(self.num_input_part):
             for filt_part in range(self.num_filter_part):
@@ -160,13 +203,23 @@ class SingleLayerSim:
 
                 operand_part = operand_matrix[operand_row_start: operand_row_end, :]
 
-                this_part_compute_node = ComputeNode()
-                this_part_compute_node.set_params(config=self.config_obj,
+                #this_part_compute_node = ComputeNode()
+                #this_part_compute_node.set_params(config=self.config_obj,
+                #                                  compute_unit='simd', optype = optype)
+
+                #this_part_compute_node.set_operands(ifmap_opmat=operand_matrix)
+
+                #self.compute_node_list += [this_part_compute_node]
+
+                this_part_chiplet_node = self.chiplet_sys.chiplet_matrix[inp_part][filt_part] #ChipletNode()
+                #this_part_chiplet_node = ChipletNode()
+                this_part_chiplet_node.compute_node.set_params(config=self.config_obj,
                                                   compute_unit='simd', optype = optype)
 
-                this_part_compute_node.set_operands(ifmap_opmat=operand_part)
+                this_part_chiplet_node.compute_node.set_operands(ifmap_opmat=operand_matrix)
 
-                self.compute_node_list += [this_part_compute_node]
+                self.chiplet_node_list += [this_part_chiplet_node]
+
 
         self.compute_done = True
 
@@ -175,49 +228,88 @@ class SingleLayerSim:
     def run_mem_sim_all_parts(self):
         assert self.compute_done
 
-        bandwidth_mode = self.config_obj.get_bandwidth_use_mode()
-        per_core_ifmap_buf_size, per_core_fitler_buf_size, per_core_ofmap_buf_size \
-            = ([i * 1024 for i in self.config_obj.get_per_unit_sram_sizes_kb()])
+        #bandwidth_mode = self.config_obj.get_bandwidth_use_mode()
+        #per_core_ifmap_buf_size, per_core_fitler_buf_size, per_core_ofmap_buf_size \
+        #    = ([i * 1024 for i in self.config_obj.get_per_unit_sram_sizes_kb()])
 
-        per_core_ifmap_bw, per_core_filter_bw, per_core_ofmap_bw\
-            = self.config_obj.get_interface_bandwidths()
+        #per_core_ifmap_bw, per_core_filter_bw, per_core_ofmap_bw\
+        #    = self.config_obj.get_interface_bandwidths()
 
-        for compute_node in self.compute_node_list:
+        #for compute_node in self.compute_node_list:
 
-            this_part_mem = double_buffered_scratchpad()
-            this_part_mem.set_params(verbose=self.verbose,
-                                     estimate_bandwidth_mode=bandwidth_mode,
-                                     ifmap_buf_size_bytes=per_core_ifmap_buf_size,
-                                     filter_buf_size_bytes=per_core_fitler_buf_size,
-                                     ofmap_buf_size_bytes=per_core_ofmap_buf_size,
-                                     ifmap_backing_buf_bw=per_core_ifmap_bw,
-                                     filter_backing_buf_bw=per_core_filter_bw,
-                                     ofmap_backing_buf_bw=per_core_ofmap_bw
-                                     )
+        #    this_part_mem = double_buffered_scratchpad()
+        #    this_part_mem.set_params(verbose=self.verbose,
+        #                             estimate_bandwidth_mode=bandwidth_mode,
+        #                             ifmap_buf_size_bytes=per_core_ifmap_buf_size,
+        #                             filter_buf_size_bytes=per_core_fitler_buf_size,
+        #                             ofmap_buf_size_bytes=per_core_ofmap_buf_size,
+        #                             ifmap_backing_buf_bw=per_core_ifmap_bw,
+        #                             filter_backing_buf_bw=per_core_filter_bw,
+        #                             ofmap_backing_buf_bw=per_core_ofmap_bw
+        #                             )
 
-            # Demand mat
-            this_node_ifmap_demand_mat, this_node_filter_demand_mat, this_node_ofmap_demand_mat \
-                = compute_node.get_demand_matrices()
+        #    # Demand mat
+        #    this_node_ifmap_demand_mat, this_node_filter_demand_mat, this_node_ofmap_demand_mat \
+        #        = compute_node.get_demand_matrices()
 
-            this_node_ifmap_fetch_mat, this_node_filter_fetch_mat = compute_node.get_prefetch_matrices()
-            if (self.config_obj.get_bandwidth_use_mode()=="USER"):
-                this_part_mem.set_read_buf_prefetch_matrices(ifmap_prefetch_mat=this_node_ifmap_fetch_mat,
-                                                         filter_prefetch_mat=this_node_filter_fetch_mat
-                                                         )
-            this_part_mem.service_memory_requests(this_node_ifmap_demand_mat,
-                                                  this_node_filter_demand_mat,
-                                                  this_node_ofmap_demand_mat)
+        #    this_node_ifmap_fetch_mat, this_node_filter_fetch_mat = compute_node.get_prefetch_matrices()
+        #    if (self.config_obj.get_bandwidth_use_mode()=="USER"):
+        #        this_part_mem.set_read_buf_prefetch_matrices(ifmap_prefetch_mat=this_node_ifmap_fetch_mat,
+        #                                                 filter_prefetch_mat=this_node_filter_fetch_mat
+        #                                                 )
+        #    this_part_mem.service_memory_requests(this_node_ifmap_demand_mat,
+        #                                          this_node_filter_demand_mat,
+        #                                          this_node_ofmap_demand_mat)
 
-            self.all_node_mem_objects += [this_part_mem]
+        #    self.all_node_mem_objects += [this_part_mem]
 
+        #-------------------------------------------------------------------
+
+        #for chiplet_node in self.chiplet_node_list:
+
+        #    #this_part_mem = double_buffered_scratchpad()
+        #    chiplet_node.scratch_pad.set_params(verbose=self.verbose,
+        #                             estimate_bandwidth_mode=bandwidth_mode,
+        #                             ifmap_buf_size_bytes=per_core_ifmap_buf_size,
+        #                             filter_buf_size_bytes=per_core_fitler_buf_size,
+        #                             ofmap_buf_size_bytes=per_core_ofmap_buf_size,
+        #                             ifmap_backing_buf_bw=per_core_ifmap_bw,
+        #                             filter_backing_buf_bw=per_core_filter_bw,
+        #                             ofmap_backing_buf_bw=per_core_ofmap_bw
+        #                             )
+
+        #    # Demand mat
+        #    this_node_ifmap_demand_mat, this_node_filter_demand_mat, this_node_ofmap_demand_mat \
+        #        = chiplet_node.compute_node.get_demand_matrices()
+
+        #    this_node_ifmap_fetch_mat, this_node_filter_fetch_mat = chiplet_node.compute_node.get_prefetch_matrices()
+        #    if (self.config_obj.get_bandwidth_use_mode()=="USER"):
+        #        chiplet_node.scratch_pad.set_read_buf_prefetch_matrices(ifmap_prefetch_mat=this_node_ifmap_fetch_mat,
+        #                                                 filter_prefetch_mat=this_node_filter_fetch_mat
+        #                                                 )
+        #    chiplet_node.scratch_pad.service_memory_requests(this_node_ifmap_demand_mat,
+        #                                          this_node_filter_demand_mat,
+        #                                          this_node_ofmap_demand_mat)
+
+        #    #self.all_node_mem_objects += [chiplet_node.scratch_pad]
+
+        self.scheduler.run_sys()
+        print("Total Latency: ",self.scheduler.get_latency())
+
+        with open('results.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            
+            writer.writerow([f'Layer {self.layer_id}', self.scheduler.get_latency()])
+
+            file.close()
+ 
         self.mem_traces_done = True
 
 
-    # 
     def gather_simd_report_items_across_cores(self):
         assert self.compute_done
-        for core_id in range(len(self.compute_node_list)):
-            compute_system = self.compute_node_list[core_id]
+        for core_id in range(len(self.chiplet_node_list)):
+            compute_system = self.chiplet_node_list[core_id].compute_node
 
             # Compute report
             num_compute = compute_system.get_num_compute()
@@ -240,9 +332,9 @@ class SingleLayerSim:
     def gather_report_items_across_cores(self):
         assert self.compute_done and self.mem_traces_done
 
-        for core_id in range(len(self.compute_node_list)):
-            compute_system = self.compute_node_list[core_id]
-            memory_system = self.all_node_mem_objects[core_id]
+        for core_id in range(len(self.chiplet_node_list)):
+            compute_system = self.chiplet_node_list[core_id].compute_node
+            memory_system = self.chiplet_node_list[core_id].scratch_pad
 
             # Compute report
             num_compute = compute_system.get_num_compute()
@@ -318,7 +410,7 @@ class SingleLayerSim:
         assert self.mem_traces_done
         self.build_trace_log_dirs()
 
-        for part_idx in range(len(self.all_node_mem_objects)):
+        for part_idx in range(len(self.chiplet_node_list)):
             trace_dir_name = self.log_top_path + \
                              '/traces/layer' + str(self.layer_id) + \
                              '/core' + str(part_idx)
@@ -331,7 +423,7 @@ class SingleLayerSim:
             filter_dram_filename = trace_dir_name + '/FILTER_DRAM_TRACE.csv'
             ofmap_dram_filename = trace_dir_name + '/OFMAP_DRAM_TRACE.csv'
 
-            memory_system = self.all_node_mem_objects[part_idx]
+            memory_system = self.chiplet_node_list[part_idx].scratch_pad
             memory_system.print_ifmap_sram_trace(ifmap_sram_filename)
             memory_system.print_ifmap_dram_trace(ifmap_dram_filename)
             memory_system.print_filter_sram_trace(filter_sram_filename)
@@ -349,7 +441,7 @@ class SingleLayerSim:
         l2_dir = l1_dir + '/layer' + str(self.layer_id)
         self.check_and_build(l2_dir)
 
-        for core_id in range(len(self.compute_node_list)):
+        for core_id in range(len(self.chiplet_node_list)):
             this_core_dir = l2_dir + '/core' + str(core_id)
             self.check_and_build(this_core_dir)
 
